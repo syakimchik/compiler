@@ -1,4 +1,4 @@
-// $ANTLR 3.4 src\\grammar\\StrLang.g 2012-04-06 16:22:51
+// $ANTLR 3.4 src\\grammar\\StrLang.g 2012-04-17 00:40:44
 
 	package grammar;
 
@@ -498,8 +498,8 @@ public class StrLangLexer extends Lexer {
         try {
             int _type = LINE_TYPE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // src\\grammar\\StrLang.g:170:11: ( 'string' )
-            // src\\grammar\\StrLang.g:170:12: 'string'
+            // src\\grammar\\StrLang.g:233:11: ( 'string' )
+            // src\\grammar\\StrLang.g:233:13: 'string'
             {
             match("string"); 
 
@@ -521,8 +521,8 @@ public class StrLangLexer extends Lexer {
         try {
             int _type = INT_TYPE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // src\\grammar\\StrLang.g:171:10: ( 'int' )
-            // src\\grammar\\StrLang.g:171:11: 'int'
+            // src\\grammar\\StrLang.g:234:10: ( 'int' )
+            // src\\grammar\\StrLang.g:234:12: 'int'
             {
             match("int"); 
 
@@ -544,8 +544,8 @@ public class StrLangLexer extends Lexer {
         try {
             int _type = SYMBOL_TYPE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // src\\grammar\\StrLang.g:172:13: ( 'char' )
-            // src\\grammar\\StrLang.g:172:14: 'char'
+            // src\\grammar\\StrLang.g:235:13: ( 'char' )
+            // src\\grammar\\StrLang.g:235:14: 'char'
             {
             match("char"); 
 
@@ -567,8 +567,8 @@ public class StrLangLexer extends Lexer {
         try {
             int _type = VOID_TYPE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // src\\grammar\\StrLang.g:173:11: ( 'void' )
-            // src\\grammar\\StrLang.g:173:12: 'void'
+            // src\\grammar\\StrLang.g:236:11: ( 'void' )
+            // src\\grammar\\StrLang.g:236:12: 'void'
             {
             match("void"); 
 
@@ -590,10 +590,10 @@ public class StrLangLexer extends Lexer {
         try {
             int _type = INT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // src\\grammar\\StrLang.g:177:2: ( ( '0' .. '9' )+ )
-            // src\\grammar\\StrLang.g:177:4: ( '0' .. '9' )+
+            // src\\grammar\\StrLang.g:240:2: ( ( '0' .. '9' )+ )
+            // src\\grammar\\StrLang.g:240:4: ( '0' .. '9' )+
             {
-            // src\\grammar\\StrLang.g:177:4: ( '0' .. '9' )+
+            // src\\grammar\\StrLang.g:240:4: ( '0' .. '9' )+
             int cnt1=0;
             loop1:
             do {
@@ -648,8 +648,8 @@ public class StrLangLexer extends Lexer {
         try {
             int _type = END_LINE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // src\\grammar\\StrLang.g:181:2: ( '\\'~\\'' )
-            // src\\grammar\\StrLang.g:181:5: '\\'~\\''
+            // src\\grammar\\StrLang.g:244:2: ( '\\'~\\'' )
+            // src\\grammar\\StrLang.g:244:5: '\\'~\\''
             {
             match("'~'"); 
 
@@ -671,10 +671,10 @@ public class StrLangLexer extends Lexer {
         try {
             int _type = ID;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // src\\grammar\\StrLang.g:185:2: ( ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_' | '\"' | ':' | '\\\\' | '.' )+ )
-            // src\\grammar\\StrLang.g:185:4: ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_' | '\"' | ':' | '\\\\' | '.' )+
+            // src\\grammar\\StrLang.g:248:2: ( ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_' | '\"' | ':' | '\\\\' | '.' )+ )
+            // src\\grammar\\StrLang.g:248:4: ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_' | '\"' | ':' | '\\\\' | '.' )+
             {
-            // src\\grammar\\StrLang.g:185:4: ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_' | '\"' | ':' | '\\\\' | '.' )+
+            // src\\grammar\\StrLang.g:248:4: ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_' | '\"' | ':' | '\\\\' | '.' )+
             int cnt2=0;
             loop2:
             do {
@@ -729,8 +729,8 @@ public class StrLangLexer extends Lexer {
         try {
             int _type = SYMBOL;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // src\\grammar\\StrLang.g:189:2: ( '\\'' ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_' | ' ' | '.' ) '\\'' )
-            // src\\grammar\\StrLang.g:189:4: '\\'' ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_' | ' ' | '.' ) '\\''
+            // src\\grammar\\StrLang.g:252:2: ( '\\'' ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_' | ' ' | '.' ) '\\'' )
+            // src\\grammar\\StrLang.g:252:4: '\\'' ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_' | ' ' | '.' ) '\\''
             {
             match('\''); 
 
@@ -762,12 +762,12 @@ public class StrLangLexer extends Lexer {
         try {
             int _type = LINE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // src\\grammar\\StrLang.g:193:2: ( '\"' ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | ' ' | '_' )* '\"' )
-            // src\\grammar\\StrLang.g:193:3: '\"' ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | ' ' | '_' )* '\"'
+            // src\\grammar\\StrLang.g:256:2: ( '\"' ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | ' ' | '_' )* '\"' )
+            // src\\grammar\\StrLang.g:256:3: '\"' ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | ' ' | '_' )* '\"'
             {
             match('\"'); 
 
-            // src\\grammar\\StrLang.g:193:7: ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | ' ' | '_' )*
+            // src\\grammar\\StrLang.g:256:7: ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | ' ' | '_' )*
             loop3:
             do {
                 int alt3=2;
@@ -819,8 +819,8 @@ public class StrLangLexer extends Lexer {
         try {
             int _type = DOUBLE_PLUS;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // src\\grammar\\StrLang.g:198:2: ( '++' )
-            // src\\grammar\\StrLang.g:198:4: '++'
+            // src\\grammar\\StrLang.g:261:2: ( '++' )
+            // src\\grammar\\StrLang.g:261:4: '++'
             {
             match("++"); 
 
@@ -842,8 +842,8 @@ public class StrLangLexer extends Lexer {
         try {
             int _type = ASSIGN_OP;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // src\\grammar\\StrLang.g:202:2: ( '=' )
-            // src\\grammar\\StrLang.g:202:4: '='
+            // src\\grammar\\StrLang.g:265:2: ( '=' )
+            // src\\grammar\\StrLang.g:265:4: '='
             {
             match('='); 
 
@@ -863,8 +863,8 @@ public class StrLangLexer extends Lexer {
         try {
             int _type = DOUBLE_MINUS;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // src\\grammar\\StrLang.g:206:2: ( '--' )
-            // src\\grammar\\StrLang.g:206:4: '--'
+            // src\\grammar\\StrLang.g:269:2: ( '--' )
+            // src\\grammar\\StrLang.g:269:4: '--'
             {
             match("--"); 
 
@@ -886,8 +886,8 @@ public class StrLangLexer extends Lexer {
         try {
             int _type = PLUS_OP;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // src\\grammar\\StrLang.g:210:2: ( '+' )
-            // src\\grammar\\StrLang.g:210:4: '+'
+            // src\\grammar\\StrLang.g:273:2: ( '+' )
+            // src\\grammar\\StrLang.g:273:4: '+'
             {
             match('+'); 
 
@@ -907,8 +907,8 @@ public class StrLangLexer extends Lexer {
         try {
             int _type = MINUS_OP;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // src\\grammar\\StrLang.g:213:9: ( '-' )
-            // src\\grammar\\StrLang.g:213:11: '-'
+            // src\\grammar\\StrLang.g:276:9: ( '-' )
+            // src\\grammar\\StrLang.g:276:11: '-'
             {
             match('-'); 
 
@@ -928,8 +928,8 @@ public class StrLangLexer extends Lexer {
         try {
             int _type = LESS_OP;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // src\\grammar\\StrLang.g:216:9: ( '<' )
-            // src\\grammar\\StrLang.g:216:11: '<'
+            // src\\grammar\\StrLang.g:279:9: ( '<' )
+            // src\\grammar\\StrLang.g:279:11: '<'
             {
             match('<'); 
 
@@ -949,8 +949,8 @@ public class StrLangLexer extends Lexer {
         try {
             int _type = MORE_OP;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // src\\grammar\\StrLang.g:219:9: ( '>' )
-            // src\\grammar\\StrLang.g:219:11: '>'
+            // src\\grammar\\StrLang.g:282:9: ( '>' )
+            // src\\grammar\\StrLang.g:282:11: '>'
             {
             match('>'); 
 
@@ -970,8 +970,8 @@ public class StrLangLexer extends Lexer {
         try {
             int _type = LESS_EQL_OP;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // src\\grammar\\StrLang.g:223:2: ( '<=' )
-            // src\\grammar\\StrLang.g:223:4: '<='
+            // src\\grammar\\StrLang.g:286:2: ( '<=' )
+            // src\\grammar\\StrLang.g:286:4: '<='
             {
             match("<="); 
 
@@ -993,8 +993,8 @@ public class StrLangLexer extends Lexer {
         try {
             int _type = MORE_EQL_OP;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // src\\grammar\\StrLang.g:227:2: ( '>=' )
-            // src\\grammar\\StrLang.g:227:4: '>='
+            // src\\grammar\\StrLang.g:290:2: ( '>=' )
+            // src\\grammar\\StrLang.g:290:4: '>='
             {
             match(">="); 
 
@@ -1016,8 +1016,8 @@ public class StrLangLexer extends Lexer {
         try {
             int _type = EQUALLY_EQL_OP;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // src\\grammar\\StrLang.g:231:2: ( '==' )
-            // src\\grammar\\StrLang.g:231:4: '=='
+            // src\\grammar\\StrLang.g:294:2: ( '==' )
+            // src\\grammar\\StrLang.g:294:4: '=='
             {
             match("=="); 
 
@@ -1039,8 +1039,8 @@ public class StrLangLexer extends Lexer {
         try {
             int _type = NO_EQUALLY;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // src\\grammar\\StrLang.g:235:2: ( '!=' )
-            // src\\grammar\\StrLang.g:235:4: '!='
+            // src\\grammar\\StrLang.g:298:2: ( '!=' )
+            // src\\grammar\\StrLang.g:298:4: '!='
             {
             match("!="); 
 
@@ -1062,7 +1062,7 @@ public class StrLangLexer extends Lexer {
         try {
             int _type = COMMENT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // src\\grammar\\StrLang.g:239:5: ( '//' (~ ( '\\n' | '\\r' ) )* ( '\\r' )? '\\n' | '/*' ( options {greedy=false; } : . )* '*/' )
+            // src\\grammar\\StrLang.g:302:5: ( '//' (~ ( '\\n' | '\\r' ) )* ( '\\r' )? '\\n' | '/*' ( options {greedy=false; } : . )* '*/' )
             int alt7=2;
             int LA7_0 = input.LA(1);
 
@@ -1092,13 +1092,13 @@ public class StrLangLexer extends Lexer {
             }
             switch (alt7) {
                 case 1 :
-                    // src\\grammar\\StrLang.g:239:9: '//' (~ ( '\\n' | '\\r' ) )* ( '\\r' )? '\\n'
+                    // src\\grammar\\StrLang.g:302:9: '//' (~ ( '\\n' | '\\r' ) )* ( '\\r' )? '\\n'
                     {
                     match("//"); 
 
 
 
-                    // src\\grammar\\StrLang.g:239:14: (~ ( '\\n' | '\\r' ) )*
+                    // src\\grammar\\StrLang.g:302:14: (~ ( '\\n' | '\\r' ) )*
                     loop4:
                     do {
                         int alt4=2;
@@ -1132,7 +1132,7 @@ public class StrLangLexer extends Lexer {
                     } while (true);
 
 
-                    // src\\grammar\\StrLang.g:239:28: ( '\\r' )?
+                    // src\\grammar\\StrLang.g:302:28: ( '\\r' )?
                     int alt5=2;
                     int LA5_0 = input.LA(1);
 
@@ -1141,7 +1141,7 @@ public class StrLangLexer extends Lexer {
                     }
                     switch (alt5) {
                         case 1 :
-                            // src\\grammar\\StrLang.g:239:28: '\\r'
+                            // src\\grammar\\StrLang.g:302:28: '\\r'
                             {
                             match('\r'); 
 
@@ -1158,13 +1158,13 @@ public class StrLangLexer extends Lexer {
                     }
                     break;
                 case 2 :
-                    // src\\grammar\\StrLang.g:240:9: '/*' ( options {greedy=false; } : . )* '*/'
+                    // src\\grammar\\StrLang.g:303:9: '/*' ( options {greedy=false; } : . )* '*/'
                     {
                     match("/*"); 
 
 
 
-                    // src\\grammar\\StrLang.g:240:14: ( options {greedy=false; } : . )*
+                    // src\\grammar\\StrLang.g:303:14: ( options {greedy=false; } : . )*
                     loop6:
                     do {
                         int alt6=2;
@@ -1189,7 +1189,7 @@ public class StrLangLexer extends Lexer {
 
                         switch (alt6) {
                     	case 1 :
-                    	    // src\\grammar\\StrLang.g:240:42: .
+                    	    // src\\grammar\\StrLang.g:303:42: .
                     	    {
                     	    matchAny(); 
 
@@ -1226,8 +1226,8 @@ public class StrLangLexer extends Lexer {
         try {
             int _type = WS;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // src\\grammar\\StrLang.g:243:5: ( ( ' ' | '\\t' | '\\r' | '\\n' ) )
-            // src\\grammar\\StrLang.g:243:9: ( ' ' | '\\t' | '\\r' | '\\n' )
+            // src\\grammar\\StrLang.g:306:5: ( ( ' ' | '\\t' | '\\r' | '\\n' ) )
+            // src\\grammar\\StrLang.g:306:9: ( ' ' | '\\t' | '\\r' | '\\n' )
             {
             if ( (input.LA(1) >= '\t' && input.LA(1) <= '\n')||input.LA(1)=='\r'||input.LA(1)==' ' ) {
                 input.consume();

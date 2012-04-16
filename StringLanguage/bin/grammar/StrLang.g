@@ -6,20 +6,69 @@ options {
 
 @header{
 	package grammar;
+	import java.io.*;
+	import namestable.*;
+	import java.util.ArrayList;
+	import org.antlr.runtime.*;
+	import namestable.*;
 }
 
 @lexer::header{
 	package grammar;
 }
 
+@members{
+	protected NamesTable names = new NamesTable();
+	protected ArrayList<String> errors = new ArrayList<String>();
+	protected ArrayList<String> tmpVarNamesList = new ArrayList<String>();
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) throws Exception {
+		// TODO Auto-generated method stub
+		
+		StrLangLexer lexer = new StrLangLexer(new ANTLRFileStream(args[0]));
+		StrLangParser parser = new StrLangParser(new CommonTokenStream(lexer));
+		parser.program();
+		if(!parser.errors.isEmpty())
+		{
+			System.out.println("Found "+parser.errors.size()+" errors:");
+			for(String m: parser.errors)
+				System.out.println(m);
+		}
+		System.out.println("Compiled successfully");
+		
+	}
+	
+	public String getErrorHeader(RecognitionException e)
+	{
+		return "line"+e.line+":";
+	}
+	
+	public void emitErrorMessage(String msg)
+	{
+		errors.add(msg);
+	}
+}
+
 program
-	: global_decl+
+	: global_decl
 	;
 
 global_decl
-	: variables
-	| global_func
-	| func
+scope{
+	String name;
+	String nameOfFunc;
+	String idType;
+}
+@init{
+	$global_decl::name = "";
+	$global_decl::nameOfFunc="";
+}
+	: ({$global_decl::name = "";}variables
+	| {$global_decl::nameOfFunc = "";}global_func
+	| func)+
 	;
 
 func
@@ -33,7 +82,14 @@ variables
 	;
 	
 decl_var
-	: type ID ( ASSIGN_OP spec_type)? ((PLUS_OP|MINUS_OP) spec_type)*  
+	: type ID
+	{
+		if(names.isExist($global_decl::name+"."+$ID.text))
+			errors.add("line "+$ID.line+": name "+$ID.text+" duplicated");
+		else
+			names.add(names.new Name($global_decl::name+"."+$ID.text, $type.idType, $ID.line));
+	}
+	( ASSIGN_OP spec_type)? ((PLUS_OP|MINUS_OP) spec_type)* 
 	;
 	
 init_var
@@ -58,7 +114,7 @@ action
 	: spec_type (DOUBLE_MINUS|DOUBLE_PLUS|ASSIGN_OP spec_type (PLUS_OP|MINUS_OP) spec_type )
 	;		
 	
-spec_type	
+spec_type
 	: INT 
 	| LINE
 	| SYMBOL 
@@ -67,9 +123,16 @@ spec_type
 	| call_func
 	;
 
-type	
+/*type	
 	: LINE_TYPE | INT_TYPE | VOID_TYPE | SYMBOL_TYPE
-	;	
+	;*/
+
+type returns[String idType]
+	:	'string' {$idType = "string";}
+	| 	'int'	{$idType="int";}
+	|	'char' {$idType = "char";}
+	|	'void' {$idType = "void";}
+	;		
 	
 global_func
 	: type ID '(' param* ')' '{' body? return_op? '}' 
@@ -165,12 +228,12 @@ logic_atom
 specialType
 	:INT
 	|ID
-	;	
+	;
 
-LINE_TYPE	:'string';
-INT_TYPE	:'int';
-SYMBOL_TYPE	:'char';
-VOID_TYPE	:'void';
+LINE_TYPE : 'string';
+INT_TYPE : 'int';
+SYMBOL_TYPE :'char';
+VOID_TYPE :'void';
 
 
 INT 
