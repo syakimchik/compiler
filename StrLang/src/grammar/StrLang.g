@@ -89,11 +89,25 @@ decl_var
 		else
 			names.add(names.new Name($global_decl::name+"."+$ID.text, $type.idType, $ID.line));
 	}
-	( ASSIGN_OP spec_type)? ((PLUS_OP|MINUS_OP) spec_type)* 
+	( ASSIGN_OP spec_type
+	{
+		if(names.isExist($global_decl::name+"."+$ID.text))
+			names.get($global_decl::name+"."+$ID.text).addLineUses($ID.line);
+		else
+			errors.add("line "+$ID.line+": name "+$ID.text+" cannot be resolved");
+	}
+	)? ((PLUS_OP|MINUS_OP) spec_type)* 
 	;
 	
 init_var
-	: ID  ASSIGN_OP spec_type ((PLUS_OP|MINUS_OP) spec_type)*
+	: ID  ASSIGN_OP spec_type
+	{
+		if(names.isExist($global_decl::name+"."+$ID.text))
+			names.get($global_decl::name+"."+$ID.text).addLineUses($ID.line);
+		else
+			errors.add("line "+$ID.line+": name "+$ID.text+" cannot be resolved");
+	} 
+	((PLUS_OP|MINUS_OP) spec_type)*
 	;
 	
 
@@ -114,11 +128,11 @@ action
 	: spec_type (DOUBLE_MINUS|DOUBLE_PLUS|ASSIGN_OP spec_type (PLUS_OP|MINUS_OP) spec_type )
 	;		
 	
-spec_type
-	: INT 
-	| LINE
-	| SYMBOL 
-	| ID 
+spec_type returns[String value]
+	: INT {$value = $INT.getText();}
+	| LINE{$value = $LINE.text;}
+	| SYMBOL
+	| ID
 	| inside_func
 	| call_func
 	;
@@ -135,7 +149,11 @@ type returns[String idType]
 	;		
 	
 global_func
-	: type ID '(' param* ')' '{' body? return_op? '}' 
+	: type ID
+	{
+		$global_decl::name = $ID.text;
+	}
+	 '(' param* ')' '{' body? return_op? '}' 	
 	;
 		
 param
