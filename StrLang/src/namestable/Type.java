@@ -12,4 +12,5 @@ public class Type {
 	public static final String STRING = "string";
 	public static final String CHAR = "char";
 	public static final String VOID = "void";
+	public static final String ERROR = "error";
 }
