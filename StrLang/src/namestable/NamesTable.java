@@ -92,52 +92,9 @@ public class NamesTable {
 			return argumentNamesList;
 		}
 	}
-	
-	public class MethodName{
-		private String idtf;
-		private String inputType;
-		private String returnType;
-		private ArrayList<String> argumentTypes;
-		private ArrayList<Integer> linesUses = new ArrayList<Integer>();
-		
-		public MethodName(String _idtf, String _inputType, String _returnType, ArrayList<String> _argTypes)
-		{
-			idtf = _idtf;
-			inputType = _inputType;
-			returnType = _returnType;
-			argumentTypes = _argTypes;
-		}
-		
-		public void addLineUses(int line)
-		{
-			linesUses.add(new Integer(line));
-		}
-		
-		public String toString()
-		{
-			return idtf+((linesUses.isEmpty())? "not uses":linesUses);
-		}
-		
-		public String getReturnType()
-		{
-			return returnType;
-		}
-		
-		public String getInputType()
-		{
-			return inputType;
-		}
-		
-		public ArrayList<String> getArgumentTypes()
-		{
-			return argumentTypes;
-		}
-		
-	}
 		
 	private HashMap<String, VariableName> variableNames = new HashMap<String, VariableName>();
 	private HashMap<String, FunctionName> functionNames = new HashMap<String, FunctionName>();
-	private HashMap<String, MethodName> methodNames = new HashMap<String, MethodName>();
 	private Stack<String> errors = new Stack<String>();
 	
 	public String getLastError()
@@ -221,39 +178,7 @@ public class NamesTable {
 		}
 	}
 	
-	public boolean isExistMethod(String name)
-	{
-		boolean n = methodNames.containsKey(name); 
-		return n;
-	}
 	
-	/*public boolean isExistMethod(String curBlock, String idName, String methodName) {
-		if(isExistVariable(curBlock+"."+idName))
-		{
-			String idType = getVariable(curBlock+"."+idName).getType();
-			return methodNames.containsKey(idType+"."+methodName);
-		}
-		return methodNames.containsKey(idName);
-	}*/
-	
-	public void addMethod(MethodName name)
-	{
-		methodNames.put(name.idtf, name);
-	}
-	
-	public MethodName getMethod(String n)
-	{
-		return methodNames.get(n);
-	}
-	
-	public void printMethod(PrintStream out)
-	{
-		for(String idtf: methodNames.keySet())
-		{
-			MethodName n = methodNames.get(idtf);
-			out.println(n);
-		}
-	}
 	
 	public boolean checkReturnType(String funcName, String varName, String curBlock, int line)
 	{
@@ -306,93 +231,36 @@ public class NamesTable {
 			}
 		}
 		
-		//var.addLineUses(line);
+		var.addLineUses(line);
 		return true;
-		
 	}
 	
-	
-	/*
-	public MethodName getMethod(String curBlock, String idName, String methodName) {
-		if(isExistVariable(curBlock+"."+idName)){
-			String idType = getVariable(curBlock+"."+idName).getType();
-			return methodNames.get(idType+"."+methodName);
-		}
-		return methodNames.get(methodName);
-	}*/
-	
-	
-	
-	
-	
-	
-	
-	
-	/*--------------------------------------------------------------------*/
-	
-	/*
-	public boolean isExist(String name) {
-		boolean rv = variableNames.containsKey(name);
-		if (! rv) {
-			rv = variableNames.containsKey(name.substring(name.indexOf('.')));
-		}
-		return rv;
-	}
-	
-	public void add(VariableName n)
+	public boolean checkCallFunction(String funcName, ArrayList<String> list, int line)
 	{
-		variableNames.put(n.idtf, n);
+		if(list==null)
+			list = new ArrayList<String>();
+		boolean result = true;
+		if(!isExistFunction(funcName))
+		{
+			//errors.add("line "+line+": unknown function "+funcName);
+			return false;
+		}
+		
+		FunctionName func = functionNames.get(funcName);
+		if(!func.getArgumentTypes().equals(list))
+		{
+			errors.add("line "+line+": incorrect argument types for function "+funcName+" need " + func.getArgumentTypes().toString() +" found "+ list.toString() );
+			result = false;
+		}
+		return result;
 	}
 	
-	public VariableName get(String n)
+	public void getAllErrors(ArrayList<String> list)
 	{
-		VariableName _n = variableNames.get(n);
-		if(_n==null)
-			_n = variableNames.get(n.substring(n.indexOf('.')));
-		return _n;
-	}
-	
-	public void print(PrintStream out)
-	{
-		for(String idtf: variableNames.keySet())
+		while(!errors.isEmpty())
 		{
-			VariableName n = variableNames.get(idtf);
-			out.println(n);
+			list.add(errors.pop());
 		}
 	}
-	
-	
-	/*__________________________________________________________*/
-	
-	/*	public boolean FunctionIsExist(String name)
-		{
-			boolean rv = FunctionNames.containsKey(name);
-			if(!rv)
-				rv = FunctionNames.containsKey(name.substring(name.indexOf('.')));
-			return rv;
-		}
-		
-		public void FunctionAdd(FunctionName n)
-		{
-			FunctionNames.put(n.idtf, n);
-		}
-		
-		public FunctionName FunctionGet(String n)
-		{
-			FunctionName _n = FunctionNames.get(n);
-			if(_n==null)
-				_n = FunctionNames.get(n.substring(n.indexOf('.')));
-			return _n;
-		}
-		
-		public void FunctionPrint(PrintStream out)
-		{
-			for(String idtf: FunctionNames.keySet())
-			{
-				FunctionName n = FunctionNames.get(idtf);
-				out.println(n.idtf);
-			}
-		}
-		*/
 
 }

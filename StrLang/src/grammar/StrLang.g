@@ -68,7 +68,6 @@ mainBlock:
 
 global_decl
 	: 
-	{$program::curBlock = "global";}
 	(variables
 	| global_func
 	| func)+
@@ -85,6 +84,7 @@ scope{
 }
 @init{
 	$variables::varType = "";
+	{$program::curBlock = "global";}
 }
 	:decl_var
 	|init_var
@@ -123,33 +123,51 @@ scope{
 	}
 	
 	(
-		ASSIGN_OP spec_type
+		ASSIGN_OP firstAssign=spec_type
 		{
-			if(!TypesChecker.checkTypes($variables::varType, $spec_type.value))
+			if(!TypesChecker.checkTypes($variables::varType, $firstAssign.value))
 			{
 				errors.add("line "+$ID.line+": mismatch - variable name "+$ID.text);
 			}
 		}
 	)?
-	//((PLUS_OP|MINUS_OP) spec_type)*
+	((PLUS_OP|MINUS_OP) secondAssign=spec_type)*
 	;
 	
 	
 init_var
-	: ID ASSIGN_OP spec_type
+	: ID
 	{
-		if(!names.isDeclaredVariable($program::curBlock+"."+$ID.text))
+		if(!names.isDeclaredVariable("global"+"."+$ID.text))
 		{
-			if(!names.isDeclaredVariable("global"+"."+$ID.text))
+			if(names.isDeclaredVariable($program::curBlock+"."+$ID.text))
+			{
 				errors.add("line "+$ID.line+": mismatch - variable name "+$ID.text);
+			}
 		}
 	}
-	((PLUS_OP|MINUS_OP) spec_type)*
+	ASSIGN_OP firstAssign=spec_type
+	{
+		if(names.isExistVariable($program::curBlock+"."+$ID.text))
+		{
+			NamesTable.VariableName var_type = names.getVariable($ID.text);
+			String type = var_type.getType();
+			if(!TypesChecker.checkTypes(type, $firstAssign.value))
+			{
+				errors.add("line "+$ID.line+": mismatch - variable name "+$ID.text);
+			}
+		}
+		else
+		{
+			errors.add("line "+$ID.line+": variable name "+$ID.text+" is not exist");
+		}
+	}
+	((PLUS_OP|MINUS_OP) secondAssign=spec_type)*
 	;
 	
 
 inside_func
-	: elem 
+	: elem
 	| length
 	| print_op  
 	| break_op
@@ -157,12 +175,39 @@ inside_func
 	| write_op
 	;
 	
-call_func
-	: ID '(' param? ')'
+assign_inside_func returns[String type]
+	: elem {$type = "char";}
+	| length {$type = "int";}
+	| read_op {$type = "string";}
+	;
+	
+call_func returns[String type, int curLine]
+scope{
+	String methodName;
+}
+@init{
+	$call_func::methodName="";
+}
+	: ID {$call_func::methodName=$ID.text;} '(' param? ')'
 	{
+		$curLine = $ID.line;
+		ArrayList<String> list = null;
+		if($param.argumentTypeList==null)
+			list = new ArrayList<String>();
+		else
+			list = $param.argumentTypeList;
+		if(!names.checkCallFunction($ID.text, list, $ID.line))
+		{
+			names.getAllErrors(errors);
+		}
 		if(!names.isExistFunction($ID.text))
 		{
 			errors.add("line "+$ID.line+": function "+$ID.text+" is not exist");
+		}
+		else
+		{
+			NamesTable.FunctionName func = names.getFunction($ID.text);
+			$type = func.getReturnType();
 		}
 	}
 	;
@@ -175,16 +220,33 @@ spec_type returns[String value]
 	: INT {$value = "int";}
 	| LINE {$value = "string";}
 	| SYMBOL {$value = "char";}
-	//| ID
-	| inside_func
-	| call_func
+	| idLiteral {$value = $idLiteral.idType;}
+	| assign_inside_func {$value = $assign_inside_func.type;}
+	| call_func {$value = $call_func.type;}
 	;
 	
-returnType returns[String value]
-	: INT	{$value = $INT.text;}
-	| LINE	{$value = $LINE.text;}
-	| SYMBOL {$value = $SYMBOL.text;}
-	| ID	{$value = $ID.text;}
+returnType returns[String value, String type]
+	: INT	{$value = $INT.text; $type = "int";}
+	| LINE	{$value = $LINE.text; $type = "string";}
+	| SYMBOL {$value = $SYMBOL.text; $type = "char";}
+	| idLiteral	{$value = $idLiteral.text; $type = $idLiteral.idType;}
+	;
+	
+idLiteral returns[String idType, int curLine]
+	:	ID
+	{
+		$curLine = $ID.line;
+		if(!names.isExistVariable($program::curBlock+"."+$ID.text))
+		{
+			errors.add("line "+$ID.line+": unknown variable "+$ID.text);
+			$idType = "";
+		}
+		else
+		{
+			names.getVariable($program::curBlock+"."+$ID.text).addLineUses($ID.line);
+			$idType = names.getVariable($program::curBlock+"."+$ID.text).getType();
+		}
+	}
 	;
 
 type
@@ -211,7 +273,7 @@ scope{
 	$global_func::funcArgNames = new ArrayList<String>();
 	$global_func::funcArgTypes = new ArrayList<String>();
 }
-	: type{$global_func::funcType = $type.text;} ID{$program::curBlock = $ID.text;}
+	: type {$global_func::funcType = $type.text;} ID{$program::curBlock = $ID.text;}
 	 '(' functionArgumentList? ')'
 	 //if fuction is not exists in nametable then add her
 	 {
@@ -224,14 +286,19 @@ scope{
 	 		errors.add("line "+$ID.line+": duplicated declaration function "+$ID.text);
 	 	}
 	 }
-	  '{' body? return_op? '}' 
-	  {
-	  	boolean result = names.checkReturnType($ID.text, $global_func::returnVariable, $program::curBlock, $ID.line);
-	  	if(result==false)
-	  	{
-	  		errors.add(names.getLastError());
-	  	}
-	  }	
+	  '{' 
+	  		body? 
+	  		(
+	  			return_op
+	  			{
+				  	boolean result = names.checkReturnType($ID.text, $global_func::returnVariable, $program::curBlock, $ID.line);
+				  	if(result==false)
+				  	{
+				  		errors.add(names.getLastError());
+				  	}
+			  	}
+	  		)?
+	  '}' 	
 	;
 	
 functionArgumentList
@@ -254,8 +321,15 @@ functionArgumentDeclarator
 	}
 	;
 		
-param
-	:  (ID|INT|SYMBOL|LINE) ( ',' (ID|INT|SYMBOL|LINE) )*
+param returns[ArrayList<String> argumentTypeList]
+	:
+	{
+		argumentTypeList = new ArrayList<String>();
+	}  
+	a=returnType {argumentTypeList.add($a.type);} (',' b=returnType {argumentTypeList.add($b.type);} )*
+	{
+		
+	}
 	;
 	
 body
@@ -290,7 +364,7 @@ length
 	;
 
 elem	
-	:'elem' '('spec_type ',' specialType ')'
+	:'elem' '(' spec_type ',' specialType ')'
 	;
 
 break_op	
@@ -340,7 +414,7 @@ logic_atom
 	| SYMBOL
 	| INT
 	| ID
-	| inside_func
+	| assign_inside_func
 	| END_LINE
 	;
 	 		
@@ -364,7 +438,7 @@ END_LINE
 	;
 
 ID  	
-	: ( 'a'..'z' | 'A'..'Z' | '0'..'9' | '_' | '"' | ':' | '\\' | '.'  )+
+	: ( 'a'..'z' | 'A'..'Z' | '0'..'9' | '_' | ':' | '\\' | '.' )+
 	;
 
 SYMBOL
@@ -372,7 +446,7 @@ SYMBOL
 	;    	
 
 LINE
-	: '\'\''( 'a'..'z' | 'A'..'Z' | '0'..'9' | ' ' | '_' )+ '\'\''
+	: '"'( 'a'..'z' | 'A'..'Z' | '0'..'9' | ' ' | '_' )+ '"'
 	
 	;
 	
