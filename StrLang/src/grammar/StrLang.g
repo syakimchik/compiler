@@ -36,8 +36,10 @@ options {
 			System.out.println("Found "+parser.errors.size()+" errors:");
 			for(String m: parser.errors)
 				System.out.println(m);
+			System.out.println("Compiled not successfully");
 		}
-		System.out.println("Compiled successfully");
+		else
+			System.out.println("Compiled successfully");
 		
 	}
 	
@@ -63,14 +65,16 @@ scope{
 	;
 	
 mainBlock:
-		'main' '{' body? '}'
+		'main' '{' body* '}'
 		;
 
 global_decl
 	: 
-	(variables
-	| global_func
-	| func)+
+	(global_var | global_func)+
+	;
+	
+global_var
+	: { $program::curBlock = "global";} variables
 	;
 
 func
@@ -84,7 +88,6 @@ scope{
 }
 @init{
 	$variables::varType = "";
-	{$program::curBlock = "global";}
 }
 	:decl_var
 	|init_var
@@ -117,8 +120,8 @@ scope{
 		}
 		else
 		{
-			if(names.isDeclaredVariable("global"+"."+$ID.text))
-				errors.add("line "+$ID.line+": duplicated variable name "+$ID.text);
+			if(names.isDeclaredVariable($program::curBlock+"."+$ID.text))
+				errors.add("line "+$ID.line+": Duplicated variable name "+$ID.text);
 		}
 	}
 	
@@ -127,42 +130,47 @@ scope{
 		{
 			if(!TypesChecker.checkTypes($variables::varType, $firstAssign.value))
 			{
-				errors.add("line "+$ID.line+": mismatch - variable name "+$ID.text);
+				errors.add("line "+$ID.line+": Type mismatch: cannot convert from "+$variables::varType+" to "+$firstAssign.value);
 			}
 		}
 	)?
-	((PLUS_OP|MINUS_OP) secondAssign=spec_type)*
+	((PLUS_OP|MINUS_OP) secondAssign=spec_type
+		{
+			if(!TypesChecker.checkTypes($variables::varType, $secondAssign.value))
+			{
+				errors.add("line "+$ID.line+": Type mismatch: cannot convert from "+$variables::varType+" to "+$secondAssign.value);
+			}
+		}
+	)*
 	;
 	
 	
 init_var
-	: ID
+	: ID ASSIGN_OP firstAssign=spec_type
 	{
-		if(!names.isDeclaredVariable("global"+"."+$ID.text))
+		if(names.isDeclaredVariable($program::curBlock+"."+$ID.text))
 		{
-			if(names.isDeclaredVariable($program::curBlock+"."+$ID.text))
+			NamesTable.VariableName var_type = names.getVariable($program::curBlock+"."+$ID.text);
+			$variables::varType = var_type.getType();
+			if(!TypesChecker.checkTypes($variables::varType, $firstAssign.value))
 			{
-				errors.add("line "+$ID.line+": mismatch - variable name "+$ID.text);
-			}
-		}
-	}
-	ASSIGN_OP firstAssign=spec_type
-	{
-		if(names.isExistVariable($program::curBlock+"."+$ID.text))
-		{
-			NamesTable.VariableName var_type = names.getVariable($ID.text);
-			String type = var_type.getType();
-			if(!TypesChecker.checkTypes(type, $firstAssign.value))
-			{
-				errors.add("line "+$ID.line+": mismatch - variable name "+$ID.text);
+				errors.add("line "+$ID.line+": Type mismatch: cannot convert from "+$variables::varType+" to "+$firstAssign.value);
 			}
 		}
 		else
 		{
-			errors.add("line "+$ID.line+": variable name "+$ID.text+" is not exist");
+			errors.add("line "+$ID.line+": "+$ID.text+" cannot be resolved to a variable");
 		}
 	}
-	((PLUS_OP|MINUS_OP) secondAssign=spec_type)*
+	(
+		(PLUS_OP|MINUS_OP) secondAssign=spec_type
+		{
+			if(!TypesChecker.checkTypes($variables::varType, $secondAssign.value))
+			{
+				errors.add("line "+$ID.line+": Type mismatch: cannot convert from "+$variables::varType+" to "+$secondAssign.value);
+			}
+		}
+	)*
 	;
 	
 
@@ -269,11 +277,10 @@ scope{
 	$global_func::funcName = "";
 	$global_func::funcType = "";
 	$global_func::returnVariable = "";
-	$global_func::isReturnUsed = false;
 	$global_func::funcArgNames = new ArrayList<String>();
 	$global_func::funcArgTypes = new ArrayList<String>();
 }
-	: type {$global_func::funcType = $type.text;} ID{$program::curBlock = $ID.text;}
+	: type {$global_func::funcType = $type.text;} ID{$program::curBlock = $ID.text; $global_func::funcName=$ID.text;}
 	 '(' functionArgumentList? ')'
 	 //if fuction is not exists in nametable then add her
 	 {
@@ -283,11 +290,11 @@ scope{
 	 	}
 	 	else
 	 	{
-	 		errors.add("line "+$ID.line+": duplicated declaration function "+$ID.text);
+	 		errors.add("line "+$ID.line+": Duplicated declaration function "+$ID.text);
 	 	}
 	 }
 	  '{' 
-	  		body? 
+	  		body*
 	  		(
 	  			return_op
 	  			{
@@ -316,7 +323,7 @@ functionArgumentDeclarator
 		}
 		else
 		{
-			errors.add("line "+$ID.line+": duplicated variable name "+$ID.text);
+			errors.add("line "+$ID.line+": Duplicated variable name "+$ID.text);
 		}
 	}
 	;
@@ -333,38 +340,39 @@ param returns[ArrayList<String> argumentTypeList]
 	;
 	
 body
-	:(variables
+	:
+	variables
 	| func
 	| if_op
 	| for_op
-	| while_op  )+
+	| while_op 
 	;
 
 write_op
-	: 'WriteToFile' '('  ID ','  ID  ')'
+	: 'WriteToFile' '('  path ','  ID  ')'
 	;
 
 read_op
-	: 'ReadFile' '('  ID   ')'
+	: 'ReadFile' '(' path ')'
 	;
 
 while_op
-	: 'while' '(' logic ')' '{' body? '}'   
+	: 'while' '(' logic ')' '{' body* '}'   
 	;
 for_op	
-	: 'for' '(' variables? ';' logic? ';' action? ')' '{' body? '}'
+	: 'for' '(' variables? ';' logic? ';' action? ')' '{' body* '}'
 	;
 
 print_op
-	: 'print' '(' spec_type (',' spec_type)*  ')'
+	: 'print' '(' returnType (',' returnType)*  ')'
 	;
 	
 length	
-	: 'length' '(' spec_type ')'
+	: 'length' '(' returnType ')'
 	;
 
 elem	
-	:'elem' '(' spec_type ',' specialType ')'
+	:'elem' '(' returnType ',' returnType ')'
 	;
 
 break_op	
@@ -380,7 +388,7 @@ return_op
  	;
 
 if_op
-	: 'if' '(' logic ')' '{' body? '}' ('else' '{' body? '}')?
+	: 'if' '(' logic ')' '{' body* '}' ('else' '{' body* '}')?
 	;
 
 expr
@@ -422,6 +430,9 @@ specialType
 	:INT
 	|ID
 	;
+	
+path:	ID|LINE
+	;
 
 LINE_TYPE : 'string';
 INT_TYPE : 'int';
@@ -438,7 +449,7 @@ END_LINE
 	;
 
 ID  	
-	: ( 'a'..'z' | 'A'..'Z' | '0'..'9' | '_' | ':' | '\\' | '.' )+
+	: ('a'..'z'|'A'..'Z'|'_') ('a'..'z'|'A'..'Z'|'0'..'9'|'_')*
 	;
 
 SYMBOL
@@ -446,8 +457,7 @@ SYMBOL
 	;    	
 
 LINE
-	: '"'( 'a'..'z' | 'A'..'Z' | '0'..'9' | ' ' | '_' )+ '"'
-	
+	: '"' ~'"'* '"'
 	;
 	
 DOUBLE_PLUS

@@ -21,7 +21,7 @@ int kol = 10
 **/
 int func(int j)
 {
-	int k = i+15
+	int k = j+15
 	return k
 }
 
@@ -36,7 +36,8 @@ main
 	s = "Hello world"
 	
 	// чтение файла в строку
-	string text = ReadFile("D:\921701\Yakimchik\test.txt")
+	string path = "D:\921701\Yakimchik\test.txt"
+	string text = ReadFile(path)
 	
 	text = text + "good"
 	
@@ -44,7 +45,7 @@ main
 	WriteToFile("D:\921701\Yakimchik\test.txt",text)
 	
 	text = "Hello"+"Java"
-	string s = "Hello"+"Antlr"
+	string s1 = "Hello"+"Antlr"
 	
 	//условные операторы
 	if(s==str)

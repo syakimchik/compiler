@@ -121,7 +121,18 @@ public class NamesTable {
 	public boolean isDeclaredVariable(String name)
 	{
 		boolean result = false;
-		result = variableNames.containsKey(name);
+		VariableName _name= variableNames.get(name);
+		if(_name==null)
+		{
+			if(name.indexOf('.')==-1)
+				_name = variableNames.get("global."+name);
+			else
+				_name = variableNames.get("global"+name.substring(name.indexOf('.')));
+			if(_name!=null)
+				return true;
+		}
+		else
+			result = true;
 		return result;
 	}
 	
