@@ -1,4 +1,4 @@
-// $ANTLR 3.3 Nov 30, 2010 12:50:56 D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g 2012-05-05 22:39:15
+// $ANTLR 3.3 Nov 30, 2010 12:50:56 D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g 2012-05-08 01:46:20
 
 	package grammar;
 
@@ -10,6 +10,10 @@ import java.util.ArrayList;
 
 public class StrLangLexer extends Lexer {
     public static final int EOF=-1;
+    public static final int T__22=22;
+    public static final int T__23=23;
+    public static final int T__24=24;
+    public static final int T__25=25;
     public static final int T__26=26;
     public static final int T__27=27;
     public static final int T__28=28;
@@ -46,12 +50,8 @@ public class StrLangLexer extends Lexer {
     public static final int LESS_OP=17;
     public static final int NO_EQUALLY=18;
     public static final int END_LINE=19;
-    public static final int LINE_TYPE=20;
-    public static final int INT_TYPE=21;
-    public static final int SYMBOL_TYPE=22;
-    public static final int VOID_TYPE=23;
-    public static final int COMMENT=24;
-    public static final int WS=25;
+    public static final int COMMENT=20;
+    public static final int WS=21;
 
     // delegates
     // delegators
@@ -66,16 +66,96 @@ public class StrLangLexer extends Lexer {
     }
     public String getGrammarFileName() { return "D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g"; }
 
-    // $ANTLR start "T__26"
-    public final void mT__26() throws RecognitionException {
+    // $ANTLR start "T__22"
+    public final void mT__22() throws RecognitionException {
         try {
-            int _type = T__26;
+            int _type = T__22;
             int _channel = DEFAULT_TOKEN_CHANNEL;
             // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:11:7: ( 'main' )
             // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:11:9: 'main'
             {
             match("main"); 
 
+
+            }
+
+            state.type = _type;
+            state.channel = _channel;
+        }
+        finally {
+        }
+    }
+    // $ANTLR end "T__22"
+
+    // $ANTLR start "T__23"
+    public final void mT__23() throws RecognitionException {
+        try {
+            int _type = T__23;
+            int _channel = DEFAULT_TOKEN_CHANNEL;
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:12:7: ( '{' )
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:12:9: '{'
+            {
+            match('{'); 
+
+            }
+
+            state.type = _type;
+            state.channel = _channel;
+        }
+        finally {
+        }
+    }
+    // $ANTLR end "T__23"
+
+    // $ANTLR start "T__24"
+    public final void mT__24() throws RecognitionException {
+        try {
+            int _type = T__24;
+            int _channel = DEFAULT_TOKEN_CHANNEL;
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:13:7: ( '}' )
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:13:9: '}'
+            {
+            match('}'); 
+
+            }
+
+            state.type = _type;
+            state.channel = _channel;
+        }
+        finally {
+        }
+    }
+    // $ANTLR end "T__24"
+
+    // $ANTLR start "T__25"
+    public final void mT__25() throws RecognitionException {
+        try {
+            int _type = T__25;
+            int _channel = DEFAULT_TOKEN_CHANNEL;
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:14:7: ( ',' )
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:14:9: ','
+            {
+            match(','); 
+
+            }
+
+            state.type = _type;
+            state.channel = _channel;
+        }
+        finally {
+        }
+    }
+    // $ANTLR end "T__25"
+
+    // $ANTLR start "T__26"
+    public final void mT__26() throws RecognitionException {
+        try {
+            int _type = T__26;
+            int _channel = DEFAULT_TOKEN_CHANNEL;
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:15:7: ( '(' )
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:15:9: '('
+            {
+            match('('); 
 
             }
 
@@ -92,10 +172,10 @@ public class StrLangLexer extends Lexer {
         try {
             int _type = T__27;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:12:7: ( '{' )
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:12:9: '{'
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:16:7: ( ')' )
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:16:9: ')'
             {
-            match('{'); 
+            match(')'); 
 
             }
 
@@ -112,10 +192,11 @@ public class StrLangLexer extends Lexer {
         try {
             int _type = T__28;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:13:7: ( '}' )
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:13:9: '}'
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:17:7: ( 'string' )
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:17:9: 'string'
             {
-            match('}'); 
+            match("string"); 
+
 
             }
 
@@ -132,10 +213,11 @@ public class StrLangLexer extends Lexer {
         try {
             int _type = T__29;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:14:7: ( ',' )
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:14:9: ','
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:18:7: ( 'int' )
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:18:9: 'int'
             {
-            match(','); 
+            match("int"); 
+
 
             }
 
@@ -152,10 +234,11 @@ public class StrLangLexer extends Lexer {
         try {
             int _type = T__30;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:15:7: ( '(' )
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:15:9: '('
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:19:7: ( 'char' )
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:19:9: 'char'
             {
-            match('('); 
+            match("char"); 
+
 
             }
 
@@ -172,10 +255,11 @@ public class StrLangLexer extends Lexer {
         try {
             int _type = T__31;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:16:7: ( ')' )
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:16:9: ')'
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:20:7: ( 'void' )
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:20:9: 'void'
             {
-            match(')'); 
+            match("void"); 
+
 
             }
 
@@ -192,8 +276,8 @@ public class StrLangLexer extends Lexer {
         try {
             int _type = T__32;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:17:7: ( 'WriteToFile' )
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:17:9: 'WriteToFile'
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:21:7: ( 'WriteToFile' )
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:21:9: 'WriteToFile'
             {
             match("WriteToFile"); 
 
@@ -213,8 +297,8 @@ public class StrLangLexer extends Lexer {
         try {
             int _type = T__33;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:18:7: ( 'ReadFile' )
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:18:9: 'ReadFile'
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:22:7: ( 'ReadFile' )
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:22:9: 'ReadFile'
             {
             match("ReadFile"); 
 
@@ -234,8 +318,8 @@ public class StrLangLexer extends Lexer {
         try {
             int _type = T__34;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:19:7: ( 'while' )
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:19:9: 'while'
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:23:7: ( 'while' )
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:23:9: 'while'
             {
             match("while"); 
 
@@ -255,8 +339,8 @@ public class StrLangLexer extends Lexer {
         try {
             int _type = T__35;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:20:7: ( 'for' )
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:20:9: 'for'
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:24:7: ( 'for' )
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:24:9: 'for'
             {
             match("for"); 
 
@@ -276,8 +360,8 @@ public class StrLangLexer extends Lexer {
         try {
             int _type = T__36;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:21:7: ( ';' )
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:21:9: ';'
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:25:7: ( ';' )
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:25:9: ';'
             {
             match(';'); 
 
@@ -296,8 +380,8 @@ public class StrLangLexer extends Lexer {
         try {
             int _type = T__37;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:22:7: ( 'print' )
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:22:9: 'print'
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:26:7: ( 'print' )
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:26:9: 'print'
             {
             match("print"); 
 
@@ -317,8 +401,8 @@ public class StrLangLexer extends Lexer {
         try {
             int _type = T__38;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:23:7: ( 'length' )
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:23:9: 'length'
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:27:7: ( 'length' )
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:27:9: 'length'
             {
             match("length"); 
 
@@ -338,8 +422,8 @@ public class StrLangLexer extends Lexer {
         try {
             int _type = T__39;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:24:7: ( 'elem' )
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:24:9: 'elem'
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:28:7: ( 'elem' )
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:28:9: 'elem'
             {
             match("elem"); 
 
@@ -359,8 +443,8 @@ public class StrLangLexer extends Lexer {
         try {
             int _type = T__40;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:25:7: ( 'break' )
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:25:9: 'break'
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:29:7: ( 'break' )
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:29:9: 'break'
             {
             match("break"); 
 
@@ -380,8 +464,8 @@ public class StrLangLexer extends Lexer {
         try {
             int _type = T__41;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:26:7: ( 'return' )
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:26:9: 'return'
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:30:7: ( 'return' )
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:30:9: 'return'
             {
             match("return"); 
 
@@ -401,8 +485,8 @@ public class StrLangLexer extends Lexer {
         try {
             int _type = T__42;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:27:7: ( 'if' )
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:27:9: 'if'
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:31:7: ( 'if' )
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:31:9: 'if'
             {
             match("if"); 
 
@@ -422,8 +506,8 @@ public class StrLangLexer extends Lexer {
         try {
             int _type = T__43;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:28:7: ( 'else' )
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:28:9: 'else'
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:32:7: ( 'else' )
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:32:9: 'else'
             {
             match("else"); 
 
@@ -443,8 +527,8 @@ public class StrLangLexer extends Lexer {
         try {
             int _type = T__44;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:29:7: ( 'and' )
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:29:9: 'and'
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:33:7: ( 'and' )
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:33:9: 'and'
             {
             match("and"); 
 
@@ -464,8 +548,8 @@ public class StrLangLexer extends Lexer {
         try {
             int _type = T__45;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:30:7: ( 'or' )
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:30:9: 'or'
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:34:7: ( 'or' )
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:34:9: 'or'
             {
             match("or"); 
 
@@ -480,99 +564,15 @@ public class StrLangLexer extends Lexer {
     }
     // $ANTLR end "T__45"
 
-    // $ANTLR start "LINE_TYPE"
-    public final void mLINE_TYPE() throws RecognitionException {
-        try {
-            int _type = LINE_TYPE;
-            int _channel = DEFAULT_TOKEN_CHANNEL;
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:437:11: ( 'string' )
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:437:13: 'string'
-            {
-            match("string"); 
-
-
-            }
-
-            state.type = _type;
-            state.channel = _channel;
-        }
-        finally {
-        }
-    }
-    // $ANTLR end "LINE_TYPE"
-
-    // $ANTLR start "INT_TYPE"
-    public final void mINT_TYPE() throws RecognitionException {
-        try {
-            int _type = INT_TYPE;
-            int _channel = DEFAULT_TOKEN_CHANNEL;
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:438:10: ( 'int' )
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:438:12: 'int'
-            {
-            match("int"); 
-
-
-            }
-
-            state.type = _type;
-            state.channel = _channel;
-        }
-        finally {
-        }
-    }
-    // $ANTLR end "INT_TYPE"
-
-    // $ANTLR start "SYMBOL_TYPE"
-    public final void mSYMBOL_TYPE() throws RecognitionException {
-        try {
-            int _type = SYMBOL_TYPE;
-            int _channel = DEFAULT_TOKEN_CHANNEL;
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:439:13: ( 'char' )
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:439:14: 'char'
-            {
-            match("char"); 
-
-
-            }
-
-            state.type = _type;
-            state.channel = _channel;
-        }
-        finally {
-        }
-    }
-    // $ANTLR end "SYMBOL_TYPE"
-
-    // $ANTLR start "VOID_TYPE"
-    public final void mVOID_TYPE() throws RecognitionException {
-        try {
-            int _type = VOID_TYPE;
-            int _channel = DEFAULT_TOKEN_CHANNEL;
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:440:11: ( 'void' )
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:440:12: 'void'
-            {
-            match("void"); 
-
-
-            }
-
-            state.type = _type;
-            state.channel = _channel;
-        }
-        finally {
-        }
-    }
-    // $ANTLR end "VOID_TYPE"
-
     // $ANTLR start "INT"
     public final void mINT() throws RecognitionException {
         try {
             int _type = INT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:444:2: ( ( '0' .. '9' )+ )
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:444:4: ( '0' .. '9' )+
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:459:2: ( ( '0' .. '9' )+ )
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:459:4: ( '0' .. '9' )+
             {
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:444:4: ( '0' .. '9' )+
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:459:4: ( '0' .. '9' )+
             int cnt1=0;
             loop1:
             do {
@@ -586,7 +586,7 @@ public class StrLangLexer extends Lexer {
 
                 switch (alt1) {
             	case 1 :
-            	    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:444:5: '0' .. '9'
+            	    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:459:5: '0' .. '9'
             	    {
             	    matchRange('0','9'); 
 
@@ -618,8 +618,8 @@ public class StrLangLexer extends Lexer {
         try {
             int _type = END_LINE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:448:2: ( '\\'~\\'' )
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:448:5: '\\'~\\''
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:463:2: ( '\\'~\\'' )
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:463:5: '\\'~\\''
             {
             match("'~'"); 
 
@@ -639,8 +639,8 @@ public class StrLangLexer extends Lexer {
         try {
             int _type = ID;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:452:2: ( ( 'a' .. 'z' | 'A' .. 'Z' | '_' ) ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_' )* )
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:452:4: ( 'a' .. 'z' | 'A' .. 'Z' | '_' ) ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_' )*
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:467:2: ( ( 'a' .. 'z' | 'A' .. 'Z' | '_' ) ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_' )* )
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:467:4: ( 'a' .. 'z' | 'A' .. 'Z' | '_' ) ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_' )*
             {
             if ( (input.LA(1)>='A' && input.LA(1)<='Z')||input.LA(1)=='_'||(input.LA(1)>='a' && input.LA(1)<='z') ) {
                 input.consume();
@@ -651,7 +651,7 @@ public class StrLangLexer extends Lexer {
                 recover(mse);
                 throw mse;}
 
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:452:28: ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_' )*
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:467:28: ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_' )*
             loop2:
             do {
                 int alt2=2;
@@ -700,8 +700,8 @@ public class StrLangLexer extends Lexer {
         try {
             int _type = SYMBOL;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:456:2: ( '\\'' ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_' | ' ' | '.' ) '\\'' )
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:456:4: '\\'' ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_' | ' ' | '.' ) '\\''
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:471:2: ( '\\'' ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_' | ' ' | '.' ) '\\'' )
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:471:4: '\\'' ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_' | ' ' | '.' ) '\\''
             {
             match('\''); 
             if ( input.LA(1)==' '||input.LA(1)=='.'||(input.LA(1)>='0' && input.LA(1)<='9')||(input.LA(1)>='A' && input.LA(1)<='Z')||input.LA(1)=='_'||(input.LA(1)>='a' && input.LA(1)<='z') ) {
@@ -730,11 +730,11 @@ public class StrLangLexer extends Lexer {
         try {
             int _type = LINE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:460:2: ( '\"' (~ '\"' )* '\"' )
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:460:4: '\"' (~ '\"' )* '\"'
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:475:2: ( '\"' (~ '\"' )* '\"' )
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:475:4: '\"' (~ '\"' )* '\"'
             {
             match('\"'); 
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:460:8: (~ '\"' )*
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:475:8: (~ '\"' )*
             loop3:
             do {
                 int alt3=2;
@@ -747,7 +747,7 @@ public class StrLangLexer extends Lexer {
 
                 switch (alt3) {
             	case 1 :
-            	    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:460:8: ~ '\"'
+            	    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:475:8: ~ '\"'
             	    {
             	    if ( (input.LA(1)>='\u0000' && input.LA(1)<='!')||(input.LA(1)>='#' && input.LA(1)<='\uFFFF') ) {
             	        input.consume();
@@ -784,8 +784,8 @@ public class StrLangLexer extends Lexer {
         try {
             int _type = DOUBLE_PLUS;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:464:2: ( '++' )
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:464:4: '++'
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:479:2: ( '++' )
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:479:4: '++'
             {
             match("++"); 
 
@@ -805,8 +805,8 @@ public class StrLangLexer extends Lexer {
         try {
             int _type = ASSIGN_OP;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:468:2: ( '=' )
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:468:4: '='
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:483:2: ( '=' )
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:483:4: '='
             {
             match('='); 
 
@@ -825,8 +825,8 @@ public class StrLangLexer extends Lexer {
         try {
             int _type = DOUBLE_MINUS;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:472:2: ( '--' )
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:472:4: '--'
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:487:2: ( '--' )
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:487:4: '--'
             {
             match("--"); 
 
@@ -846,8 +846,8 @@ public class StrLangLexer extends Lexer {
         try {
             int _type = PLUS_OP;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:476:2: ( '+' )
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:476:4: '+'
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:491:2: ( '+' )
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:491:4: '+'
             {
             match('+'); 
 
@@ -866,8 +866,8 @@ public class StrLangLexer extends Lexer {
         try {
             int _type = MINUS_OP;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:479:9: ( '-' )
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:479:11: '-'
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:494:9: ( '-' )
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:494:11: '-'
             {
             match('-'); 
 
@@ -886,8 +886,8 @@ public class StrLangLexer extends Lexer {
         try {
             int _type = LESS_OP;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:482:9: ( '<' )
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:482:11: '<'
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:497:9: ( '<' )
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:497:11: '<'
             {
             match('<'); 
 
@@ -906,8 +906,8 @@ public class StrLangLexer extends Lexer {
         try {
             int _type = MORE_OP;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:485:9: ( '>' )
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:485:11: '>'
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:500:9: ( '>' )
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:500:11: '>'
             {
             match('>'); 
 
@@ -926,8 +926,8 @@ public class StrLangLexer extends Lexer {
         try {
             int _type = LESS_EQL_OP;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:489:2: ( '<=' )
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:489:4: '<='
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:504:2: ( '<=' )
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:504:4: '<='
             {
             match("<="); 
 
@@ -947,8 +947,8 @@ public class StrLangLexer extends Lexer {
         try {
             int _type = MORE_EQL_OP;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:493:2: ( '>=' )
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:493:4: '>='
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:508:2: ( '>=' )
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:508:4: '>='
             {
             match(">="); 
 
@@ -968,8 +968,8 @@ public class StrLangLexer extends Lexer {
         try {
             int _type = EQUALLY_EQL_OP;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:497:2: ( '==' )
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:497:4: '=='
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:512:2: ( '==' )
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:512:4: '=='
             {
             match("=="); 
 
@@ -989,8 +989,8 @@ public class StrLangLexer extends Lexer {
         try {
             int _type = NO_EQUALLY;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:501:2: ( '!=' )
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:501:4: '!='
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:516:2: ( '!=' )
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:516:4: '!='
             {
             match("!="); 
 
@@ -1010,7 +1010,7 @@ public class StrLangLexer extends Lexer {
         try {
             int _type = COMMENT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:505:5: ( '//' (~ ( '\\n' | '\\r' ) )* ( '\\r' )? '\\n' | '/*' ( options {greedy=false; } : . )* '*/' )
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:520:5: ( '//' (~ ( '\\n' | '\\r' ) )* ( '\\r' )? '\\n' | '/*' ( options {greedy=false; } : . )* '*/' )
             int alt7=2;
             int LA7_0 = input.LA(1);
 
@@ -1038,11 +1038,11 @@ public class StrLangLexer extends Lexer {
             }
             switch (alt7) {
                 case 1 :
-                    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:505:9: '//' (~ ( '\\n' | '\\r' ) )* ( '\\r' )? '\\n'
+                    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:520:9: '//' (~ ( '\\n' | '\\r' ) )* ( '\\r' )? '\\n'
                     {
                     match("//"); 
 
-                    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:505:14: (~ ( '\\n' | '\\r' ) )*
+                    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:520:14: (~ ( '\\n' | '\\r' ) )*
                     loop4:
                     do {
                         int alt4=2;
@@ -1055,7 +1055,7 @@ public class StrLangLexer extends Lexer {
 
                         switch (alt4) {
                     	case 1 :
-                    	    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:505:14: ~ ( '\\n' | '\\r' )
+                    	    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:520:14: ~ ( '\\n' | '\\r' )
                     	    {
                     	    if ( (input.LA(1)>='\u0000' && input.LA(1)<='\t')||(input.LA(1)>='\u000B' && input.LA(1)<='\f')||(input.LA(1)>='\u000E' && input.LA(1)<='\uFFFF') ) {
                     	        input.consume();
@@ -1075,7 +1075,7 @@ public class StrLangLexer extends Lexer {
                         }
                     } while (true);
 
-                    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:505:28: ( '\\r' )?
+                    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:520:28: ( '\\r' )?
                     int alt5=2;
                     int LA5_0 = input.LA(1);
 
@@ -1084,7 +1084,7 @@ public class StrLangLexer extends Lexer {
                     }
                     switch (alt5) {
                         case 1 :
-                            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:505:28: '\\r'
+                            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:520:28: '\\r'
                             {
                             match('\r'); 
 
@@ -1099,11 +1099,11 @@ public class StrLangLexer extends Lexer {
                     }
                     break;
                 case 2 :
-                    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:506:9: '/*' ( options {greedy=false; } : . )* '*/'
+                    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:521:9: '/*' ( options {greedy=false; } : . )* '*/'
                     {
                     match("/*"); 
 
-                    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:506:14: ( options {greedy=false; } : . )*
+                    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:521:14: ( options {greedy=false; } : . )*
                     loop6:
                     do {
                         int alt6=2;
@@ -1128,7 +1128,7 @@ public class StrLangLexer extends Lexer {
 
                         switch (alt6) {
                     	case 1 :
-                    	    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:506:42: .
+                    	    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:521:42: .
                     	    {
                     	    matchAny(); 
 
@@ -1161,8 +1161,8 @@ public class StrLangLexer extends Lexer {
         try {
             int _type = WS;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:509:5: ( ( ' ' | '\\t' | '\\r' | '\\n' ) )
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:509:9: ( ' ' | '\\t' | '\\r' | '\\n' )
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:524:5: ( ( ' ' | '\\t' | '\\r' | '\\n' ) )
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:524:9: ( ' ' | '\\t' | '\\r' | '\\n' )
             {
             if ( (input.LA(1)>='\t' && input.LA(1)<='\n')||input.LA(1)=='\r'||input.LA(1)==' ' ) {
                 input.consume();
@@ -1186,299 +1186,299 @@ public class StrLangLexer extends Lexer {
     // $ANTLR end "WS"
 
     public void mTokens() throws RecognitionException {
-        // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:1:8: ( T__26 | T__27 | T__28 | T__29 | T__30 | T__31 | T__32 | T__33 | T__34 | T__35 | T__36 | T__37 | T__38 | T__39 | T__40 | T__41 | T__42 | T__43 | T__44 | T__45 | LINE_TYPE | INT_TYPE | SYMBOL_TYPE | VOID_TYPE | INT | END_LINE | ID | SYMBOL | LINE | DOUBLE_PLUS | ASSIGN_OP | DOUBLE_MINUS | PLUS_OP | MINUS_OP | LESS_OP | MORE_OP | LESS_EQL_OP | MORE_EQL_OP | EQUALLY_EQL_OP | NO_EQUALLY | COMMENT | WS )
+        // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:1:8: ( T__22 | T__23 | T__24 | T__25 | T__26 | T__27 | T__28 | T__29 | T__30 | T__31 | T__32 | T__33 | T__34 | T__35 | T__36 | T__37 | T__38 | T__39 | T__40 | T__41 | T__42 | T__43 | T__44 | T__45 | INT | END_LINE | ID | SYMBOL | LINE | DOUBLE_PLUS | ASSIGN_OP | DOUBLE_MINUS | PLUS_OP | MINUS_OP | LESS_OP | MORE_OP | LESS_EQL_OP | MORE_EQL_OP | EQUALLY_EQL_OP | NO_EQUALLY | COMMENT | WS )
         int alt8=42;
         alt8 = dfa8.predict(input);
         switch (alt8) {
             case 1 :
-                // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:1:10: T__26
+                // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:1:10: T__22
+                {
+                mT__22(); 
+
+                }
+                break;
+            case 2 :
+                // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:1:16: T__23
+                {
+                mT__23(); 
+
+                }
+                break;
+            case 3 :
+                // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:1:22: T__24
+                {
+                mT__24(); 
+
+                }
+                break;
+            case 4 :
+                // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:1:28: T__25
+                {
+                mT__25(); 
+
+                }
+                break;
+            case 5 :
+                // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:1:34: T__26
                 {
                 mT__26(); 
 
                 }
                 break;
-            case 2 :
-                // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:1:16: T__27
+            case 6 :
+                // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:1:40: T__27
                 {
                 mT__27(); 
 
                 }
                 break;
-            case 3 :
-                // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:1:22: T__28
+            case 7 :
+                // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:1:46: T__28
                 {
                 mT__28(); 
 
                 }
                 break;
-            case 4 :
-                // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:1:28: T__29
+            case 8 :
+                // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:1:52: T__29
                 {
                 mT__29(); 
 
                 }
                 break;
-            case 5 :
-                // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:1:34: T__30
+            case 9 :
+                // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:1:58: T__30
                 {
                 mT__30(); 
 
                 }
                 break;
-            case 6 :
-                // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:1:40: T__31
+            case 10 :
+                // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:1:64: T__31
                 {
                 mT__31(); 
 
                 }
                 break;
-            case 7 :
-                // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:1:46: T__32
+            case 11 :
+                // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:1:70: T__32
                 {
                 mT__32(); 
 
                 }
                 break;
-            case 8 :
-                // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:1:52: T__33
+            case 12 :
+                // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:1:76: T__33
                 {
                 mT__33(); 
 
                 }
                 break;
-            case 9 :
-                // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:1:58: T__34
+            case 13 :
+                // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:1:82: T__34
                 {
                 mT__34(); 
 
                 }
                 break;
-            case 10 :
-                // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:1:64: T__35
+            case 14 :
+                // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:1:88: T__35
                 {
                 mT__35(); 
 
                 }
                 break;
-            case 11 :
-                // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:1:70: T__36
+            case 15 :
+                // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:1:94: T__36
                 {
                 mT__36(); 
 
                 }
                 break;
-            case 12 :
-                // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:1:76: T__37
+            case 16 :
+                // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:1:100: T__37
                 {
                 mT__37(); 
 
                 }
                 break;
-            case 13 :
-                // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:1:82: T__38
+            case 17 :
+                // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:1:106: T__38
                 {
                 mT__38(); 
 
                 }
                 break;
-            case 14 :
-                // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:1:88: T__39
+            case 18 :
+                // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:1:112: T__39
                 {
                 mT__39(); 
 
                 }
                 break;
-            case 15 :
-                // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:1:94: T__40
+            case 19 :
+                // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:1:118: T__40
                 {
                 mT__40(); 
 
                 }
                 break;
-            case 16 :
-                // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:1:100: T__41
+            case 20 :
+                // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:1:124: T__41
                 {
                 mT__41(); 
 
                 }
                 break;
-            case 17 :
-                // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:1:106: T__42
+            case 21 :
+                // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:1:130: T__42
                 {
                 mT__42(); 
 
                 }
                 break;
-            case 18 :
-                // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:1:112: T__43
+            case 22 :
+                // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:1:136: T__43
                 {
                 mT__43(); 
 
                 }
                 break;
-            case 19 :
-                // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:1:118: T__44
+            case 23 :
+                // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:1:142: T__44
                 {
                 mT__44(); 
 
                 }
                 break;
-            case 20 :
-                // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:1:124: T__45
+            case 24 :
+                // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:1:148: T__45
                 {
                 mT__45(); 
 
                 }
                 break;
-            case 21 :
-                // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:1:130: LINE_TYPE
-                {
-                mLINE_TYPE(); 
-
-                }
-                break;
-            case 22 :
-                // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:1:140: INT_TYPE
-                {
-                mINT_TYPE(); 
-
-                }
-                break;
-            case 23 :
-                // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:1:149: SYMBOL_TYPE
-                {
-                mSYMBOL_TYPE(); 
-
-                }
-                break;
-            case 24 :
-                // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:1:161: VOID_TYPE
-                {
-                mVOID_TYPE(); 
-
-                }
-                break;
             case 25 :
-                // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:1:171: INT
+                // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:1:154: INT
                 {
                 mINT(); 
 
                 }
                 break;
             case 26 :
-                // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:1:175: END_LINE
+                // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:1:158: END_LINE
                 {
                 mEND_LINE(); 
 
                 }
                 break;
             case 27 :
-                // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:1:184: ID
+                // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:1:167: ID
                 {
                 mID(); 
 
                 }
                 break;
             case 28 :
-                // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:1:187: SYMBOL
+                // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:1:170: SYMBOL
                 {
                 mSYMBOL(); 
 
                 }
                 break;
             case 29 :
-                // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:1:194: LINE
+                // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:1:177: LINE
                 {
                 mLINE(); 
 
                 }
                 break;
             case 30 :
-                // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:1:199: DOUBLE_PLUS
+                // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:1:182: DOUBLE_PLUS
                 {
                 mDOUBLE_PLUS(); 
 
                 }
                 break;
             case 31 :
-                // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:1:211: ASSIGN_OP
+                // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:1:194: ASSIGN_OP
                 {
                 mASSIGN_OP(); 
 
                 }
                 break;
             case 32 :
-                // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:1:221: DOUBLE_MINUS
+                // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:1:204: DOUBLE_MINUS
                 {
                 mDOUBLE_MINUS(); 
 
                 }
                 break;
             case 33 :
-                // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:1:234: PLUS_OP
+                // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:1:217: PLUS_OP
                 {
                 mPLUS_OP(); 
 
                 }
                 break;
             case 34 :
-                // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:1:242: MINUS_OP
+                // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:1:225: MINUS_OP
                 {
                 mMINUS_OP(); 
 
                 }
                 break;
             case 35 :
-                // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:1:251: LESS_OP
+                // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:1:234: LESS_OP
                 {
                 mLESS_OP(); 
 
                 }
                 break;
             case 36 :
-                // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:1:259: MORE_OP
+                // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:1:242: MORE_OP
                 {
                 mMORE_OP(); 
 
                 }
                 break;
             case 37 :
-                // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:1:267: LESS_EQL_OP
+                // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:1:250: LESS_EQL_OP
                 {
                 mLESS_EQL_OP(); 
 
                 }
                 break;
             case 38 :
-                // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:1:279: MORE_EQL_OP
+                // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:1:262: MORE_EQL_OP
                 {
                 mMORE_EQL_OP(); 
 
                 }
                 break;
             case 39 :
-                // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:1:291: EQUALLY_EQL_OP
+                // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:1:274: EQUALLY_EQL_OP
                 {
                 mEQUALLY_EQL_OP(); 
 
                 }
                 break;
             case 40 :
-                // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:1:306: NO_EQUALLY
+                // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:1:289: NO_EQUALLY
                 {
                 mNO_EQUALLY(); 
 
                 }
                 break;
             case 41 :
-                // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:1:317: COMMENT
+                // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:1:300: COMMENT
                 {
                 mCOMMENT(); 
 
                 }
                 break;
             case 42 :
-                // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:1:325: WS
+                // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\StrLang.g:1:308: WS
                 {
                 mWS(); 
 
@@ -1492,51 +1492,52 @@ public class StrLangLexer extends Lexer {
 
     protected DFA8 dfa8 = new DFA8(this);
     static final String DFA8_eotS =
-        "\1\uffff\1\31\5\uffff\4\31\1\uffff\13\31\4\uffff\1\67\1\71\1\73"+
-        "\1\75\1\77\3\uffff\12\31\1\113\2\31\1\116\3\31\14\uffff\4\31\1\126"+
-        "\6\31\1\uffff\1\135\1\136\1\uffff\3\31\1\142\3\31\1\uffff\2\31\1"+
-        "\150\1\151\2\31\2\uffff\1\31\1\155\1\156\1\uffff\2\31\1\161\1\162"+
-        "\1\31\2\uffff\1\164\2\31\2\uffff\2\31\2\uffff\1\171\1\uffff\1\172"+
-        "\1\173\2\31\3\uffff\1\31\1\177\1\31\1\uffff\1\31\1\u0082\1\uffff";
+        "\1\uffff\1\31\5\uffff\10\31\1\uffff\7\31\4\uffff\1\67\1\71\1\73"+
+        "\1\75\1\77\3\uffff\3\31\1\103\14\31\1\121\14\uffff\2\31\1\124\1"+
+        "\uffff\5\31\1\132\6\31\1\141\1\uffff\1\142\1\31\1\uffff\1\144\1"+
+        "\145\3\31\1\uffff\2\31\1\153\1\154\2\31\2\uffff\1\31\2\uffff\2\31"+
+        "\1\162\1\163\1\31\2\uffff\1\165\1\31\1\167\2\31\2\uffff\1\172\1"+
+        "\uffff\1\173\1\uffff\2\31\2\uffff\1\31\1\177\1\31\1\uffff\1\31\1"+
+        "\u0082\1\uffff";
     static final String DFA8_eofS =
         "\u0083\uffff";
     static final String DFA8_minS =
-        "\1\11\1\141\5\uffff\1\162\1\145\1\150\1\157\1\uffff\1\162\1\145"+
-        "\1\154\1\162\1\145\1\146\1\156\1\162\1\164\1\150\1\157\1\uffff\1"+
-        "\40\2\uffff\1\53\1\75\1\55\2\75\3\uffff\2\151\1\141\1\151\1\162"+
-        "\1\151\1\156\2\145\1\164\1\60\1\164\1\144\1\60\1\162\1\141\1\151"+
-        "\14\uffff\1\156\1\164\1\144\1\154\1\60\1\156\1\147\1\155\1\145\1"+
-        "\141\1\165\1\uffff\2\60\1\uffff\1\151\1\162\1\144\1\60\1\145\1\106"+
-        "\1\145\1\uffff\2\164\2\60\1\153\1\162\2\uffff\1\156\2\60\1\uffff"+
-        "\1\124\1\151\2\60\1\150\2\uffff\1\60\1\156\1\147\2\uffff\1\157\1"+
-        "\154\2\uffff\1\60\1\uffff\2\60\1\106\1\145\3\uffff\1\151\1\60\1"+
-        "\154\1\uffff\1\145\1\60\1\uffff";
+        "\1\11\1\141\5\uffff\1\164\1\146\1\150\1\157\1\162\1\145\1\150\1"+
+        "\157\1\uffff\1\162\1\145\1\154\1\162\1\145\1\156\1\162\1\uffff\1"+
+        "\40\2\uffff\1\53\1\75\1\55\2\75\3\uffff\1\151\1\162\1\164\1\60\1"+
+        "\141\2\151\1\141\1\151\1\162\1\151\1\156\2\145\1\164\1\144\1\60"+
+        "\14\uffff\1\156\1\151\1\60\1\uffff\1\162\1\144\1\164\1\144\1\154"+
+        "\1\60\1\156\1\147\1\155\1\145\1\141\1\165\1\60\1\uffff\1\60\1\156"+
+        "\1\uffff\2\60\1\145\1\106\1\145\1\uffff\2\164\2\60\1\153\1\162\2"+
+        "\uffff\1\147\2\uffff\1\124\1\151\2\60\1\150\2\uffff\1\60\1\156\1"+
+        "\60\1\157\1\154\2\uffff\1\60\1\uffff\1\60\1\uffff\1\106\1\145\2"+
+        "\uffff\1\151\1\60\1\154\1\uffff\1\145\1\60\1\uffff";
     static final String DFA8_maxS =
-        "\1\175\1\141\5\uffff\1\162\1\145\1\150\1\157\1\uffff\1\162\1\145"+
-        "\1\154\1\162\1\145\2\156\1\162\1\164\1\150\1\157\1\uffff\1\176\2"+
-        "\uffff\1\53\1\75\1\55\2\75\3\uffff\2\151\1\141\1\151\1\162\1\151"+
-        "\1\156\1\163\1\145\1\164\1\172\1\164\1\144\1\172\1\162\1\141\1\151"+
-        "\14\uffff\1\156\1\164\1\144\1\154\1\172\1\156\1\147\1\155\1\145"+
-        "\1\141\1\165\1\uffff\2\172\1\uffff\1\151\1\162\1\144\1\172\1\145"+
-        "\1\106\1\145\1\uffff\2\164\2\172\1\153\1\162\2\uffff\1\156\2\172"+
-        "\1\uffff\1\124\1\151\2\172\1\150\2\uffff\1\172\1\156\1\147\2\uffff"+
-        "\1\157\1\154\2\uffff\1\172\1\uffff\2\172\1\106\1\145\3\uffff\1\151"+
-        "\1\172\1\154\1\uffff\1\145\1\172\1\uffff";
+        "\1\175\1\141\5\uffff\1\164\1\156\1\150\1\157\1\162\1\145\1\150"+
+        "\1\157\1\uffff\1\162\1\145\1\154\1\162\1\145\1\156\1\162\1\uffff"+
+        "\1\176\2\uffff\1\53\1\75\1\55\2\75\3\uffff\1\151\1\162\1\164\1\172"+
+        "\1\141\2\151\1\141\1\151\1\162\1\151\1\156\1\163\1\145\1\164\1\144"+
+        "\1\172\14\uffff\1\156\1\151\1\172\1\uffff\1\162\1\144\1\164\1\144"+
+        "\1\154\1\172\1\156\1\147\1\155\1\145\1\141\1\165\1\172\1\uffff\1"+
+        "\172\1\156\1\uffff\2\172\1\145\1\106\1\145\1\uffff\2\164\2\172\1"+
+        "\153\1\162\2\uffff\1\147\2\uffff\1\124\1\151\2\172\1\150\2\uffff"+
+        "\1\172\1\156\1\172\1\157\1\154\2\uffff\1\172\1\uffff\1\172\1\uffff"+
+        "\1\106\1\145\2\uffff\1\151\1\172\1\154\1\uffff\1\145\1\172\1\uffff";
     static final String DFA8_acceptS =
-        "\2\uffff\1\2\1\3\1\4\1\5\1\6\4\uffff\1\13\13\uffff\1\31\1\uffff"+
+        "\2\uffff\1\2\1\3\1\4\1\5\1\6\10\uffff\1\17\7\uffff\1\31\1\uffff"+
         "\1\33\1\35\5\uffff\1\50\1\51\1\52\21\uffff\1\32\1\34\1\36\1\41\1"+
-        "\47\1\37\1\40\1\42\1\45\1\43\1\46\1\44\13\uffff\1\21\2\uffff\1\24"+
-        "\7\uffff\1\12\6\uffff\1\26\1\23\3\uffff\1\1\5\uffff\1\16\1\22\3"+
-        "\uffff\1\27\1\30\2\uffff\1\11\1\14\1\uffff\1\17\4\uffff\1\15\1\20"+
-        "\1\25\3\uffff\1\10\2\uffff\1\7";
+        "\47\1\37\1\40\1\42\1\45\1\43\1\46\1\44\3\uffff\1\25\15\uffff\1\30"+
+        "\2\uffff\1\10\5\uffff\1\16\6\uffff\1\27\1\1\1\uffff\1\11\1\12\5"+
+        "\uffff\1\22\1\26\5\uffff\1\15\1\20\1\uffff\1\23\1\uffff\1\7\2\uffff"+
+        "\1\21\1\24\3\uffff\1\14\2\uffff\1\13";
     static final String DFA8_specialS =
         "\u0083\uffff}>";
     static final String[] DFA8_transitionS = {
             "\2\42\2\uffff\1\42\22\uffff\1\42\1\40\1\32\4\uffff\1\30\1\5"+
-            "\1\6\1\uffff\1\33\1\4\1\35\1\uffff\1\41\12\27\1\uffff\1\13\1"+
-            "\36\1\34\1\37\2\uffff\21\31\1\10\4\31\1\7\3\31\4\uffff\1\31"+
-            "\1\uffff\1\22\1\17\1\25\1\31\1\16\1\12\2\31\1\21\2\31\1\15\1"+
-            "\1\1\31\1\23\1\14\1\31\1\20\1\24\2\31\1\26\1\11\3\31\1\2\1\uffff"+
+            "\1\6\1\uffff\1\33\1\4\1\35\1\uffff\1\41\12\27\1\uffff\1\17\1"+
+            "\36\1\34\1\37\2\uffff\21\31\1\14\4\31\1\13\3\31\4\uffff\1\31"+
+            "\1\uffff\1\25\1\23\1\11\1\31\1\22\1\16\2\31\1\10\2\31\1\21\1"+
+            "\1\1\31\1\26\1\20\1\31\1\24\1\7\2\31\1\12\1\15\3\31\1\2\1\uffff"+
             "\1\3",
             "\1\43",
             "",
@@ -1545,16 +1546,16 @@ public class StrLangLexer extends Lexer {
             "",
             "",
             "\1\44",
-            "\1\45",
-            "\1\46",
+            "\1\46\7\uffff\1\45",
             "\1\47",
-            "",
             "\1\50",
             "\1\51",
             "\1\52",
             "\1\53",
             "\1\54",
-            "\1\55\7\uffff\1\56",
+            "",
+            "\1\55",
+            "\1\56",
             "\1\57",
             "\1\60",
             "\1\61",
@@ -1576,20 +1577,20 @@ public class StrLangLexer extends Lexer {
             "\1\100",
             "\1\101",
             "\1\102",
-            "\1\103",
+            "\12\31\7\uffff\32\31\4\uffff\1\31\1\uffff\32\31",
             "\1\104",
             "\1\105",
             "\1\106",
-            "\1\107\15\uffff\1\110",
+            "\1\107",
+            "\1\110",
             "\1\111",
             "\1\112",
-            "\12\31\7\uffff\32\31\4\uffff\1\31\1\uffff\32\31",
-            "\1\114",
-            "\1\115",
-            "\12\31\7\uffff\32\31\4\uffff\1\31\1\uffff\32\31",
+            "\1\113",
+            "\1\114\15\uffff\1\115",
+            "\1\116",
             "\1\117",
             "\1\120",
-            "\1\121",
+            "\12\31\7\uffff\32\31\4\uffff\1\31\1\uffff\32\31",
             "",
             "",
             "",
@@ -1604,62 +1605,62 @@ public class StrLangLexer extends Lexer {
             "",
             "\1\122",
             "\1\123",
-            "\1\124",
-            "\1\125",
             "\12\31\7\uffff\32\31\4\uffff\1\31\1\uffff\32\31",
+            "",
+            "\1\125",
+            "\1\126",
             "\1\127",
             "\1\130",
             "\1\131",
-            "\1\132",
+            "\12\31\7\uffff\32\31\4\uffff\1\31\1\uffff\32\31",
             "\1\133",
             "\1\134",
-            "",
-            "\12\31\7\uffff\32\31\4\uffff\1\31\1\uffff\32\31",
-            "\12\31\7\uffff\32\31\4\uffff\1\31\1\uffff\32\31",
-            "",
+            "\1\135",
+            "\1\136",
             "\1\137",
             "\1\140",
-            "\1\141",
+            "\12\31\7\uffff\32\31\4\uffff\1\31\1\uffff\32\31",
+            "",
             "\12\31\7\uffff\32\31\4\uffff\1\31\1\uffff\32\31",
             "\1\143",
-            "\1\144",
-            "\1\145",
             "",
+            "\12\31\7\uffff\32\31\4\uffff\1\31\1\uffff\32\31",
+            "\12\31\7\uffff\32\31\4\uffff\1\31\1\uffff\32\31",
             "\1\146",
             "\1\147",
-            "\12\31\7\uffff\32\31\4\uffff\1\31\1\uffff\32\31",
-            "\12\31\7\uffff\32\31\4\uffff\1\31\1\uffff\32\31",
+            "\1\150",
+            "",
+            "\1\151",
             "\1\152",
-            "\1\153",
-            "",
-            "",
-            "\1\154",
             "\12\31\7\uffff\32\31\4\uffff\1\31\1\uffff\32\31",
             "\12\31\7\uffff\32\31\4\uffff\1\31\1\uffff\32\31",
+            "\1\155",
+            "\1\156",
+            "",
             "",
             "\1\157",
+            "",
+            "",
             "\1\160",
+            "\1\161",
             "\12\31\7\uffff\32\31\4\uffff\1\31\1\uffff\32\31",
             "\12\31\7\uffff\32\31\4\uffff\1\31\1\uffff\32\31",
-            "\1\163",
+            "\1\164",
             "",
             "",
             "\12\31\7\uffff\32\31\4\uffff\1\31\1\uffff\32\31",
-            "\1\165",
             "\1\166",
-            "",
-            "",
-            "\1\167",
+            "\12\31\7\uffff\32\31\4\uffff\1\31\1\uffff\32\31",
             "\1\170",
+            "\1\171",
             "",
             "",
             "\12\31\7\uffff\32\31\4\uffff\1\31\1\uffff\32\31",
             "",
             "\12\31\7\uffff\32\31\4\uffff\1\31\1\uffff\32\31",
-            "\12\31\7\uffff\32\31\4\uffff\1\31\1\uffff\32\31",
+            "",
             "\1\174",
             "\1\175",
-            "",
             "",
             "",
             "\1\176",
@@ -1701,7 +1702,7 @@ public class StrLangLexer extends Lexer {
             this.transition = DFA8_transition;
         }
         public String getDescription() {
-            return "1:1: Tokens : ( T__26 | T__27 | T__28 | T__29 | T__30 | T__31 | T__32 | T__33 | T__34 | T__35 | T__36 | T__37 | T__38 | T__39 | T__40 | T__41 | T__42 | T__43 | T__44 | T__45 | LINE_TYPE | INT_TYPE | SYMBOL_TYPE | VOID_TYPE | INT | END_LINE | ID | SYMBOL | LINE | DOUBLE_PLUS | ASSIGN_OP | DOUBLE_MINUS | PLUS_OP | MINUS_OP | LESS_OP | MORE_OP | LESS_EQL_OP | MORE_EQL_OP | EQUALLY_EQL_OP | NO_EQUALLY | COMMENT | WS );";
+            return "1:1: Tokens : ( T__22 | T__23 | T__24 | T__25 | T__26 | T__27 | T__28 | T__29 | T__30 | T__31 | T__32 | T__33 | T__34 | T__35 | T__36 | T__37 | T__38 | T__39 | T__40 | T__41 | T__42 | T__43 | T__44 | T__45 | INT | END_LINE | ID | SYMBOL | LINE | DOUBLE_PLUS | ASSIGN_OP | DOUBLE_MINUS | PLUS_OP | MINUS_OP | LESS_OP | MORE_OP | LESS_EQL_OP | MORE_EQL_OP | EQUALLY_EQL_OP | NO_EQUALLY | COMMENT | WS );";
         }
     }
  

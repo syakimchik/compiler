@@ -183,10 +183,10 @@ inside_func
 	| write_op
 	;
 	
-assign_inside_func returns[String type]
-	: elem {$type = "char";}
-	| length {$type = "int";}
-	| read_op {$type = "string";}
+assign_inside_func returns[String type, int line]
+	: elem {$type = "char"; $line = $elem.line;}
+	| length {$type = "int"; $line = $length.line;}
+	| read_op {$type = "string"; $line = $read_op.line;}
 	;
 	
 call_func returns[String type, int curLine]
@@ -224,13 +224,13 @@ action
 	: spec_type (DOUBLE_MINUS|DOUBLE_PLUS|ASSIGN_OP spec_type (PLUS_OP|MINUS_OP) spec_type )
 	;		
 	
-spec_type returns[String value] 
-	: INT {$value = "int";}
-	| LINE {$value = "string";}
-	| SYMBOL {$value = "char";}
-	| idLiteral {$value = $idLiteral.idType;}
-	| assign_inside_func {$value = $assign_inside_func.type;}
-	| call_func {$value = $call_func.type;}
+spec_type returns[String value, int curLine] 
+	: INT {$value = "int"; $curLine = $INT.line;}
+	| LINE {$value = "string"; $curLine=$LINE.line;}
+	| SYMBOL {$value = "char"; $curLine = $SYMBOL.line;}
+	| idLiteral {$value = $idLiteral.idType; $curLine = $idLiteral.curLine;}
+	| assign_inside_func {$value = $assign_inside_func.type; $curLine = $assign_inside_func.line;}
+	| call_func {$value = $call_func.type; $curLine = $call_func.curLine;}
 	;
 	
 returnType returns[String value, String type]
@@ -334,9 +334,6 @@ param returns[ArrayList<String> argumentTypeList]
 		argumentTypeList = new ArrayList<String>();
 	}  
 	a=returnType {argumentTypeList.add($a.type);} (',' b=returnType {argumentTypeList.add($b.type);} )*
-	{
-		
-	}
 	;
 	
 body
@@ -349,11 +346,29 @@ body
 	;
 
 write_op
-	: 'WriteToFile' '('  path ','  ID  ')'
+	: c='WriteToFile' '('  a=string_and_var ','  b=string_and_var  ')'
+	{
+		String s_type = "string";
+		if(!TypesChecker.checkTypes($a.type, s_type))
+		{
+			errors.add("line "+$c.line+": incorrect first argument type for function WriteToFile. Need type string, found "+$a.type);
+		}
+		if(!TypesChecker.checkTypes($b.type, s_type))
+		{
+			errors.add("line "+$c.line+": incorrect second argument type for function WriteToFile. Need type string, found "+$b.type);
+		}
+	}
 	;
 
-read_op
-	: 'ReadFile' '(' path ')'
+read_op returns[int line]
+	: c='ReadFile' '(' a=string_and_var ')' {$line = $c.line;}
+	{
+		String s_type = "string";
+		if(!TypesChecker.checkTypes($a.type, s_type))
+		{
+			errors.add("line "+$c.line+": incorrect argument type for function ReadFile. Need type string, found "+$a.type);
+		}
+	}
 	;
 
 while_op
@@ -364,15 +379,22 @@ for_op
 	;
 
 print_op
-	: 'print' '(' returnType (',' returnType)*  ')'
+	: 'print' '(' a=returnType (',' b=returnType)*  ')'
 	;
 	
-length	
-	: 'length' '(' returnType ')'
+length returns[int line]
+	: c='length' '(' a=string_and_var ')' {$line = $c.line;}
+	{
+		String s_type = "string";
+		if(!TypesChecker.checkTypes($a.type, s_type))
+		{
+			errors.add("line "+$c.line+": incorrect argument type for function length. Need type string, found "+$a.type);
+		}
+	}
 	;
 
-elem	
-	:'elem' '(' returnType ',' returnType ')'
+elem returns[int line]	
+	:a='elem' '(' returnType ',' returnType ')' {$line = $a.line;}
 	;
 
 break_op	
@@ -413,32 +435,25 @@ logic_or
 
 
 logic_expr
-	: logic_atom (expr logic_atom)?
+	: a=logic_atom expr b=logic_atom 
+	{
+		if(!TypesChecker.checkTypes($a.type,$b.type))
+		{
+			errors.add("line "+$a.curLine+": incomparable types: "+$a.type+" and "+$b.type);
+		}
+	} 
 	| '(' logic ')'
 	;
 
-logic_atom
-	: LINE
-	| SYMBOL
-	| INT
-	| ID
-	| assign_inside_func
-	| END_LINE
-	;
-	 		
-specialType
-	:INT
-	|ID
+logic_atom returns[String type, int curLine]
+	: spec_type {$type = $spec_type.value; $curLine = $spec_type.curLine;}
+	| END_LINE {$type = "char"; $curLine = $END_LINE.line; }
 	;
 	
-path:	ID|LINE
+string_and_var returns[String value, String type]
+	: idLiteral {$value = $idLiteral.text; $type = $idLiteral.idType;}
+	| LINE {$value = $LINE.text; $type = "string";}
 	;
-
-LINE_TYPE : 'string';
-INT_TYPE : 'int';
-SYMBOL_TYPE :'char';
-VOID_TYPE :'void';
-
 
 INT 
 	: ('0'..'9')+
