@@ -221,14 +221,50 @@ scope{
 	;
 	
 action	
-	: spec_type (DOUBLE_MINUS|DOUBLE_PLUS|ASSIGN_OP spec_type (PLUS_OP|MINUS_OP) spec_type )
+	: a=spec_type prefix
+	{
+		String s_type = "int";
+		if(!TypesChecker.checkTypes($a.value, s_type))
+		{
+			errors.add("line "+$a.curLine+": incomparable types in variable "+$a.text+": "+$a.value+" and "+s_type);
+		}
+	}
+	| b=spec_type ASSIGN_OP c=spec_type (PLUS_OP|MINUS_OP) d=spec_type
+	{
+		String s_type = "int", type="";
+		if($b.value=="")
+			type = "none";
+		else
+			type = $b.value;
+		if(!TypesChecker.checkTypes($b.value, s_type))
+		{
+			errors.add("line "+$b.curLine+": incomparable types in variable "+$b.text+": "+type+" and "+s_type);
+		}
+		if($c.value=="")
+			type = "none";
+		else
+			type = $c.value;
+		if(!TypesChecker.checkTypes($c.value, s_type))
+		{
+			errors.add("line "+$c.curLine+": incomparable types in variable "+$c.text+": "+type+" and "+s_type);
+		}
+		if($d.value=="")
+			type = "none";
+		else
+			type = $d.value;
+		if(!TypesChecker.checkTypes($d.value, s_type))
+		{
+			errors.add("line "+$d.curLine+": incomparable types in variable "+$d.text+": "+type+" and "+s_type);
+		}
+	}
+	//spec_type (DOUBLE_MINUS|DOUBLE_PLUS|ASSIGN_OP spec_type (PLUS_OP|MINUS_OP) spec_type )
 	;		
 	
-spec_type returns[String value, int curLine] 
+spec_type returns[String value, int curLine, String text] 
 	: INT {$value = "int"; $curLine = $INT.line;}
 	| LINE {$value = "string"; $curLine=$LINE.line;}
 	| SYMBOL {$value = "char"; $curLine = $SYMBOL.line;}
-	| idLiteral {$value = $idLiteral.idType; $curLine = $idLiteral.curLine;}
+	| idLiteral {$value = $idLiteral.idType; $curLine = $idLiteral.curLine; $text = $idLiteral.text;}
 	| assign_inside_func {$value = $assign_inside_func.type; $curLine = $assign_inside_func.line;}
 	| call_func {$value = $call_func.type; $curLine = $call_func.curLine;}
 	;
@@ -240,10 +276,11 @@ returnType returns[String value, String type]
 	| idLiteral	{$value = $idLiteral.text; $type = $idLiteral.idType;}
 	;
 	
-idLiteral returns[String idType, int curLine]
+idLiteral returns[String idType, int curLine, String text]
 	:	ID
 	{
 		$curLine = $ID.line;
+		$text = $ID.text;
 		if(!names.isExistVariable($program::curBlock+"."+$ID.text))
 		{
 			errors.add("line "+$ID.line+": unknown variable "+$ID.text);
@@ -420,6 +457,11 @@ expr
 	| MORE_OP
 	| LESS_OP
 	| NO_EQUALLY
+	;
+	
+prefix
+	: DOUBLE_MINUS
+	| DOUBLE_PLUS
 	;
 	
 logic

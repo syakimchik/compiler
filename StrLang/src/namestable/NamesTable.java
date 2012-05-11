@@ -273,5 +273,20 @@ public class NamesTable {
 			list.add(errors.pop());
 		}
 	}
+	
+	/*public static void printValue(String f_avg, String s_avg)
+	{
+		//removing unnecessary characters
+		if(f_avg.contains("\""))
+			f_avg=f_avg.replace("\"", "");
+		if(f_avg.contains("\'"))
+			f_avg=f_avg.replace("\'", "");
+		if(s_avg.contains("\""))
+			s_avg=s_avg.replace("\"", "");
+		if(s_avg.contains("\'"))
+			s_avg=s_avg.replace("\'", "");
+		System.out.print(f_avg);
+		System.out.print(s_avg+"\n");
+	}*/
 
 }
