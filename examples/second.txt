@@ -94,7 +94,8 @@ main
 	while(elem(str,i)!='~')
 	{
 		char v = elem(str,i)
-		WriteToFile("D:\921701\Yakimchik\test2.txt",v)
+		string v_str = ToString(v)
+		WriteToFile("D:\921701\Yakimchik\test2.txt",v_str)
 		i=i+1
 	}
 	
