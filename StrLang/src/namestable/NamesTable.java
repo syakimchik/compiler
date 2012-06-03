@@ -191,7 +191,7 @@ public class NamesTable {
 	
 	
 	
-	public boolean checkReturnType(String funcName, String varName, String curBlock, int line)
+	public boolean checkReturnType(String funcName, String varName, String vType, String curBlock, int line)
 	{
 		
 		if(curBlock.equals("main"))
@@ -206,43 +206,57 @@ public class NamesTable {
 			return false;
 		}
 		
-		if(!isExistVariable(curBlock+"."+varName) && varName!=null && !varName.equals(""))
+		try
 		{
-			errors.add("line "+line+": variable "+varName+" doesn't exists");
-			return false;
-		}
-		
-		FunctionName func = getFunction(funcName);
-		VariableName var = getVariable(curBlock+"."+varName);
-		String funcReturnType = func.getReturnType();
-		
-		if(funcReturnType.equals("void"))
-		{
-			if(varName!=null)
+			FunctionName func = getFunction(funcName);
+			VariableName var = getVariable(curBlock+"."+varName);
+			String funcReturnType = func.getReturnType();
+			
+			if(!isExistVariable(curBlock+"."+varName) && varName!=null && !varName.equals(""))
 			{
-				errors.add("line "+line+": return type of "+funcName+" mismatch - need void, found "+var.getType());
-				return false;
-			}
-		}
-		else
-		{
-			if(varName==null)
-			{
-				errors.add("line "+line+": function "+funcName+" must return a value of type "+funcReturnType);
-				return false;
-			}
-			else
-			{
-				String varType = var.getType();
-				if(!varType.equals(funcReturnType))
+				if(vType.equals(funcReturnType))
 				{
-					errors.add("line "+line+": return type of "+funcName+" mismatch - need "+funcReturnType+", found "+varType);
+					return true;
+				}
+				//errors.add("line "+line+": variable "+varName+" doesn't exists");
+				errors.add("line "+line+": Type mismatch: cannot convert from "+funcReturnType+" to "+vType);
+				return false;
+			}
+			
+			if(funcReturnType.equals("void"))
+			{
+				if(varName!=null)
+				{
+					errors.add("line "+line+": return type of "+funcName+" mismatch - need void, found "+var.getType());
 					return false;
 				}
 			}
+			else
+			{
+				if(varName==null)
+				{
+					errors.add("line "+line+": function "+funcName+" must return a value of type "+funcReturnType);
+					return false;
+				}
+				else
+				{
+					String varType = var.getType();
+					if(!varType.equals(funcReturnType))
+					{
+						errors.add("line "+line+": return type of "+funcName+" mismatch - need "+funcReturnType+", found "+varType);
+						return false;
+					}
+				}
+			}
+			var.addLineUses(line);
 		}
+		catch (NullPointerException e) {
+			// TODO: handle exception
+			errors.add("line "+line+": Not found the keyword return in function with name "+funcName);
+			return false;
+		}
+			
 		
-		var.addLineUses(line);
 		return true;
 	}
 	
@@ -273,20 +287,4 @@ public class NamesTable {
 			list.add(errors.pop());
 		}
 	}
-	
-	/*public static void printValue(String f_avg, String s_avg)
-	{
-		//removing unnecessary characters
-		if(f_avg.contains("\""))
-			f_avg=f_avg.replace("\"", "");
-		if(f_avg.contains("\'"))
-			f_avg=f_avg.replace("\'", "");
-		if(s_avg.contains("\""))
-			s_avg=s_avg.replace("\"", "");
-		if(s_avg.contains("\'"))
-			s_avg=s_avg.replace("\'", "");
-		System.out.print(f_avg);
-		System.out.print(s_avg+"\n");
-	}*/
-
 }

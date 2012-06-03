@@ -1,5 +1,5 @@
-main
-{
-	string str = "Hello world"
-	print(str)
+main{
+	string str;
+	str = "Hello, world";
+	write(str);
 }

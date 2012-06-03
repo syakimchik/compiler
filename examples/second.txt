@@ -10,19 +10,20 @@
 /**
 	объявление глобальных переменных
 **/
-string str = "Hello world"
-string s
-char ch = 'a'
-char b
-int kol = 10
+string str;
+string s;
+char ch;
+char b;
+int kol;
 
 /**
 	глобальная функция
 **/
 int func(int j)
 {
-	int k = j+15
-	return k
+	int k;
+	k = j+15;
+	return k;
 }
 
 /**
@@ -32,44 +33,36 @@ int func(int j)
 main
 {
 	// присваивание значения глобальным переменным
-	b = 'b'
-	s = "Hello world"
+	b = 'b';
+	s = "Hello world";
 	
-	/**
-		*name: чтение файла в строку
-		*ReadFile(string arg)
-		*arg - path to file
-	**/
-	string path = "D:\921701\Yakimchik\test.txt"
-	string text = ReadFile(path)
+	// чтение строки с консоли
+	string text;
+	read(text);
 	
-	text = text + "good"
+	text = text + "good";
+	// вывод на экран
+	write(text);
 	
-	/**
-		*name: запись в файл текста
-		*WriteToFile(string first_arg, string secknd_arg)
-		*first_arg: path to file
-		*second_arg: what information write to file
-	**/
-	WriteToFile("D:\921701\Yakimchik\test.txt",text)
-	
-	text = "Hello"+"Java"
-	string s1 = "Hello"+"Antlr"
+	text = "Hello"+"Java";
 	
 	//условные операторы
 	if(s==str)
 	{
-		print("Good")
+		write("Good");
 	}
 	else
 	{
 		if(s=="Hello")
 		{
-			int i=14
-			print(i)
-			break								// прерывание и выход к следующей операции, т.е. print("Bad") не будет выполнено
+			int i;
+			i =14;
+			write(i);
 		}
-		print("Bad")
+		if(s!="world" & s!="Hello")	// & - обозначает "и". Знак "|" - обазначает или
+		{
+			write("no");
+		}
 	}
 	
 	/**
@@ -77,27 +70,35 @@ main
 		@ elem(string str, int i) - функция, преобразовывабщая i-ы элемент в char
 		  length(string str) - функция, определяющая длину строки
 	**/
-	int k=0
-	for(int j=0; j<length(text); j++)
+	int k;
+	k=0;
+	int j;
+	for(j=0; j<15; j=j+1)
 	{
 		if(elem(text,j)=='l')			//подсчёт сколько букв в в строке "Hello world"
 		{
-			k = k+1
+			k = k+1;
 		}
 	}
-	print(k)
+	write(k);
 	
 	/**
 		цикл while
 		~ - элемент, обозначающий конец строки
 	**/
-	while(elem(str,i)!='~')
+	while(elem(str,i)!='\n')
 	{
-		char v = elem(str,i)
-		string v_str = ToString(v)
-		WriteToFile("D:\921701\Yakimchik\test2.txt",v_str)
-		i=i+1
+		char v;
+		v = elem(str,i);
+		string v_str;
+		v_str = ToString(v);
+		write(v_str);
+		i=i+1;
 	}
 	
-	int sum = k+15+kol+func(k)			// работа с int и вызов глобальной функции, возращающей тип int
+	int sum;
+	int sum1;
+	sum= k+15;
+	sum1 = kol+func(k);
+	sum = sum-sum1;
 }
