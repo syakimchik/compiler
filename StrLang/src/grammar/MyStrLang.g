@@ -28,13 +28,13 @@ options{
 		protected ArrayList<String> tmpVarNamesList = new ArrayList<String>();
 		
 		public static StringTemplateGroup templateGroup;
-		//public static final String templateFileName = "D:/Projects/Yapis/StrLang/src/template/ByteCode.stg";
+		public static final String templateFileName = "D:/Projects/Yapis/StrLang/src/template/ByteCode.stg";
 		
 		/**
 		* @param args
 		*/
 		public static void main(String[] args) throws Exception {
-		//templateGroup = new StringTemplateGroup(new FileReader(templateFileName), AngleBracketTemplateLexer.class);
+			templateGroup = new StringTemplateGroup(new FileReader(templateFileName), AngleBracketTemplateLexer.class);
 			if(args.length != 1)
 			{
 				System.out.println("Argument error. Please specify input file name");
@@ -48,14 +48,14 @@ options{
 				return;
 			}
 
-			//programName = codeFile.substring(0, codeFile.lastIndexOf("."));
+			programName = codeFile.substring(0, codeFile.lastIndexOf("."));
 
 			try{
 				MyStrLangLexer lexer = new MyStrLangLexer(new ANTLRFileStream(codeFile));
 				MyStrLangParser parser = new MyStrLangParser(new CommonTokenStream(lexer));
-				parser.program();
-				//parser.setTemplateLib(templateGroup);
-				//RuleReturnScope returnScope = parser.program();
+				//parser.program();
+				parser.setTemplateLib(templateGroup);
+				RuleReturnScope returnScope = parser.program();
 				if(!parser.errors.isEmpty())
 				{
 					System.out.println("Found "+parser.errors.size()+" errors:");
@@ -66,9 +66,9 @@ options{
 				else
 				{
 					System.out.println("Compiled successfully");
-					//FileWriter out = new FileWriter(programName + ".txt.j");
-					//out.write(returnScope.getTemplate().toString());
-					//out.close();
+					FileWriter out = new FileWriter(programName + ".j");
+					out.write(returnScope.getTemplate().toString());
+					out.close();
 				}
 			}
 			catch(FileNotFoundException ex)
@@ -92,19 +92,25 @@ options{
 program
 scope{
 	String curBlock;
+	List global_variables;
+	List functions;
 }
 @init{
 	$program::curBlock = "";
+	$program::global_variables = new ArrayList();
+	$program::functions = new ArrayList();
 }
-	:	global_decl_var* (functions)* {$program::curBlock="main";} mainBlock EOF
+	:	global_variables* (functions {$program::functions.add($functions.st);})* {$program::curBlock="main";} mainBlock EOF
+		-> program(global_variables={$program::global_variables}, functions={$program::functions}, program={$mainBlock.st}, programName={programName})
 	;
 	
 mainBlock
 	:	'main' '{' block '}'
+		-> mainBlock(block={$block.stList})
 	;
 	
-global_decl_var
-	:	{ $program::curBlock = "global";} (global_declaration)* ';'
+global_variables
+	:	{ $program::curBlock = "global";} (global_declaration {$program::global_variables.add($global_declaration.st);})* ';'
 	;
 	
 global_declaration
@@ -120,6 +126,8 @@ global_declaration
 				errors.add("line "+$ID.line+": Duplicated variable name "+$ID.text);
 		}
 	}
+	
+	-> global_declaration(ident={$ID.text}, type={$type.st})
 	;
 	
 functions
@@ -162,9 +170,14 @@ scope{
 			}
 		} 
 	'}'
+	
+	->functions(type={$type_func.st}, ident={$ID.text}, args={$arg_list.stList}, returnType={$return_stmt.type}, block={$block.stList})
 	;
 
-arg_list
+arg_list returns[List<StringTemplate> stList]
+@init{
+	$stList = new ArrayList<StringTemplate>();
+}
 	:	(
 		firstType=type firstId=ID
 		{
@@ -173,6 +186,7 @@ arg_list
 			if(!names.isDeclaredVariable($program::curBlock+"."+$firstId.text))
 			{
 				names.addVariable(names.new VariableName($program::curBlock+"."+$firstId.text, $firstType.text, $firstId.line));
+				$stList.add(%parameter(type={$firstType.st}, ident={$firstId.text}));
 			}
 			else
 			{
@@ -186,6 +200,7 @@ arg_list
 			if(!names.isDeclaredVariable($program::curBlock+"."+$secondId.text))
 			{
 				names.addVariable(names.new VariableName($program::curBlock+"."+$secondId.text, $secondType.text, $secondId.line));
+				$stList.add(%parameter(type={$secondType.st}, ident={$secondId.text}));
 			}
 			else
 			{
@@ -196,18 +211,22 @@ arg_list
  		)?
 	;
 	
-block	:	(statements)*
+block returns[List<StringTemplate> stList]
+@init{
+	$stList = new ArrayList<StringTemplate>();
+}
+	:	(statements {$stList.add($statements.st);})*
 	;
 	
 statements
-	:	assign_stmt ';'
-	|	decl_stmt ';'
-	|	write_stmt ';'
-	|	read_strm ';'
-	|	if_stmt
-	|	for_stmt
-	|	while_stmt
-	| 	call_func_stmt ';'
+	:	assign_stmt ';' -> {$assign_stmt.st}
+	|	decl_stmt ';' -> {$decl_stmt.st}
+	|	write_stmt ';' -> {$write_stmt.st}
+	|	read_strm ';' -> {$read_strm.st}
+	|	if_stmt -> {$if_stmt.st}
+	|	for_stmt -> {$for_stmt.st}
+	|	while_stmt ->{$while_stmt.st}
+	| 	call_func_stmt ';' -> {$call_func_stmt.st}
 	;
 	
 assign_stmt
@@ -250,11 +269,56 @@ decl_stmt
 			if(names.isDeclaredVariable($program::curBlock+"."+$ID.text))
 				errors.add("line "+$ID.line+": Duplicated variable name "+$ID.text);
 		}
+		
+		if(TypesChecker.isInteger($type.text))
+		{
+			$st = %declaration_int(variableNumber={$ID.text});
+		}
+		if(TypesChecker.isString($type.text))
+		{
+			$st = %declaration_string(string={$ID.text});
+		}
+		if(TypesChecker.isChar($type.text))
+		{
+			$st = %declaration_char(char={$ID.text});
+		}
 	}
 	;
 	
 write_stmt
-	:	'write' '(' atom ')' 
+	:	'write' '(' write_param ')' 
+	{
+		if(TypesChecker.isInteger($write_param.type))
+		{
+			$st = %write_int(expression={$write_param.st});
+		}
+		if(TypesChecker.isString($write_param.type))
+		{
+			$st = %write_string(string={$write_param.st});
+		}
+		if(TypesChecker.isChar($write_param.type))
+		{
+			$st = %write_char(expression={$write_param.st});
+		}
+	}
+	;
+	
+write_param returns[String text, String type]
+	:	ID {
+		$text = $ID.text;
+		if(names.isDeclaredVariable($program::curBlock+"."+$ID.text))
+		{
+			NamesTable.VariableName v_type = names.getVariable($program::curBlock+"."+$ID.text);
+			$type = v_type.getType();
+		}
+		else
+		{
+			errors.add("line "+$ID.line+": unknown variable "+$ID.text);
+		}
+	}
+	|	INT {$text = $INT.text; $type = "int";}				-> const_int(value={$INT.text})
+	|	STRING {$text = $STRING.text; $type = "string";}	-> const_string(value = {$STRING.text})
+	|	CHAR {$text = $CHAR.text; $type = "char";}			-> const_char(value = {$CHAR.text})
 	;
 	
 read_strm
@@ -315,6 +379,7 @@ scope{
 }
 @init{
 	$call_func::methodName = "";
+	List<StringTemplate> argTypes = new ArrayList<StringTemplate>();
 }
 	:	ID{$call_func::methodName=$ID.text;} '(' arg_call ')'
 	{
@@ -337,15 +402,57 @@ scope{
 			NamesTable.FunctionName func = names.getFunction($ID.text);
 			$type = func.getReturnType();
 		}
+		
+		for(String arg_type: $arg_call.argumentTypeList)
+		{
+			if(TypesChecker.isInteger(arg_type))
+			{
+				argTypes.add(%type_int());
+			}
+			if(TypesChecker.isString(arg_type))
+			{
+				argTypes.add(%type_string());
+			}
+			if(TypesChecker.isVoid(arg_type))
+			{
+				argTypes.add(%type_void());
+			}
+			if(TypesChecker.isChar(arg_type))
+			{
+				argTypes.add(%type_char());
+			}  
+		}
+		
+		StringTemplate returnType = new StringTemplate();
+		
+		if(TypesChecker.isInteger($type))
+		{
+			returnType = %type_int();
+		}
+		if(TypesChecker.isString($type))
+		{
+			returnType = %type_string();
+		}
+		if(TypesChecker.isVoid($type))
+		{
+			returnType = %type_void();
+		}
+		if(TypesChecker.isChar($type))
+		{
+			returnType = %type_char();
+		}
+		
+		$st = %function_call(programName={programName}, funcName={$ID.text}, argTemplates={$arg_call.stList}, argTypes={argTypes}, returnType={returnType});
 	}
 	;
 	
-arg_call returns[ArrayList<String> argumentTypeList]
+arg_call returns[ArrayList<String> argumentTypeList, List<StringTemplate> stList]
 	:
 	{
 		$argumentTypeList = new ArrayList<String>();
+		$stList = new ArrayList<StringTemplate>();
 	}	
-	(a=atom {$argumentTypeList.add($a.type);} (',' b=atom {$argumentTypeList.add($b.type);})*)?
+	(a=atom {$argumentTypeList.add($a.type); $stList.add($a.st);} (',' b=atom {$argumentTypeList.add($b.type); $stList.add($b.st);})*)?
 	;
 	
 expression:	and_expression ('|'  expression)? 
@@ -370,31 +477,37 @@ comparison
 	;
 	
 atom returns [String value, String type]
-	:	ID {$value = $ID.text;
-		if(names.isDeclaredVariable($program::curBlock+"."+$ID.text))
+	:	ID 
 		{
-			NamesTable.VariableName v_type = names.getVariable($program::curBlock+"."+$ID.text);
-			$type = v_type.getType();
+			$value = $ID.text;
+			if(names.isDeclaredVariable($program::curBlock+"."+$ID.text))
+			{
+				NamesTable.VariableName v_type = names.getVariable($program::curBlock+"."+$ID.text);
+				$type = v_type.getType();
+			}
+			else
+			{
+				errors.add("line "+$ID.line+": unknown variable "+$ID.text);
+			}
 		}
-		else
-		{
-			errors.add("line "+$ID.line+": unknown variable "+$ID.text);
-		}
-	}
-	|	INT {$type="int"; $value=$INT.text;}
-	|	CHAR{$type="char"; $value=$CHAR.text;}
-	|	STRING{$type="string"; $value=$STRING.text;}
-	|	call_func {$type=$call_func.type;}
+	|	INT {$type="int"; $value=$INT.text;}	-> const_int(value={$INT.text})
+	|	CHAR{$type="char"; $value=$CHAR.text;}	-> const_char(value = {$CHAR.text})
+	|	STRING{$type="string"; $value=$STRING.text;}	-> const_string(value = {$STRING.text})
+	|	call_func {$type=$call_func.type;}		-> {$call_func.st}
 	|	length_stmt{$type="int";}
 	|	elem_stmt{$type="char";}
 	|	to_string_stmt{$type="string";}
 	;
 	
-type	:	'int'| 'string'| 'char'
+type returns[StringTemplate returnType]	
+	:	'int' {$returnType = %return_int();} -> type_int()
+	| 	'string' {$returnType = %return_string();} ->type_string()
+	| 	'char' {$returnType = %return_char();} ->type_char()
 	;
 	
-type_func
-	:	type|'void'
+type_func returns[StringTemplate returnType]
+	:	type {$returnType = $type.returnType;}
+	|	'void' {$returnType = %return_void();} -> type_void()
 	;
 	
 ID  	

@@ -1,0 +1,104 @@
+group ByteCode;
+
+program(global_variables, functions, program, programName) ::= <<
+.class public <programName>
+.super java/lang/Object
+  <global_variables>
+  <functions>
+	<program>
+>>
+
+mainBlock(block) ::= <<
+.method public static main([Ljava/lang/String;)V
+.limit locals 100
+.limit stack 20
+  <block; separator="\n">
+  return
+.end method
+>>
+
+global_declaration(ident, type) ::=<<
+.field private static <ident>field <type> <\n>
+>>
+
+declaration_int(variableNumber) ::= <<
+ldc 0
+istore <variableNumber>
+>>
+
+declaration_string(string) ::= <<
+ldc 0
+astore <string>
+>>
+
+declaration_char(char) ::= <<
+ldc 0
+astore <char>
+>>
+
+functions(type, ident, args, returnType, block) ::=<<
+.method public static <ident> func(<args:{<it.type>}>) <type>
+.limit locals 100
+.limit stack 20
+  <block; separator="\n">
+  <returnType>
+.end method
+>>
+
+parameter(type, ident) ::= "<type> <ident>"
+
+function_call(programName, funcName, argTemplates, argTypes, returnType) ::=<<
+<argTemplates; separator="\n">
+invokestatic <programName>/<funcName>func(<argTypes>) <returnType>
+>>
+
+write_string(string) ::=<<
+getstatic java/lang/System/out Ljava/io/PrintStream;
+<string>
+invokevirtual java/io/PrintStream/println(Ljava/lang/String;)V
+>>
+
+write_int(expression) ::=<<
+getstatic java/lang/System/out Ljava/io/PrintStream;
+<expression>
+invokevirtual java/io/PrintStream/println(I)V
+>>
+
+write_char(expression) ::=<<
+getstatic java/lang/System/out Ljava/io/PrintStream;
+<expression>
+invokevirtual java/io/PrintStream/println(Ljava/lang/String;)V
+>>
+
+const_int(value) ::=<<
+ldc <value>
+>>
+
+const_string(value) ::=<<
+ldc <value>
+>>
+
+const_char(value) ::=<<
+ldc <values>
+>>
+
+return_int() ::= <<
+ireturn
+>>
+
+return_void() ::= <<
+return
+>>
+
+return_string() ::= <<
+areturn
+>>
+
+return_char() ::= <<
+areturn
+>>
+
+type_int() ::= "I"
+type_char() ::= "C"
+type_string() ::= "S"
+type_void() ::="V"
