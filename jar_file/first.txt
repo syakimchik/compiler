@@ -1,5 +1,0 @@
-void main()
-{
-	string str = "Hello world"
-	print(str)
-}

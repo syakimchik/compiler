@@ -1,8 +1,0 @@
-group ByteCode;
-
-program(curBlock) ::=<<
-.class public Wrapper
-.super java/lang/Object
-<curBlock>
->>
-
