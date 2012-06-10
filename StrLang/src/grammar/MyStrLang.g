@@ -21,14 +21,15 @@ options{
 
 @members{
 		private static String programName = "";
-		private int labelNumber=0;
+		private int counter;
 		
 		protected NamesTable names = new NamesTable();
 		protected ArrayList<String> errors = new ArrayList<String>();
 		protected ArrayList<String> tmpVarNamesList = new ArrayList<String>();
 		
 		public static StringTemplateGroup templateGroup;
-		public static final String templateFileName = "D:/Projects/Yapis/StrLang/src/template/ByteCode.stg";
+		public static final String templateFileName = "D:/Projects/Yapis/StrLang/src/template/ByteCode.stg";	//testing line
+		//public static final String templateFileName = "D:/Projects/Yapis/StrLang/src/template/ByteCode.stg";	//line for jar file
 		
 		/**
 		* @param args
@@ -105,6 +106,9 @@ scope{
 	;
 	
 mainBlock
+@init{
+	counter = 1;
+}
 	:	'main' '{' block '}'
 		-> mainBlock(block={$block.stList})
 	;
@@ -118,7 +122,10 @@ global_declaration
 	{
 		if(!names.isDeclaredVariable($program::curBlock+"."+$ID.text))
 		{
-			names.addVariable(names.new VariableName($program::curBlock+"."+$ID.text, $type.text, $ID.line));
+			NamesTable.VariableName var = names.new VariableName($program::curBlock+"."+$ID.text, $type.text, $ID.line);
+			var.setNumber(counter);
+			names.addVariable(var);
+			counter++;
 		}
 		else
 		{
@@ -177,6 +184,10 @@ scope{
 arg_list returns[List<StringTemplate> stList]
 @init{
 	$stList = new ArrayList<StringTemplate>();
+	counter = 0;
+}
+@after{
+	counter = 0;
 }
 	:	(
 		firstType=type firstId=ID
@@ -185,8 +196,11 @@ arg_list returns[List<StringTemplate> stList]
 			$functions::funcArgNames.add($firstId.text);
 			if(!names.isDeclaredVariable($program::curBlock+"."+$firstId.text))
 			{
-				names.addVariable(names.new VariableName($program::curBlock+"."+$firstId.text, $firstType.text, $firstId.line));
+				NamesTable.VariableName var = names.new VariableName($program::curBlock+"."+$firstId.text, $firstType.text, $firstId.line);
+				var.setNumber(counter);
+				names.addVariable(var);
 				$stList.add(%parameter(type={$firstType.st}, ident={$firstId.text}));
+				counter++;
 			}
 			else
 			{
@@ -199,7 +213,10 @@ arg_list returns[List<StringTemplate> stList]
 			$functions::funcArgNames.add($secondId.text);
 			if(!names.isDeclaredVariable($program::curBlock+"."+$secondId.text))
 			{
-				names.addVariable(names.new VariableName($program::curBlock+"."+$secondId.text, $secondType.text, $secondId.line));
+				NamesTable.VariableName var = names.new VariableName($program::curBlock+"."+$secondId.text, $secondType.text, $secondId.line);
+				var.setNumber(counter); 
+				names.addVariable(var);
+				counter++;
 				$stList.add(%parameter(type={$secondType.st}, ident={$secondId.text}));
 			}
 			else
@@ -240,6 +257,25 @@ assign_stmt
 			{
 				errors.add("line "+$ID.line+": Type mismatch: cannot convert from "+varType+" to "+$firstAssign.type);
 			}
+			if(TypesChecker.isInteger(varType))
+			{
+				if(names.isGlobal($ID.text)){
+					$st = %assign_field_int(expression={$firstAssign.st}, programName={programName}, fieldName={$ID.text});
+				} 
+				else{
+					$st = %assign_var_int(expression={$firstAssign.st}, counter={var_type.getNumber()});
+				}
+			}
+			if(TypesChecker.isString(varType) || TypesChecker.isChar(varType))
+			{
+				if(names.isGlobal($ID.text)){
+					$st = %assign_field_string(expression={$firstAssign.st}, programName={programName}, fieldName={$ID.text});
+				} 
+				else{
+					$st = %assign_var_string(expression={$firstAssign.st}, counter={var_type.getNumber()});
+				}
+			}
+			
 		}
 	} 
 	(('+'|'-') secondAssign=atom
@@ -262,7 +298,9 @@ decl_stmt
 	{
 		if(!names.isDeclaredVariable($program::curBlock+"."+$ID.text))
 		{
-			names.addVariable(names.new VariableName($program::curBlock+"."+$ID.text, $type.text, $ID.line));
+			NamesTable.VariableName var = names.new VariableName($program::curBlock+"."+$ID.text, $type.text, $ID.line);
+			var.setNumber(counter);
+			names.addVariable(var);	
 		}
 		else
 		{
@@ -272,16 +310,14 @@ decl_stmt
 		
 		if(TypesChecker.isInteger($type.text))
 		{
-			$st = %declaration_int(variableNumber={$ID.text});
+			$st = %declaration_int(counter={counter});
 		}
-		if(TypesChecker.isString($type.text))
+		if(TypesChecker.isString($type.text) || TypesChecker.isChar($type.text))
 		{
-			$st = %declaration_string(string={$ID.text});
+			$st = %declaration_string(counter={counter});
 		}
-		if(TypesChecker.isChar($type.text))
-		{
-			$st = %declaration_char(char={$ID.text});
-		}
+		
+		counter++;
 	}
 	;
 	
@@ -292,13 +328,9 @@ write_stmt
 		{
 			$st = %write_int(expression={$write_param.st});
 		}
-		if(TypesChecker.isString($write_param.type))
+		if(TypesChecker.isString($write_param.type) || TypesChecker.isChar($write_param.type))
 		{
 			$st = %write_string(string={$write_param.st});
-		}
-		if(TypesChecker.isChar($write_param.type))
-		{
-			$st = %write_char(expression={$write_param.st});
 		}
 	}
 	;
@@ -310,6 +342,28 @@ write_param returns[String text, String type]
 		{
 			NamesTable.VariableName v_type = names.getVariable($program::curBlock+"."+$ID.text);
 			$type = v_type.getType();
+			if(TypesChecker.isInteger($type))
+			{
+				if(names.isGlobal($type))
+				{
+					$st = %referenceField_int(programName={programName}, fieldName={v_type.getNumber()});
+				}
+				else{
+					$st = %referenceVariable_int(counter={v_type.getNumber()});
+				}
+			}
+			
+			if(TypesChecker.isString($type) || TypesChecker.isChar($type))
+			{
+				if(names.isGlobal($type))
+				{
+					$st = %referenceField_string(programName={programName}, fieldName={v_type.getNumber()});
+				}
+				else{
+					$st = %referenceVariable_string(counter={v_type.getNumber()});
+				}
+			}
+			
 		}
 		else
 		{
@@ -318,7 +372,7 @@ write_param returns[String text, String type]
 	}
 	|	INT {$text = $INT.text; $type = "int";}				-> const_int(value={$INT.text})
 	|	STRING {$text = $STRING.text; $type = "string";}	-> const_string(value = {$STRING.text})
-	|	CHAR {$text = $CHAR.text; $type = "char";}			-> const_char(value = {$CHAR.text})
+	|	CHAR {$text = $CHAR.text; $type = "char";}			-> const_string(value = {$CHAR.text})
 	;
 	
 read_strm
@@ -326,6 +380,24 @@ read_strm
 	{
 		if(!names.isDeclaredVariable($program::curBlock+"."+$ID.text))
 			errors.add("line "+$ID.line+": unknown variable "+$ID.text);
+		else{
+			NamesTable.VariableName var_type = names.getVariable($program::curBlock+"."+$ID.text);
+			String varType = var_type.getType();
+			if(TypesChecker.isInteger(varType))
+			{
+				if(names.isGlobal($ID.text)){
+					$st = %read_field_int(programName={programName}, fieldName={$ID.text});
+				} else
+					$st = %read_var_int(counter={var_type.getNumber()});
+			}
+			if(TypesChecker.isString(varType) || TypesChecker.isChar(varType))
+			{
+				if(names.isGlobal($ID.text)){
+					$st = %read_field_string(programName={programName}, fieldName={$ID.text});
+				} else
+					$st = %read_var_string(counter={var_type.getNumber()});
+			}
+		}
 	}
 	;
 	
@@ -491,7 +563,7 @@ atom returns [String value, String type]
 			}
 		}
 	|	INT {$type="int"; $value=$INT.text;}	-> const_int(value={$INT.text})
-	|	CHAR{$type="char"; $value=$CHAR.text;}	-> const_char(value = {$CHAR.text})
+	|	CHAR{$type="char"; $value=$CHAR.text;}	-> const_string(value = {$CHAR.text})
 	|	STRING{$type="string"; $value=$STRING.text;}	-> const_string(value = {$STRING.text})
 	|	call_func {$type=$call_func.type;}		-> {$call_func.st}
 	|	length_stmt{$type="int";}
@@ -502,7 +574,7 @@ atom returns [String value, String type]
 type returns[StringTemplate returnType]	
 	:	'int' {$returnType = %return_int();} -> type_int()
 	| 	'string' {$returnType = %return_string();} ->type_string()
-	| 	'char' {$returnType = %return_char();} ->type_char()
+	| 	'char' {$returnType = %return_string();} ->type_string()
 	;
 	
 type_func returns[StringTemplate returnType]
@@ -517,7 +589,7 @@ ID
 INT	:	('0'..'9')+
 	;
 	
-CHAR	:	'\'' ('a'..'z' | 'A'..'Z' | '0'..'9'|'\\n' ) '\''
+CHAR	:	'"' ('a'..'z' | 'A'..'Z' | '0'..'9'|'\\n' ) '"'
 	;
 	
 STRING	:	'"' ~'"'* '"'

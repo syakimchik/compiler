@@ -28,8 +28,16 @@ public class NamesTable {
 		private String idtf;
 		private String type;
 		private int lineDeclaration;
+		private int number;
 		private ArrayList<Integer> linesUses = new ArrayList<Integer>();
 		
+		
+		/**
+		 * Construction sets the basic parameters that describe the variable
+		 * @param idft - name of the new variable
+		 * @param type - type of the new variable
+		 * @param line - line in the code
+		 */
 		public VariableName(String idft, String type, int line)
 		{
 			this.idtf = idft;
@@ -37,16 +45,37 @@ public class NamesTable {
 			lineDeclaration = line;
 		}
 		
+		/**
+		 * Add line, where used variable
+		 * @param line - line in the code
+		 */
 		public void addLineUses(int line) {
 			linesUses.add(new Integer(line));
 		}
+		
 		public String toString() {
 			return idtf + ", " + type + ", " + lineDeclaration + ", "
 				+ ((linesUses.isEmpty())? "not uses" : linesUses);
 		}
+		
+		/**
+		 * Returns the string value of the variable type
+		 * @return - string, where contain type of variable
+		 */
 		public String getType() {
 			return type;
 		}
+		
+		public int getNumber()
+		{
+			return number;
+		}
+		
+		public void setNumber(int number)
+		{
+			this.number = number;
+		}
+		
 	}
 		
 	public class FunctionName{
@@ -128,6 +157,22 @@ public class NamesTable {
 				_name = variableNames.get("global."+name);
 			else
 				_name = variableNames.get("global"+name.substring(name.indexOf('.')));
+			if(_name!=null)
+				return true;
+		}
+		else
+			result = true;
+		return result;
+	}
+	
+	public boolean isGlobal(String name)
+	{
+		boolean result = false;
+		VariableName _name = variableNames.get(name);
+		if(_name==null)
+		{
+			if(name.indexOf('.')==-1)
+				_name = variableNames.get("global."+name);
 			if(_name!=null)
 				return true;
 		}

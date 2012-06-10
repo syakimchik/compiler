@@ -21,19 +21,14 @@ global_declaration(ident, type) ::=<<
 .field private static <ident>field <type> <\n>
 >>
 
-declaration_int(variableNumber) ::= <<
+declaration_int(counter) ::= <<
 ldc 0
-istore <variableNumber>
+istore <counter>
 >>
 
-declaration_string(string) ::= <<
-ldc 0
-astore <string>
->>
-
-declaration_char(char) ::= <<
-ldc 0
-astore <char>
+declaration_string(counter) ::= <<
+ldc ""
+astore <counter>
 >>
 
 functions(type, ident, args, returnType, block) ::=<<
@@ -52,6 +47,78 @@ function_call(programName, funcName, argTemplates, argTypes, returnType) ::=<<
 invokestatic <programName>/<funcName>func(<argTypes>) <returnType>
 >>
 
+assign_var_int(expression, counter) ::= <<
+<expression>
+istore <counter>
+>>
+
+assign_field_int(expression, programName, fieldName) ::= <<
+<expression>
+putstatic <programName>/<fieldName>field I
+>>
+
+assign_var_string(expression, counter) ::= <<
+<expression>
+astore <counter>
+>>
+
+assign_field_string(expression, programName, fieldName) ::= <<
+<expression>
+putstatic <programName>/<fieldName>field Ljava/lang/String; 
+>>
+
+referenceVariable_int(counter) ::= <<
+iload <counter>
+>>
+
+referenceField_int(programName, fieldName) ::= <<
+getstatic <programName>/<fieldName>field I
+>>
+
+referenceVariable_string(counter) ::= <<
+aload <counter>
+>>
+
+referenceField_string(programName, fieldName) ::= <<
+getstatic <programName>/<fieldName>field Ljava/lang/String;
+>>
+
+read_var_int(counter) ::= <<
+new java/util/Scanner
+dup
+getstatic java/lang/System/in Ljava/io/InputStream;
+invokespecial java/util/Scanner/\<init\>(Ljava/io/InputStream;)V
+invokevirtual java/util/Scanner/nextInt()I
+istore <counter>
+>>
+
+read_field_int(programName, fieldName) ::= <<
+new java/util/Scanner
+dup
+getstatic java/lang/System/in Ljava/io/InputStream;
+invokespecial java/util/Scanner/\<init\>(Ljava/io/InputStream;)V
+invokevirtual java/util/Scanner/nextInt()I
+putstatic <programName>/<fieldName>field I
+>>
+
+read_field_string(programName, fieldName) ::= <<
+new java/util/Scanner
+dup
+getstatic java/lang/System/in Ljava/io/InputStream;
+invokespecial java/util/Scanner/\<init\>(Ljava/io/InputStream;)V
+invokevirtual java/util/Scanner/nextLine()Ljava/lang/String;
+putstatic <programName>/<fieldName>field Ljava/lang/String;
+>>
+
+read_var_string(counter) ::= <<
+new java/util/Scanner
+dup
+getstatic java/lang/System/in Ljava/io/InputStream;
+invokespecial java/util/Scanner/\<init\>(Ljava/io/InputStream;)V
+invokevirtual java/util/Scanner/nextLine()Ljava/lang/String;
+astore <counter>
+>>
+
 write_string(string) ::=<<
 getstatic java/lang/System/out Ljava/io/PrintStream;
 <string>
@@ -64,22 +131,12 @@ getstatic java/lang/System/out Ljava/io/PrintStream;
 invokevirtual java/io/PrintStream/println(I)V
 >>
 
-write_char(expression) ::=<<
-getstatic java/lang/System/out Ljava/io/PrintStream;
-<expression>
-invokevirtual java/io/PrintStream/println(Ljava/lang/String;)V
->>
-
 const_int(value) ::=<<
 ldc <value>
 >>
 
 const_string(value) ::=<<
 ldc <value>
->>
-
-const_char(value) ::=<<
-ldc <values>
 >>
 
 return_int() ::= <<
@@ -94,11 +151,6 @@ return_string() ::= <<
 areturn
 >>
 
-return_char() ::= <<
-areturn
->>
-
 type_int() ::= "I"
-type_char() ::= "C"
 type_string() ::= "S"
 type_void() ::="V"
