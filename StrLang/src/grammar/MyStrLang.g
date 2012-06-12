@@ -294,6 +294,10 @@ expr returns [String type]
 			{
 				$type = $firstAssign.type;
 				String t_1 = $secondAssign.type;
+				if(TypesChecker.isChar($secondAssign.type))
+				{
+					errors.add("line "+$op.line+": impossibly addition type of char to char");
+				}
 				if(!TypesChecker.checkTypes($firstAssign.type, $secondAssign.type))
 				{
 					errors.add("line "+$op.line+": mismatch in math operation. Found "+$firstAssign.type+"and"+$secondAssign.type);
@@ -303,11 +307,17 @@ expr returns [String type]
 				 	if(TypesChecker.isInteger($firstAssign.type) && TypesChecker.isInteger($secondAssign.type)){
 				 		$st = %add_int(firstValue={$firstAssign.st}, secondValue={$secondAssign.st});
 				 	}
+				 	if(TypesChecker.isString($firstAssign.type) && TypesChecker.isString($secondAssign.type)){
+				 		$st = %add_string(firstValue={$firstAssign.st}, secondValue={$secondAssign.st}, counter={counter});
+				 	}
 		 		}
 		 		if($op.text.equals("-")){
 		 			if(TypesChecker.isInteger($firstAssign.type) && TypesChecker.isInteger($secondAssign.type)){
 		 				$st = %sub_int(firstValue={$firstAssign.st}, secondValue={$secondAssign.st});
 		 			}
+		 			if(TypesChecker.isString($firstAssign.type) && TypesChecker.isString($secondAssign.type)){
+				 		$st = %sub_string(firstValue={$firstAssign.st}, secondValue={$secondAssign.st}, counter={counter});
+				 	}
 		 		}
 					
 			}

@@ -67,6 +67,16 @@ assign_field_string(expression, programName, fieldName) ::= <<
 putstatic <programName>/<fieldName>field Ljava/lang/String; 
 >>
 
+add_string(firstValue, secondValue, counter) ::= <<
+new java/lang/StringBuilder
+dup
+<secondValue>
+invokestatic java/lang/String.valueOf(Ljava/lang/Object;)Ljava/lang/String;
+invokespecial java/lang/StringBuilder.\<init\>(Ljava/lang/String;)V
+<firstValue>
+invokevirtual java/lang/StringBuilder.append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+invokevirtual java/lang/StringBuilder.toString()Ljava/lang/String;
+>>
 add_int(firstValue, secondValue) ::= <<
 <firstValue>
 <secondValue>
