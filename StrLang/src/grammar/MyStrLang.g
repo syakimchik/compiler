@@ -22,6 +22,8 @@ options{
 @members{
 		private static String programName = "";
 		private int counter;
+		private String _funcName = "";
+		private String _funcType = "";
 		
 		protected NamesTable names = new NamesTable();
 		protected ArrayList<String> errors = new ArrayList<String>();
@@ -107,7 +109,7 @@ scope{
 	
 mainBlock
 @init{
-	counter = 1;
+	counter = 0;
 }
 	:	'main' '{' block '}'
 		-> mainBlock(block={$block.stList})
@@ -149,11 +151,11 @@ scope{
 @init{
 	$functions::funcName = "";
 	$functions::funcType = "";
-	$functions::returnVariable = "";
 	$functions::funcArgNames = new ArrayList<String>();
 	$functions::funcArgTypes = new ArrayList<String>();
 }
-	:	type_func {$functions::funcType = $type_func.text;} ID{$program::curBlock = $ID.text; $functions::funcName=$ID.text;}
+	:	type_func {$functions::funcType = $type_func.text; _funcType = $type_func.text; } 
+		ID {$program::curBlock = $ID.text; $functions::funcName=$ID.text; _funcName = $ID.text;}
 	'(' arg_list ')'
 	//if fuction is not exists in nametable then add her
 	{
@@ -167,26 +169,14 @@ scope{
 		}
 	}
 	'{' 
-		block 
-		return_stmt
-		{
-			boolean result = names.checkReturnType($ID.text, $functions::returnVariable, $return_stmt.type, $program::curBlock, $ID.line);
-			if(result==false)
-			{
-				errors.add(names.getLastError());
-			}
-		} 
+		block
 	'}'
-	
-	->functions(type={$type_func.st}, ident={$ID.text}, args={$arg_list.stList}, returnType={$return_stmt.type}, block={$block.stList})
+	-> functions(type={$type_func.st}, ident={$ID.text}, args={$arg_list.stList}, returnType={$type_func.returnType}, block={$block.stList})
 	;
 
 arg_list returns[List<StringTemplate> stList]
 @init{
 	$stList = new ArrayList<StringTemplate>();
-	counter = 0;
-}
-@after{
 	counter = 0;
 }
 	:	(
@@ -232,7 +222,19 @@ block returns[List<StringTemplate> stList]
 @init{
 	$stList = new ArrayList<StringTemplate>();
 }
-	:	(statements {$stList.add($statements.st);})*
+	:	(statements {$stList.add($statements.st);})* (return_stmt {$stList.add($return_stmt.st);})
+	{		
+		if($program::curBlock!="main"){
+			String name = $program::curBlock;
+			NamesTable.FunctionName func = names.getFunction(name);
+			String type = func.getReturnType();
+			if($return_stmt.value==null)
+			{
+				if(!type.equals("void"))
+					errors.add("line "+$return_stmt.line+": Not found the keyword return in function with name "+name);
+			}
+		}
+	}
 	;
 	
 statements
@@ -247,50 +249,70 @@ statements
 	;
 	
 assign_stmt
-	:	ID '=' firstAssign=atom
+	:	ID '=' expr
 	{
 		if(names.isDeclaredVariable($program::curBlock+"."+$ID.text))
 		{
 			NamesTable.VariableName var_type = names.getVariable($program::curBlock+"."+$ID.text);
 			String varType = var_type.getType();
-			if(!TypesChecker.checkTypes(varType, $firstAssign.type))
+			if(!TypesChecker.checkTypes(varType, $expr.type))
 			{
-				errors.add("line "+$ID.line+": Type mismatch: cannot convert from "+varType+" to "+$firstAssign.type);
+				errors.add("line "+$ID.line+": Type mismatch: cannot convert from "+varType+" to "+$expr.type);
 			}
 			if(TypesChecker.isInteger(varType))
 			{
 				if(names.isGlobal($ID.text)){
-					$st = %assign_field_int(expression={$firstAssign.st}, programName={programName}, fieldName={$ID.text});
+					$st = %assign_field_int(expression={$expr.st}, programName={programName}, fieldName={$ID.text});
 				} 
 				else{
-					$st = %assign_var_int(expression={$firstAssign.st}, counter={var_type.getNumber()});
+					$st = %assign_var_int(expression={$expr.st}, counter={var_type.getNumber()});
 				}
 			}
 			if(TypesChecker.isString(varType) || TypesChecker.isChar(varType))
 			{
 				if(names.isGlobal($ID.text)){
-					$st = %assign_field_string(expression={$firstAssign.st}, programName={programName}, fieldName={$ID.text});
+					$st = %assign_field_string(expression={$expr.st}, programName={programName}, fieldName={$ID.text});
 				} 
 				else{
-					$st = %assign_var_string(expression={$firstAssign.st}, counter={var_type.getNumber()});
+					$st = %assign_var_string(expression={$expr.st}, counter={var_type.getNumber()});
 				}
 			}
 			
 		}
-	} 
-	(('+'|'-') secondAssign=atom
-	{
-		if(names.isDeclaredVariable($program::curBlock+"."+$ID.text))
-		{
-			NamesTable.VariableName var_type = names.getVariable($program::curBlock+"."+$ID.text);
-			String varType = var_type.getType();
-			if(!TypesChecker.checkTypes(varType, $secondAssign.type))
-			{
-				errors.add("line "+$ID.line+": Type mismatch: cannot convert from "+varType+" to "+$secondAssign.type);
-			}
-		}
 	}
-	)?
+	;
+	
+expr returns [String type]
+	:	
+		firstAssign=atom
+		{
+			$type = $firstAssign.type;
+			$st = $firstAssign.st;
+		}
+		(
+			(op='+'|op='-') secondAssign=atom
+			{
+				$type = $firstAssign.type;
+				String t_1 = $secondAssign.type;
+				if(!TypesChecker.checkTypes($firstAssign.type, $secondAssign.type))
+				{
+					errors.add("line "+$op.line+": mismatch in math operation. Found "+$firstAssign.type+"and"+$secondAssign.type);
+				}
+				if($op.text.equals("+"))
+		 		{
+				 	if(TypesChecker.isInteger($firstAssign.type) && TypesChecker.isInteger($secondAssign.type)){
+				 		$st = %add_int(firstValue={$firstAssign.st}, secondValue={$secondAssign.st});
+				 	}
+		 		}
+		 		if($op.text.equals("-")){
+		 			if(TypesChecker.isInteger($firstAssign.type) && TypesChecker.isInteger($secondAssign.type)){
+		 				$st = %sub_int(firstValue={$firstAssign.st}, secondValue={$secondAssign.st});
+		 			}
+		 		}
+					
+			}
+		)?
+	
 	;
 	
 decl_stmt
@@ -322,20 +344,20 @@ decl_stmt
 	;
 	
 write_stmt
-	:	'write' '(' write_param ')' 
+	:	'write' '(' atom ')' 
 	{
-		if(TypesChecker.isInteger($write_param.type))
+		if(TypesChecker.isInteger($atom.type))
 		{
-			$st = %write_int(expression={$write_param.st});
+			$st = %write_int(expression={$atom.st});
 		}
-		if(TypesChecker.isString($write_param.type) || TypesChecker.isChar($write_param.type))
+		if(TypesChecker.isString($atom.type) || TypesChecker.isChar($atom.type))
 		{
-			$st = %write_string(string={$write_param.st});
+			$st = %write_string(string={$atom.st});
 		}
 	}
 	;
 	
-write_param returns[String text, String type]
+atom returns[String text, String type]
 	:	ID {
 		$text = $ID.text;
 		if(names.isDeclaredVariable($program::curBlock+"."+$ID.text))
@@ -373,6 +395,10 @@ write_param returns[String text, String type]
 	|	INT {$text = $INT.text; $type = "int";}				-> const_int(value={$INT.text})
 	|	STRING {$text = $STRING.text; $type = "string";}	-> const_string(value = {$STRING.text})
 	|	CHAR {$text = $CHAR.text; $type = "char";}			-> const_string(value = {$CHAR.text})
+	|	call_func {$type=$call_func.type;}		-> {$call_func.st}
+	|	length_stmt{$type="int";}
+	|	elem_stmt{$type="char";}
+	|	to_string_stmt{$type="string";}
 	;
 	
 read_strm
@@ -411,8 +437,30 @@ while_stmt
 	:	'while' '(' expression ')' '{' block '}'
 	;
 	
-return_stmt returns[String type]
-	:	('return' atom ';' {$functions::returnVariable=$atom.value; $type=$atom.type;})?
+return_stmt returns[String value, int line]
+	:
+	(a='return' atom ';' 
+	{	
+		if($program::curBlock=="main")
+			errors.add("line "+$a.line+": function main may not contain keyword return");
+		$value = $atom.text;
+		$line = $a.line;
+		
+		String name = $functions::funcName;
+		NamesTable.FunctionName func = names.getFunction(name);
+		String type = func.getReturnType();
+		
+		if(type.equals("void")){
+			errors.add("line "+$a.line+": type of void may not contain keyword return");
+		}
+		
+		String rType = $atom.type;
+		if(!TypesChecker.checkTypes(type,rType)){
+			errors.add("line "+$a.line+": Type mismatch: cannot convert from "+type+" to "+rType);
+		}
+	}
+	)?
+	-> {$atom.st}
 	;
 	
 length_stmt
@@ -443,6 +491,7 @@ to_string_stmt
 	
 call_func_stmt
 	:	call_func
+		-> {$call_func.st}
 	;
 	
 call_func returns[String type, int line]
@@ -481,7 +530,7 @@ scope{
 			{
 				argTypes.add(%type_int());
 			}
-			if(TypesChecker.isString(arg_type))
+			if(TypesChecker.isString(arg_type) || TypesChecker.isChar(arg_type))
 			{
 				argTypes.add(%type_string());
 			}
@@ -489,10 +538,7 @@ scope{
 			{
 				argTypes.add(%type_void());
 			}
-			if(TypesChecker.isChar(arg_type))
-			{
-				argTypes.add(%type_char());
-			}  
+			  
 		}
 		
 		StringTemplate returnType = new StringTemplate();
@@ -501,17 +547,13 @@ scope{
 		{
 			returnType = %type_int();
 		}
-		if(TypesChecker.isString($type))
+		if(TypesChecker.isString($type) || TypesChecker.isChar($type))
 		{
 			returnType = %type_string();
 		}
 		if(TypesChecker.isVoid($type))
 		{
 			returnType = %type_void();
-		}
-		if(TypesChecker.isChar($type))
-		{
-			returnType = %type_char();
 		}
 		
 		$st = %function_call(programName={programName}, funcName={$ID.text}, argTemplates={$arg_call.stList}, argTypes={argTypes}, returnType={returnType});
@@ -548,29 +590,6 @@ comparison
 	}
 	;
 	
-atom returns [String value, String type]
-	:	ID 
-		{
-			$value = $ID.text;
-			if(names.isDeclaredVariable($program::curBlock+"."+$ID.text))
-			{
-				NamesTable.VariableName v_type = names.getVariable($program::curBlock+"."+$ID.text);
-				$type = v_type.getType();
-			}
-			else
-			{
-				errors.add("line "+$ID.line+": unknown variable "+$ID.text);
-			}
-		}
-	|	INT {$type="int"; $value=$INT.text;}	-> const_int(value={$INT.text})
-	|	CHAR{$type="char"; $value=$CHAR.text;}	-> const_string(value = {$CHAR.text})
-	|	STRING{$type="string"; $value=$STRING.text;}	-> const_string(value = {$STRING.text})
-	|	call_func {$type=$call_func.type;}		-> {$call_func.st}
-	|	length_stmt{$type="int";}
-	|	elem_stmt{$type="char";}
-	|	to_string_stmt{$type="string";}
-	;
-	
 type returns[StringTemplate returnType]	
 	:	'int' {$returnType = %return_int();} -> type_int()
 	| 	'string' {$returnType = %return_string();} ->type_string()
@@ -578,7 +597,10 @@ type returns[StringTemplate returnType]
 	;
 	
 type_func returns[StringTemplate returnType]
-	:	type {$returnType = $type.returnType;}
+	:	
+	|	'int' {$returnType = %return_int();} -> type_int()
+	| 	'string' {$returnType = %return_string();} ->type_string()
+	| 	'char' {$returnType = %return_string();} ->type_string()
 	|	'void' {$returnType = %return_void();} -> type_void()
 	;
 	

@@ -32,7 +32,7 @@ astore <counter>
 >>
 
 functions(type, ident, args, returnType, block) ::=<<
-.method public static <ident> func(<args:{<it.type>}>) <type>
+.method public static <ident>(<args:{<it.type>}>)<type>
 .limit locals 100
 .limit stack 20
   <block; separator="\n">
@@ -44,7 +44,7 @@ parameter(type, ident) ::= "<type> <ident>"
 
 function_call(programName, funcName, argTemplates, argTypes, returnType) ::=<<
 <argTemplates; separator="\n">
-invokestatic <programName>/<funcName>func(<argTypes>) <returnType>
+invokestatic <programName>/<funcName>(<argTypes>)<returnType>
 >>
 
 assign_var_int(expression, counter) ::= <<
@@ -65,6 +65,18 @@ astore <counter>
 assign_field_string(expression, programName, fieldName) ::= <<
 <expression>
 putstatic <programName>/<fieldName>field Ljava/lang/String; 
+>>
+
+add_int(firstValue, secondValue) ::= <<
+<firstValue>
+<secondValue>
+iadd 
+>>
+
+sub_int(firstValue, secondValue) ::= <<
+<firstValue>
+<secondValue>
+isub 
 >>
 
 referenceVariable_int(counter) ::= <<
@@ -152,5 +164,5 @@ areturn
 >>
 
 type_int() ::= "I"
-type_string() ::= "S"
+type_string() ::= "Ljava/lang/String;"
 type_void() ::="V"
