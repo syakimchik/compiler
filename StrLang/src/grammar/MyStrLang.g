@@ -308,7 +308,7 @@ expr returns [String type]
 				 		$st = %add_int(firstValue={$firstAssign.st}, secondValue={$secondAssign.st});
 				 	}
 				 	if(TypesChecker.isString($firstAssign.type) && TypesChecker.isString($secondAssign.type)){
-				 		$st = %add_string(firstValue={$firstAssign.st}, secondValue={$secondAssign.st}, counter={counter});
+				 		$st = %add_string(firstValue={$firstAssign.st}, secondValue={$secondAssign.st});
 				 	}
 		 		}
 		 		if($op.text.equals("-")){
@@ -316,7 +316,7 @@ expr returns [String type]
 		 				$st = %sub_int(firstValue={$firstAssign.st}, secondValue={$secondAssign.st});
 		 			}
 		 			if(TypesChecker.isString($firstAssign.type) && TypesChecker.isString($secondAssign.type)){
-				 		$st = %sub_string(firstValue={$firstAssign.st}, secondValue={$secondAssign.st}, counter={counter});
+				 		errors.add("line "+$op.line+": operation '-' is not available in type string");
 				 	}
 		 		}
 					
@@ -406,7 +406,7 @@ atom returns[String text, String type]
 	|	STRING {$text = $STRING.text; $type = "string";}	-> const_string(value = {$STRING.text})
 	|	CHAR {$text = $CHAR.text; $type = "char";}			-> const_string(value = {$CHAR.text})
 	|	call_func {$type=$call_func.type;}		-> {$call_func.st}
-	|	length_stmt{$type="int";}
+	|	length_stmt{$type="int";}				-> {$length_stmt.st}
 	|	elem_stmt{$type="char";}
 	|	to_string_stmt{$type="string";}
 	;
@@ -474,11 +474,48 @@ return_stmt returns[String value, int line]
 	;
 	
 length_stmt
-	:	'length' '(' (a=ID|STRING) ')'
+	:	'length' '(' param ')'
 	{
-		if(!names.isDeclaredVariable($program::curBlock+"."+$a.text))
-			errors.add("line "+$a.line+": unknown variable "+$a.text);
+		$st = %length_string(string={$param.st});
 	}
+	;
+	
+param returns[String text, String type]
+	:	ID {
+		$text = $ID.text;
+		if(names.isDeclaredVariable($program::curBlock+"."+$ID.text))
+		{
+			NamesTable.VariableName v_type = names.getVariable($program::curBlock+"."+$ID.text);
+			$type = v_type.getType();
+			if(TypesChecker.isInteger($type))
+			{
+				if(names.isGlobal($type))
+				{
+					$st = %referenceField_int(programName={programName}, fieldName={v_type.getNumber()});
+				}
+				else{
+					$st = %referenceVariable_int(counter={v_type.getNumber()});
+				}
+			}
+			
+			if(TypesChecker.isString($type))
+			{
+				if(names.isGlobal($type))
+				{
+					$st = %referenceField_string(programName={programName}, fieldName={v_type.getNumber()});
+				}
+				else{
+					$st = %referenceVariable_string(counter={v_type.getNumber()});
+				}
+			}
+			
+		}
+		else
+		{
+			errors.add("line "+$ID.line+": unknown variable "+$ID.text);
+		}
+		}
+	|	STRING {$text = $STRING.text; $type = "string";}	-> const_string(value = {$STRING.text})
 	;
 	
 elem_stmt
