@@ -76,6 +76,17 @@ public class NamesTable {
 			this.number = number;
 		}
 		
+		public String getName()
+		{
+			String _name = idtf;
+			if(_name.contains("global."))
+			{
+				int beginIndex = _name.indexOf(".");
+				_name = _name.substring(beginIndex+1);
+			}
+			return _name;
+		}
+		
 	}
 		
 	public class FunctionName{

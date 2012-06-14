@@ -12,6 +12,7 @@ options{
     import namestable.*;
 	import org.antlr.stringtemplate.StringTemplateGroup;
 	import org.antlr.stringtemplate.language.AngleBracketTemplateLexer;
+	import java.io.UnsupportedEncodingException;
 }
 
 @lexer::header
@@ -244,7 +245,7 @@ statements
 	|	read_strm ';' -> {$read_strm.st}
 	|	if_stmt -> {$if_stmt.st}
 	|	for_stmt -> {$for_stmt.st}
-	|	while_stmt ->{$while_stmt.st}
+	|	while_stmt -> {$while_stmt.st}
 	| 	call_func_stmt ';' -> {$call_func_stmt.st}
 	;
 	
@@ -268,13 +269,22 @@ assign_stmt
 					$st = %assign_var_int(expression={$expr.st}, counter={var_type.getNumber()});
 				}
 			}
-			if(TypesChecker.isString(varType) || TypesChecker.isChar(varType))
+			if(TypesChecker.isString(varType))
 			{
 				if(names.isGlobal($ID.text)){
 					$st = %assign_field_string(expression={$expr.st}, programName={programName}, fieldName={$ID.text});
 				} 
 				else{
 					$st = %assign_var_string(expression={$expr.st}, counter={var_type.getNumber()});
+				}
+			}
+			if(TypesChecker.isChar(varType))
+			{
+				if(names.isGlobal($ID.text)){
+					$st = %assign_field_char(expression={$expr.st}, programName={programName}, fieldName={$ID.text});
+				} 
+				else{
+					$st = %assign_var_char(expression={$expr.st}, counter={var_type.getNumber()});
 				}
 			}
 			
@@ -344,9 +354,14 @@ decl_stmt
 		{
 			$st = %declaration_int(counter={counter});
 		}
-		if(TypesChecker.isString($type.text) || TypesChecker.isChar($type.text))
+		if(TypesChecker.isString($type.text))
 		{
 			$st = %declaration_string(counter={counter});
+		}
+		
+		if(TypesChecker.isChar($type.text))
+		{
+			$st = %declaration_char(counter={counter});
 		}
 		
 		counter++;
@@ -360,9 +375,13 @@ write_stmt
 		{
 			$st = %write_int(expression={$atom.st});
 		}
-		if(TypesChecker.isString($atom.type) || TypesChecker.isChar($atom.type))
+		if(TypesChecker.isString($atom.type))
 		{
 			$st = %write_string(string={$atom.st});
+		}
+		if(TypesChecker.isChar($atom.type))
+		{
+			$st = %write_char(string={$atom.st});
 		}
 	}
 	;
@@ -376,23 +395,34 @@ atom returns[String text, String type]
 			$type = v_type.getType();
 			if(TypesChecker.isInteger($type))
 			{
-				if(names.isGlobal($type))
+				if(names.isGlobal($text))
 				{
-					$st = %referenceField_int(programName={programName}, fieldName={v_type.getNumber()});
+					$st = %referenceField_int(programName={programName}, fieldName={v_type.getName()});
 				}
 				else{
 					$st = %referenceVariable_int(counter={v_type.getNumber()});
 				}
 			}
 			
-			if(TypesChecker.isString($type) || TypesChecker.isChar($type))
+			if(TypesChecker.isString($type))
 			{
-				if(names.isGlobal($type))
+				if(names.isGlobal($text))
 				{
-					$st = %referenceField_string(programName={programName}, fieldName={v_type.getNumber()});
+					$st = %referenceField_string(programName={programName}, fieldName={v_type.getName()});
 				}
 				else{
 					$st = %referenceVariable_string(counter={v_type.getNumber()});
+				}
+			}
+			
+			if(TypesChecker.isChar($type))
+			{
+				if(names.isGlobal($text))
+				{
+					$st = %referenceField_char(programName={programName}, fieldName={v_type.getName()});
+				}
+				else{
+					$st = %referenceVariable_char(counter={v_type.getNumber()});
 				}
 			}
 			
@@ -404,11 +434,27 @@ atom returns[String text, String type]
 	}
 	|	INT {$text = $INT.text; $type = "int";}				-> const_int(value={$INT.text})
 	|	STRING {$text = $STRING.text; $type = "string";}	-> const_string(value = {$STRING.text})
-	|	CHAR {$text = $CHAR.text; $type = "char";}			-> const_string(value = {$CHAR.text})
+	|	char_c {$type = "char";}					-> {$char_c.st}
 	|	call_func {$type=$call_func.type;}		-> {$call_func.st}
 	|	length_stmt{$type="int";}				-> {$length_stmt.st}
-	|	elem_stmt{$type="char";}
-	|	to_string_stmt{$type="string";}
+	|	elem_stmt{$type="char";}				-> {$elem_stmt.st}
+	|	to_string_stmt{$type="string";}			-> {$to_string_stmt.st}
+	;
+	
+char_c returns[int numb]
+	:	CHAR
+	{	
+			String str = $CHAR.text;
+			char el = str.charAt(1);
+			try{
+				$numb = Character.toString(el).getBytes("cp1251")[0];
+			}
+			catch(UnsupportedEncodingException e)
+			{
+				e.printStackTrace();
+			}
+	}
+		-> const_char(cod={$numb})
 	;
 	
 read_strm
@@ -426,7 +472,7 @@ read_strm
 				} else
 					$st = %read_var_int(counter={var_type.getNumber()});
 			}
-			if(TypesChecker.isString(varType) || TypesChecker.isChar(varType))
+			if(TypesChecker.isString(varType))
 			{
 				if(names.isGlobal($ID.text)){
 					$st = %read_field_string(programName={programName}, fieldName={$ID.text});
@@ -491,7 +537,7 @@ param returns[String text, String type]
 			{
 				if(names.isGlobal($type))
 				{
-					$st = %referenceField_int(programName={programName}, fieldName={v_type.getNumber()});
+					$st = %referenceField_int(programName={programName}, fieldName={v_type.getName()});
 				}
 				else{
 					$st = %referenceVariable_int(counter={v_type.getNumber()});
@@ -502,7 +548,7 @@ param returns[String text, String type]
 			{
 				if(names.isGlobal($type))
 				{
-					$st = %referenceField_string(programName={programName}, fieldName={v_type.getNumber()});
+					$st = %referenceField_string(programName={programName}, fieldName={v_type.getName()});
 				}
 				else{
 					$st = %referenceVariable_string(counter={v_type.getNumber()});
@@ -519,21 +565,107 @@ param returns[String text, String type]
 	;
 	
 elem_stmt
-	:	'elem' '('(a=ID|STRING)','(INT|b=ID) ')'
+	:	'elem' '('f_el ',' s_el ')'
 	{
-		if(!names.isDeclaredVariable($program::curBlock+"."+$a.text))
-			errors.add("line "+$a.line+": unknown variable "+$a.text);
-		if(!names.isDeclaredVariable($program::curBlock+"."+$b.text))
-			errors.add("line "+$b.line+": unknown variable "+$b.text);
+		$st = %elem_in_string(fValue={$f_el.st}, sValue={$s_el.st});
 	}
 	;
 	
-to_string_stmt
-	:	'ToString' '(' (b=CHAR|a=ID) ')'
+f_el
+	:	ID
 	{
-		if(!names.isDeclaredVariable($program::curBlock+"."+$a.text))
-			errors.add("line "+$a.line+": unknown variable "+$a.text);
+		if(names.isDeclaredVariable($program::curBlock+"."+$ID.text))
+		{
+			NamesTable.VariableName v_type = names.getVariable($program::curBlock+"."+$ID.text);
+			String type = v_type.getType();
+			if(TypesChecker.isString(type))
+			{
+				if(names.isGlobal($ID.text))
+				{
+					$st = %referenceField_string(programName={programName}, fieldName={v_type.getName()});
+				}
+				else{
+					$st = %referenceVariable_string(counter={v_type.getNumber()});
+				}
+			}
+		}
+		else
+			errors.add("line "+$ID.line+": unknown variable "+$ID.text);
 	}
+	|	STRING		-> const_string(value={$STRING.text})
+	;
+	
+s_el
+	:	ID
+	{
+		if(names.isDeclaredVariable($program::curBlock+"."+$ID.text))
+		{
+			NamesTable.VariableName v_type = names.getVariable($program::curBlock+"."+$ID.text);
+			String type = v_type.getType();
+			if(TypesChecker.isInteger(type))
+			{
+				if(names.isGlobal($ID.text))
+				{
+					$st = %referenceField_int(programName={programName}, fieldName={v_type.getName()});
+				}
+				else{
+					$st = %referenceVariable_int(counter={v_type.getNumber()});
+				}
+			}
+		}
+		else
+			errors.add("line "+$ID.line+": unknown variable "+$ID.text);
+	}
+	|	INT		-> const_int(value={$INT.text})
+	;
+	
+to_string_stmt
+	:	'ToString' '(' param_str ')'
+	{
+		if(TypesChecker.isInteger($param_str.t)){
+			$st = %int_to_string(value={$param_str.st});
+		}
+		if(TypesChecker.isChar($param_str.t)){
+			$st = %char_to_string(value={$param_str.st});
+		}
+	}
+	;
+	
+param_str returns[String t]
+	:	ID
+	{
+		if(names.isDeclaredVariable($program::curBlock+"."+$ID.text))
+		{
+			NamesTable.VariableName v_type = names.getVariable($program::curBlock+"."+$ID.text);
+			String type = v_type.getType();
+			$t = type;
+			if(TypesChecker.isInteger(type))
+			{
+				if(names.isGlobal($ID.text))
+				{
+					$st = %referenceField_int(programName={programName}, fieldName={v_type.getName()});
+				}
+				else{
+					$st = %referenceVariable_int(counter={v_type.getNumber()});
+				}
+			}
+			
+			if(TypesChecker.isChar(type))
+			{
+				if(names.isGlobal($ID.text))
+				{
+					$st = %referenceField_char(programName={programName}, fieldName={v_type.getName()});
+				}
+				else{
+					$st = %referenceVariable_char(counter={v_type.getNumber()});
+				}
+			}
+		}
+		else
+			errors.add("line "+$ID.line+": unknown variable "+$ID.text);
+	}
+	|	INT	{$t="int";}			-> const_int(value={$INT.text})
+	|	char_c {$t="char";}		-> {$char_c.st}
 	;
 	
 call_func_stmt
@@ -577,13 +709,13 @@ scope{
 			{
 				argTypes.add(%type_int());
 			}
-			if(TypesChecker.isString(arg_type) || TypesChecker.isChar(arg_type))
+			if(TypesChecker.isString(arg_type))
 			{
 				argTypes.add(%type_string());
 			}
-			if(TypesChecker.isVoid(arg_type))
+			if(TypesChecker.isChar(arg_type))
 			{
-				argTypes.add(%type_void());
+				argTypes.add(%type_char());
 			}
 			  
 		}
@@ -594,9 +726,13 @@ scope{
 		{
 			returnType = %type_int();
 		}
-		if(TypesChecker.isString($type) || TypesChecker.isChar($type))
+		if(TypesChecker.isString($type))
 		{
 			returnType = %type_string();
+		}
+		if(TypesChecker.isChar($type))
+		{
+			returnType = %type_char();
 		}
 		if(TypesChecker.isVoid($type))
 		{
@@ -640,14 +776,14 @@ comparison
 type returns[StringTemplate returnType]	
 	:	'int' {$returnType = %return_int();} -> type_int()
 	| 	'string' {$returnType = %return_string();} ->type_string()
-	| 	'char' {$returnType = %return_string();} ->type_string()
+	| 	'char' {$returnType = %return_string();} ->type_char()
 	;
 	
 type_func returns[StringTemplate returnType]
 	:	
 	|	'int' {$returnType = %return_int();} -> type_int()
 	| 	'string' {$returnType = %return_string();} ->type_string()
-	| 	'char' {$returnType = %return_string();} ->type_string()
+	| 	'char' {$returnType = %return_string();} ->type_char()
 	|	'void' {$returnType = %return_void();} -> type_void()
 	;
 	
@@ -658,7 +794,7 @@ ID
 INT	:	('0'..'9')+
 	;
 	
-CHAR	:	'"' ('a'..'z' | 'A'..'Z' | '0'..'9'|'\\n' ) '"'
+CHAR	:	'\'' ('a'..'z' | 'A'..'Z' | '0'..'9'|'\\n' ) '\''
 	;
 	
 STRING	:	'"' ~'"'* '"'

@@ -31,6 +31,11 @@ ldc ""
 astore <counter>
 >>
 
+declaration_char(counter) ::= <<
+bipush 0
+istore <counter>
+>>
+
 functions(type, ident, args, returnType, block) ::=<<
 .method public static <ident>(<args:{<it.type>}>)<type>
 .limit locals 100
@@ -57,6 +62,16 @@ assign_field_int(expression, programName, fieldName) ::= <<
 putstatic <programName>/<fieldName>field I
 >>
 
+assign_var_char(expression, counter) ::= <<
+<expression>
+istore <counter>
+>>
+
+assign_field_char(expression, programName, fieldName) ::= <<
+<expression>
+putstatic <programName>/<fieldName>field C
+>>
+
 assign_var_string(expression, counter) ::= <<
 <expression>
 astore <counter>
@@ -70,10 +85,10 @@ putstatic <programName>/<fieldName>field Ljava/lang/String;
 add_string(firstValue, secondValue) ::= <<
 new java/lang/StringBuilder
 dup
-<secondValue>
+<firstValue>
 invokestatic java/lang/String.valueOf(Ljava/lang/Object;)Ljava/lang/String;
 invokespecial java/lang/StringBuilder.\<init\>(Ljava/lang/String;)V
-<firstValue>
+<secondValue>
 invokevirtual java/lang/StringBuilder.append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 invokevirtual java/lang/StringBuilder.toString()Ljava/lang/String;
 >>
@@ -90,17 +105,6 @@ sub_int(firstValue, secondValue) ::= <<
 isub 
 >>
 
-sub_string(firstValue, secondValue) ::= <<
-new java/lang/StringBuilder
-dup
-<secondValue>
-invokestatic java/lang/String.valueOf(Ljava/lang/Object;)Ljava/lang/String;
-invokespecial java/lang/StringBuilder.\<init\>(Ljava/lang/String;)V
-<firstValue>
-invokevirtual java/lang/StringBuilder.append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-invokevirtual java/lang/StringBuilder.toString()Ljava/lang/String;
->>
-
 referenceVariable_int(counter) ::= <<
 iload <counter>
 >>
@@ -115,6 +119,14 @@ aload <counter>
 
 referenceField_string(programName, fieldName) ::= <<
 getstatic <programName>/<fieldName>field Ljava/lang/String;
+>>
+
+referenceVariable_char(counter) ::= <<
+iload <counter>
+>>
+
+referenceField_char(programName, fieldName) ::= <<
+getstatic <programName>/<fieldName>field C
 >>
 
 read_var_int(counter) ::= <<
@@ -165,9 +177,41 @@ getstatic java/lang/System/out Ljava/io/PrintStream;
 invokevirtual java/io/PrintStream/println(I)V
 >>
 
+write_char(string) ::=<<
+getstatic java/lang/System/out Ljava/io/PrintStream;
+<string>
+invokevirtual java/io/PrintStream/println(C)V
+>>
+
 length_string(string) ::= <<
 <string>
 invokevirtual java/lang/String.length()I
+>>
+
+int_to_string(value) ::= <<
+new java/lang/Integer
+dup
+<value>
+invokenonvirtual java/lang/Integer/\<init\>(I)V
+invokevirtual java/lang/Integer.toString()Ljava/lang/String;
+>>
+
+char_to_string(value) ::= <<
+new java/lang/Character
+dup
+<value>
+invokenonvirtual java/lang/Character/\<init\>(C)V
+invokevirtual java/lang/Character.toString()Ljava/lang/String;
+>>
+
+
+elem_in_string(fValue, sValue) ::=<<
+new java/lang/String
+dup
+<fValue>
+invokenonvirtual java/lang/String/\<init\>(Ljava/lang/String;)V
+<sValue>
+invokevirtual java/lang/String.charAt(I)C
 >>
 
 const_int(value) ::=<<
@@ -177,6 +221,11 @@ ldc <value>
 const_string(value) ::=<<
 ldc <value>
 >>
+
+const_char(cod) ::=<<
+bipush <cod>
+>>
+
 
 return_int() ::= <<
 ireturn
@@ -190,6 +239,11 @@ return_string() ::= <<
 areturn
 >>
 
+return_char() ::=<<
+ireturn
+>>
+
 type_int() ::= "I"
 type_string() ::= "Ljava/lang/String;"
 type_void() ::="V"
+type_char() ::="C"
