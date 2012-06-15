@@ -33,7 +33,7 @@ options{
 		
 		public static StringTemplateGroup templateGroup;
 		public static final String templateFileName = "D:/Projects/Yapis/StrLang/src/template/ByteCode.stg";	//testing line
-		//public static final String templateFileName = "D:/Projects/Yapis/StrLang/src/template/ByteCode.stg";	//line for jar file
+		//public static final String templateFileName = "template/ByteCode.stg";	//line for jar file
 		
 		/**
 		* @param args
@@ -496,11 +496,21 @@ if_stmt
 	}
 	;
 	
-for_stmt:	'for' '(' assign_stmt? ';' expression ';' assign_stmt ')' '{' block '}'
+for_stmt
+	:	'for' '(' begin=assign_stmt? ';' check=expression ';' end=assign_stmt ')' '{' forBlock=block '}'
+	{
+		$st = %for_operator(beginExpr={$begin.st}, checkExpr={$check.st}, endExpr={$end.st}, 
+			forBlock={$forBlock.stList}, firstLabel={labelCounter}, secondLabel={labelCounter+1}, thirdLabel={labelCounter+2});
+		labelCounter = labelCounter+3;
+	}
 	;
 	
 while_stmt
-	:	'while' '(' expression ')' '{' block '}'
+	:	'while' '(' check=expression ')' '{' whileBlock=block '}'
+	{
+		$st = %while_operator(checkExpr={$check.st}, whileBlock={$whileBlock.stList}, firstLabel={labelCounter}, secondLabel={labelCounter+1}, thirdLabel={labelCounter+2});
+		labelCounter = labelCounter+3;
+	}
 	;
 	
 return_stmt returns[String value, int line]

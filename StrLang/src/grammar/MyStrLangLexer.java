@@ -1,4 +1,4 @@
-// $ANTLR 3.3 Nov 30, 2010 12:50:56 D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g 2012-06-15 16:01:54
+// $ANTLR 3.3 Nov 30, 2010 12:50:56 D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g 2012-06-15 18:41:23
 
     package grammar;
 
@@ -771,8 +771,8 @@ public class MyStrLangLexer extends Lexer {
         try {
             int _type = ID;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:856:2: ( ( 'a' .. 'z' | 'A' .. 'Z' | '_' ) ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_' )* )
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:856:5: ( 'a' .. 'z' | 'A' .. 'Z' | '_' ) ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_' )*
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:866:2: ( ( 'a' .. 'z' | 'A' .. 'Z' | '_' ) ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_' )* )
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:866:5: ( 'a' .. 'z' | 'A' .. 'Z' | '_' ) ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_' )*
             {
             if ( (input.LA(1)>='A' && input.LA(1)<='Z')||input.LA(1)=='_'||(input.LA(1)>='a' && input.LA(1)<='z') ) {
                 input.consume();
@@ -783,7 +783,7 @@ public class MyStrLangLexer extends Lexer {
                 recover(mse);
                 throw mse;}
 
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:856:29: ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_' )*
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:866:29: ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_' )*
             loop1:
             do {
                 int alt1=2;
@@ -832,10 +832,10 @@ public class MyStrLangLexer extends Lexer {
         try {
             int _type = INT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:859:5: ( ( '0' .. '9' )+ )
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:859:7: ( '0' .. '9' )+
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:869:5: ( ( '0' .. '9' )+ )
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:869:7: ( '0' .. '9' )+
             {
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:859:7: ( '0' .. '9' )+
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:869:7: ( '0' .. '9' )+
             int cnt2=0;
             loop2:
             do {
@@ -849,7 +849,7 @@ public class MyStrLangLexer extends Lexer {
 
                 switch (alt2) {
             	case 1 :
-            	    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:859:8: '0' .. '9'
+            	    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:869:8: '0' .. '9'
             	    {
             	    matchRange('0','9'); 
 
@@ -881,11 +881,11 @@ public class MyStrLangLexer extends Lexer {
         try {
             int _type = CHAR;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:862:6: ( '\\'' ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '\\\\n' ) '\\'' )
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:862:8: '\\'' ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '\\\\n' ) '\\''
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:872:6: ( '\\'' ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '\\\\n' ) '\\'' )
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:872:8: '\\'' ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '\\\\n' ) '\\''
             {
             match('\''); 
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:862:13: ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '\\\\n' )
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:872:13: ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '\\\\n' )
             int alt3=4;
             switch ( input.LA(1) ) {
             case 'a':
@@ -976,28 +976,28 @@ public class MyStrLangLexer extends Lexer {
 
             switch (alt3) {
                 case 1 :
-                    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:862:14: 'a' .. 'z'
+                    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:872:14: 'a' .. 'z'
                     {
                     matchRange('a','z'); 
 
                     }
                     break;
                 case 2 :
-                    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:862:25: 'A' .. 'Z'
+                    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:872:25: 'A' .. 'Z'
                     {
                     matchRange('A','Z'); 
 
                     }
                     break;
                 case 3 :
-                    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:862:36: '0' .. '9'
+                    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:872:36: '0' .. '9'
                     {
                     matchRange('0','9'); 
 
                     }
                     break;
                 case 4 :
-                    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:862:45: '\\\\n'
+                    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:872:45: '\\\\n'
                     {
                     match("\\n"); 
 
@@ -1024,11 +1024,11 @@ public class MyStrLangLexer extends Lexer {
         try {
             int _type = STRING;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:865:8: ( '\"' (~ '\"' )* '\"' )
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:865:10: '\"' (~ '\"' )* '\"'
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:875:8: ( '\"' (~ '\"' )* '\"' )
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:875:10: '\"' (~ '\"' )* '\"'
             {
             match('\"'); 
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:865:14: (~ '\"' )*
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:875:14: (~ '\"' )*
             loop4:
             do {
                 int alt4=2;
@@ -1041,7 +1041,7 @@ public class MyStrLangLexer extends Lexer {
 
                 switch (alt4) {
             	case 1 :
-            	    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:865:14: ~ '\"'
+            	    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:875:14: ~ '\"'
             	    {
             	    if ( (input.LA(1)>='\u0000' && input.LA(1)<='!')||(input.LA(1)>='#' && input.LA(1)<='\uFFFF') ) {
             	        input.consume();
@@ -1078,7 +1078,7 @@ public class MyStrLangLexer extends Lexer {
         try {
             int _type = COMMENT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:870:5: ( '//' (~ ( '\\n' | '\\r' ) )* ( '\\r' )? '\\n' | '/*' ( options {greedy=false; } : . )* '*/' )
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:880:5: ( '//' (~ ( '\\n' | '\\r' ) )* ( '\\r' )? '\\n' | '/*' ( options {greedy=false; } : . )* '*/' )
             int alt8=2;
             int LA8_0 = input.LA(1);
 
@@ -1106,11 +1106,11 @@ public class MyStrLangLexer extends Lexer {
             }
             switch (alt8) {
                 case 1 :
-                    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:870:9: '//' (~ ( '\\n' | '\\r' ) )* ( '\\r' )? '\\n'
+                    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:880:9: '//' (~ ( '\\n' | '\\r' ) )* ( '\\r' )? '\\n'
                     {
                     match("//"); 
 
-                    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:870:14: (~ ( '\\n' | '\\r' ) )*
+                    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:880:14: (~ ( '\\n' | '\\r' ) )*
                     loop5:
                     do {
                         int alt5=2;
@@ -1123,7 +1123,7 @@ public class MyStrLangLexer extends Lexer {
 
                         switch (alt5) {
                     	case 1 :
-                    	    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:870:14: ~ ( '\\n' | '\\r' )
+                    	    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:880:14: ~ ( '\\n' | '\\r' )
                     	    {
                     	    if ( (input.LA(1)>='\u0000' && input.LA(1)<='\t')||(input.LA(1)>='\u000B' && input.LA(1)<='\f')||(input.LA(1)>='\u000E' && input.LA(1)<='\uFFFF') ) {
                     	        input.consume();
@@ -1143,7 +1143,7 @@ public class MyStrLangLexer extends Lexer {
                         }
                     } while (true);
 
-                    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:870:28: ( '\\r' )?
+                    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:880:28: ( '\\r' )?
                     int alt6=2;
                     int LA6_0 = input.LA(1);
 
@@ -1152,7 +1152,7 @@ public class MyStrLangLexer extends Lexer {
                     }
                     switch (alt6) {
                         case 1 :
-                            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:870:28: '\\r'
+                            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:880:28: '\\r'
                             {
                             match('\r'); 
 
@@ -1167,11 +1167,11 @@ public class MyStrLangLexer extends Lexer {
                     }
                     break;
                 case 2 :
-                    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:871:9: '/*' ( options {greedy=false; } : . )* '*/'
+                    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:881:9: '/*' ( options {greedy=false; } : . )* '*/'
                     {
                     match("/*"); 
 
-                    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:871:14: ( options {greedy=false; } : . )*
+                    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:881:14: ( options {greedy=false; } : . )*
                     loop7:
                     do {
                         int alt7=2;
@@ -1196,7 +1196,7 @@ public class MyStrLangLexer extends Lexer {
 
                         switch (alt7) {
                     	case 1 :
-                    	    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:871:42: .
+                    	    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:881:42: .
                     	    {
                     	    matchAny(); 
 
@@ -1229,8 +1229,8 @@ public class MyStrLangLexer extends Lexer {
         try {
             int _type = WS;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:874:5: ( ( ' ' | '\\t' | '\\r' | '\\n' ) )
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:874:9: ( ' ' | '\\t' | '\\r' | '\\n' )
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:884:5: ( ( ' ' | '\\t' | '\\r' | '\\n' ) )
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:884:9: ( ' ' | '\\t' | '\\r' | '\\n' )
             {
             if ( (input.LA(1)>='\t' && input.LA(1)<='\n')||input.LA(1)=='\r'||input.LA(1)==' ' ) {
                 input.consume();

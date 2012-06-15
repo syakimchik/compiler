@@ -306,6 +306,30 @@ label<trueLabel>:
 label<falseLabel>:
 >>
 
+for_operator(beginExpr, checkExpr, endExpr, forBlock, firstLabel, secondLabel, thirdLabel) ::= <<
+<beginExpr>
+label<firstLabel>:
+<checkExpr>
+ifne label<secondLabel>
+goto label<thirdLabel>
+label<secondLabel>:
+<forBlock; separator="\n">
+<endExpr>
+goto label<firstLabel>
+label<thirdLabel>:
+>>
+
+while_operator(checkExpr, whileBlock, firstLabel, secondLabel, thirdLabel) ::= <<
+label<firstLabel>:
+<checkExpr>
+ifne label<secondLabel>
+goto label<thirdLabel>
+label<secondLabel>:
+<whileBlock; separator="\n">
+goto label<firstLabel>
+label<thirdLabel>:
+>>
+
 //-----------------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------------
 

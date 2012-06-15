@@ -1,4 +1,4 @@
-// $ANTLR 3.3 Nov 30, 2010 12:50:56 D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g 2012-06-15 16:01:53
+// $ANTLR 3.3 Nov 30, 2010 12:50:56 D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g 2012-06-15 18:41:23
 
     package grammar;
     import java.io.*;
@@ -113,7 +113,7 @@ public class MyStrLangParser extends Parser {
     		
     		public static StringTemplateGroup templateGroup;
     		public static final String templateFileName = "D:/Projects/Yapis/StrLang/src/template/ByteCode.stg";	//testing line
-    		//public static final String templateFileName = "D:/Projects/Yapis/StrLang/src/template/ByteCode.stg";	//line for jar file
+    		//public static final String templateFileName = "template/ByteCode.stg";	//line for jar file
     		
     		/**
     		* @param args
@@ -1884,18 +1884,27 @@ public class MyStrLangParser extends Parser {
     };
 
     // $ANTLR start "for_stmt"
-    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:499:1: for_stmt : 'for' '(' ( assign_stmt )? ';' expression ';' assign_stmt ')' '{' block '}' ;
+    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:499:1: for_stmt : 'for' '(' (begin= assign_stmt )? ';' check= expression ';' end= assign_stmt ')' '{' forBlock= block '}' ;
     public final MyStrLangParser.for_stmt_return for_stmt() throws RecognitionException {
         MyStrLangParser.for_stmt_return retval = new MyStrLangParser.for_stmt_return();
         retval.start = input.LT(1);
 
+        MyStrLangParser.assign_stmt_return begin = null;
+
+        MyStrLangParser.expression_return check = null;
+
+        MyStrLangParser.assign_stmt_return end = null;
+
+        MyStrLangParser.block_return forBlock = null;
+
+
         try {
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:499:9: ( 'for' '(' ( assign_stmt )? ';' expression ';' assign_stmt ')' '{' block '}' )
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:499:11: 'for' '(' ( assign_stmt )? ';' expression ';' assign_stmt ')' '{' block '}'
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:500:2: ( 'for' '(' (begin= assign_stmt )? ';' check= expression ';' end= assign_stmt ')' '{' forBlock= block '}' )
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:500:4: 'for' '(' (begin= assign_stmt )? ';' check= expression ';' end= assign_stmt ')' '{' forBlock= block '}'
             {
-            match(input,24,FOLLOW_24_in_for_stmt795); 
-            match(input,14,FOLLOW_14_in_for_stmt797); 
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:499:21: ( assign_stmt )?
+            match(input,24,FOLLOW_24_in_for_stmt797); 
+            match(input,14,FOLLOW_14_in_for_stmt799); 
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:500:19: (begin= assign_stmt )?
             int alt12=2;
             int LA12_0 = input.LA(1);
 
@@ -1904,10 +1913,10 @@ public class MyStrLangParser extends Parser {
             }
             switch (alt12) {
                 case 1 :
-                    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:499:21: assign_stmt
+                    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:500:19: begin= assign_stmt
                     {
-                    pushFollow(FOLLOW_assign_stmt_in_for_stmt799);
-                    assign_stmt();
+                    pushFollow(FOLLOW_assign_stmt_in_for_stmt803);
+                    begin=assign_stmt();
 
                     state._fsp--;
 
@@ -1917,26 +1926,31 @@ public class MyStrLangParser extends Parser {
 
             }
 
-            match(input,13,FOLLOW_13_in_for_stmt802); 
-            pushFollow(FOLLOW_expression_in_for_stmt804);
-            expression();
-
-            state._fsp--;
-
             match(input,13,FOLLOW_13_in_for_stmt806); 
-            pushFollow(FOLLOW_assign_stmt_in_for_stmt808);
-            assign_stmt();
+            pushFollow(FOLLOW_expression_in_for_stmt810);
+            check=expression();
 
             state._fsp--;
 
-            match(input,15,FOLLOW_15_in_for_stmt810); 
-            match(input,11,FOLLOW_11_in_for_stmt812); 
-            pushFollow(FOLLOW_block_in_for_stmt814);
-            block();
+            match(input,13,FOLLOW_13_in_for_stmt812); 
+            pushFollow(FOLLOW_assign_stmt_in_for_stmt816);
+            end=assign_stmt();
 
             state._fsp--;
 
-            match(input,12,FOLLOW_12_in_for_stmt816); 
+            match(input,15,FOLLOW_15_in_for_stmt818); 
+            match(input,11,FOLLOW_11_in_for_stmt820); 
+            pushFollow(FOLLOW_block_in_for_stmt824);
+            forBlock=block();
+
+            state._fsp--;
+
+            match(input,12,FOLLOW_12_in_for_stmt826); 
+
+            		retval.st = templateLib.getInstanceOf("for_operator",
+              new STAttrMap().put("beginExpr", (begin!=null?begin.st:null)).put("checkExpr", (check!=null?check.st:null)).put("endExpr", (end!=null?end.st:null)).put("forBlock", (forBlock!=null?forBlock.stList:null)).put("firstLabel", labelCounter).put("secondLabel", labelCounter+1).put("thirdLabel", labelCounter+2));
+            		labelCounter = labelCounter+3;
+            	
 
             }
 
@@ -1960,30 +1974,40 @@ public class MyStrLangParser extends Parser {
     };
 
     // $ANTLR start "while_stmt"
-    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:502:1: while_stmt : 'while' '(' expression ')' '{' block '}' ;
+    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:508:1: while_stmt : 'while' '(' check= expression ')' '{' whileBlock= block '}' ;
     public final MyStrLangParser.while_stmt_return while_stmt() throws RecognitionException {
         MyStrLangParser.while_stmt_return retval = new MyStrLangParser.while_stmt_return();
         retval.start = input.LT(1);
 
+        MyStrLangParser.expression_return check = null;
+
+        MyStrLangParser.block_return whileBlock = null;
+
+
         try {
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:503:2: ( 'while' '(' expression ')' '{' block '}' )
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:503:4: 'while' '(' expression ')' '{' block '}'
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:509:2: ( 'while' '(' check= expression ')' '{' whileBlock= block '}' )
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:509:4: 'while' '(' check= expression ')' '{' whileBlock= block '}'
             {
-            match(input,25,FOLLOW_25_in_while_stmt828); 
-            match(input,14,FOLLOW_14_in_while_stmt830); 
-            pushFollow(FOLLOW_expression_in_while_stmt832);
-            expression();
+            match(input,25,FOLLOW_25_in_while_stmt841); 
+            match(input,14,FOLLOW_14_in_while_stmt843); 
+            pushFollow(FOLLOW_expression_in_while_stmt847);
+            check=expression();
 
             state._fsp--;
 
-            match(input,15,FOLLOW_15_in_while_stmt834); 
-            match(input,11,FOLLOW_11_in_while_stmt836); 
-            pushFollow(FOLLOW_block_in_while_stmt838);
-            block();
+            match(input,15,FOLLOW_15_in_while_stmt849); 
+            match(input,11,FOLLOW_11_in_while_stmt851); 
+            pushFollow(FOLLOW_block_in_while_stmt855);
+            whileBlock=block();
 
             state._fsp--;
 
-            match(input,12,FOLLOW_12_in_while_stmt840); 
+            match(input,12,FOLLOW_12_in_while_stmt857); 
+
+            		retval.st = templateLib.getInstanceOf("while_operator",
+              new STAttrMap().put("checkExpr", (check!=null?check.st:null)).put("whileBlock", (whileBlock!=null?whileBlock.stList:null)).put("firstLabel", labelCounter).put("secondLabel", labelCounter+1).put("thirdLabel", labelCounter+2));
+            		labelCounter = labelCounter+3;
+            	
 
             }
 
@@ -2009,7 +2033,7 @@ public class MyStrLangParser extends Parser {
     };
 
     // $ANTLR start "return_stmt"
-    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:506:1: return_stmt returns [String value, int line] : (a= 'return' atom ';' )? -> {$atom.st};
+    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:516:1: return_stmt returns [String value, int line] : (a= 'return' atom ';' )? -> {$atom.st};
     public final MyStrLangParser.return_stmt_return return_stmt() throws RecognitionException {
         MyStrLangParser.return_stmt_return retval = new MyStrLangParser.return_stmt_return();
         retval.start = input.LT(1);
@@ -2019,10 +2043,10 @@ public class MyStrLangParser extends Parser {
 
 
         try {
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:507:2: ( (a= 'return' atom ';' )? -> {$atom.st})
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:508:2: (a= 'return' atom ';' )?
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:517:2: ( (a= 'return' atom ';' )? -> {$atom.st})
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:518:2: (a= 'return' atom ';' )?
             {
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:508:2: (a= 'return' atom ';' )?
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:518:2: (a= 'return' atom ';' )?
             int alt13=2;
             int LA13_0 = input.LA(1);
 
@@ -2031,15 +2055,15 @@ public class MyStrLangParser extends Parser {
             }
             switch (alt13) {
                 case 1 :
-                    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:508:3: a= 'return' atom ';'
+                    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:518:3: a= 'return' atom ';'
                     {
-                    a=(Token)match(input,26,FOLLOW_26_in_return_stmt859); 
-                    pushFollow(FOLLOW_atom_in_return_stmt861);
+                    a=(Token)match(input,26,FOLLOW_26_in_return_stmt879); 
+                    pushFollow(FOLLOW_atom_in_return_stmt881);
                     atom37=atom();
 
                     state._fsp--;
 
-                    match(input,13,FOLLOW_13_in_return_stmt863); 
+                    match(input,13,FOLLOW_13_in_return_stmt883); 
                     	
                     		if(((program_scope)program_stack.peek()).curBlock=="main")
                     			errors.add("line "+(a!=null?a.getLine():0)+": function main may not contain keyword return");
@@ -2068,7 +2092,7 @@ public class MyStrLangParser extends Parser {
 
 
             // TEMPLATE REWRITE
-            // 529:2: -> {$atom.st}
+            // 539:2: -> {$atom.st}
             {
                 retval.st = (atom37!=null?atom37.st:null);
             }
@@ -2096,7 +2120,7 @@ public class MyStrLangParser extends Parser {
     };
 
     // $ANTLR start "length_stmt"
-    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:532:1: length_stmt : 'length' '(' param ')' ;
+    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:542:1: length_stmt : 'length' '(' param ')' ;
     public final MyStrLangParser.length_stmt_return length_stmt() throws RecognitionException {
         MyStrLangParser.length_stmt_return retval = new MyStrLangParser.length_stmt_return();
         retval.start = input.LT(1);
@@ -2105,17 +2129,17 @@ public class MyStrLangParser extends Parser {
 
 
         try {
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:533:2: ( 'length' '(' param ')' )
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:533:4: 'length' '(' param ')'
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:543:2: ( 'length' '(' param ')' )
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:543:4: 'length' '(' param ')'
             {
-            match(input,27,FOLLOW_27_in_length_stmt888); 
-            match(input,14,FOLLOW_14_in_length_stmt890); 
-            pushFollow(FOLLOW_param_in_length_stmt892);
+            match(input,27,FOLLOW_27_in_length_stmt908); 
+            match(input,14,FOLLOW_14_in_length_stmt910); 
+            pushFollow(FOLLOW_param_in_length_stmt912);
             param38=param();
 
             state._fsp--;
 
-            match(input,15,FOLLOW_15_in_length_stmt894); 
+            match(input,15,FOLLOW_15_in_length_stmt914); 
 
             		retval.st = templateLib.getInstanceOf("length_string",
               new STAttrMap().put("string", (param38!=null?param38.st:null)));
@@ -2145,7 +2169,7 @@ public class MyStrLangParser extends Parser {
     };
 
     // $ANTLR start "param"
-    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:539:1: param returns [String text, String type] : ( ID | STRING -> const_string(value=$STRING.text));
+    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:549:1: param returns [String text, String type] : ( ID | STRING -> const_string(value=$STRING.text));
     public final MyStrLangParser.param_return param() throws RecognitionException {
         MyStrLangParser.param_return retval = new MyStrLangParser.param_return();
         retval.start = input.LT(1);
@@ -2154,7 +2178,7 @@ public class MyStrLangParser extends Parser {
         Token STRING40=null;
 
         try {
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:540:2: ( ID | STRING -> const_string(value=$STRING.text))
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:550:2: ( ID | STRING -> const_string(value=$STRING.text))
             int alt14=2;
             int LA14_0 = input.LA(1);
 
@@ -2172,9 +2196,9 @@ public class MyStrLangParser extends Parser {
             }
             switch (alt14) {
                 case 1 :
-                    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:540:4: ID
+                    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:550:4: ID
                     {
-                    ID39=(Token)match(input,ID,FOLLOW_ID_in_param912); 
+                    ID39=(Token)match(input,ID,FOLLOW_ID_in_param932); 
 
                     		retval.text = (ID39!=null?ID39.getText():null);
                     		if(names.isDeclaredVariable(((program_scope)program_stack.peek()).curBlock+"."+(ID39!=null?ID39.getText():null)))
@@ -2217,14 +2241,14 @@ public class MyStrLangParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:574:4: STRING
+                    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:584:4: STRING
                     {
-                    STRING40=(Token)match(input,STRING,FOLLOW_STRING_in_param919); 
+                    STRING40=(Token)match(input,STRING,FOLLOW_STRING_in_param939); 
                     retval.text = (STRING40!=null?STRING40.getText():null); retval.type = "string";
 
 
                     // TEMPLATE REWRITE
-                    // 574:53: -> const_string(value=$STRING.text)
+                    // 584:53: -> const_string(value=$STRING.text)
                     {
                         retval.st = templateLib.getInstanceOf("const_string",
                       new STAttrMap().put("value", (STRING40!=null?STRING40.getText():null)));
@@ -2255,7 +2279,7 @@ public class MyStrLangParser extends Parser {
     };
 
     // $ANTLR start "elem_stmt"
-    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:577:1: elem_stmt : 'elem' '(' f_el ',' s_el ')' ;
+    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:587:1: elem_stmt : 'elem' '(' f_el ',' s_el ')' ;
     public final MyStrLangParser.elem_stmt_return elem_stmt() throws RecognitionException {
         MyStrLangParser.elem_stmt_return retval = new MyStrLangParser.elem_stmt_return();
         retval.start = input.LT(1);
@@ -2266,23 +2290,23 @@ public class MyStrLangParser extends Parser {
 
 
         try {
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:578:2: ( 'elem' '(' f_el ',' s_el ')' )
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:578:4: 'elem' '(' f_el ',' s_el ')'
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:588:2: ( 'elem' '(' f_el ',' s_el ')' )
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:588:4: 'elem' '(' f_el ',' s_el ')'
             {
-            match(input,28,FOLLOW_28_in_elem_stmt944); 
-            match(input,14,FOLLOW_14_in_elem_stmt946); 
-            pushFollow(FOLLOW_f_el_in_elem_stmt947);
+            match(input,28,FOLLOW_28_in_elem_stmt964); 
+            match(input,14,FOLLOW_14_in_elem_stmt966); 
+            pushFollow(FOLLOW_f_el_in_elem_stmt967);
             f_el41=f_el();
 
             state._fsp--;
 
-            match(input,16,FOLLOW_16_in_elem_stmt949); 
-            pushFollow(FOLLOW_s_el_in_elem_stmt951);
+            match(input,16,FOLLOW_16_in_elem_stmt969); 
+            pushFollow(FOLLOW_s_el_in_elem_stmt971);
             s_el42=s_el();
 
             state._fsp--;
 
-            match(input,15,FOLLOW_15_in_elem_stmt953); 
+            match(input,15,FOLLOW_15_in_elem_stmt973); 
 
             		retval.st = templateLib.getInstanceOf("elem_in_string",
               new STAttrMap().put("fValue", (f_el41!=null?f_el41.st:null)).put("sValue", (s_el42!=null?s_el42.st:null)));
@@ -2310,7 +2334,7 @@ public class MyStrLangParser extends Parser {
     };
 
     // $ANTLR start "f_el"
-    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:584:1: f_el : ( ID | STRING -> const_string(value=$STRING.text));
+    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:594:1: f_el : ( ID | STRING -> const_string(value=$STRING.text));
     public final MyStrLangParser.f_el_return f_el() throws RecognitionException {
         MyStrLangParser.f_el_return retval = new MyStrLangParser.f_el_return();
         retval.start = input.LT(1);
@@ -2319,7 +2343,7 @@ public class MyStrLangParser extends Parser {
         Token STRING44=null;
 
         try {
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:585:2: ( ID | STRING -> const_string(value=$STRING.text))
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:595:2: ( ID | STRING -> const_string(value=$STRING.text))
             int alt15=2;
             int LA15_0 = input.LA(1);
 
@@ -2337,9 +2361,9 @@ public class MyStrLangParser extends Parser {
             }
             switch (alt15) {
                 case 1 :
-                    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:585:4: ID
+                    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:595:4: ID
                     {
-                    ID43=(Token)match(input,ID,FOLLOW_ID_in_f_el968); 
+                    ID43=(Token)match(input,ID,FOLLOW_ID_in_f_el988); 
 
                     		if(names.isDeclaredVariable(((program_scope)program_stack.peek()).curBlock+"."+(ID43!=null?ID43.getText():null)))
                     		{
@@ -2365,13 +2389,13 @@ public class MyStrLangParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:605:4: STRING
+                    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:615:4: STRING
                     {
-                    STRING44=(Token)match(input,STRING,FOLLOW_STRING_in_f_el976); 
+                    STRING44=(Token)match(input,STRING,FOLLOW_STRING_in_f_el996); 
 
 
                     // TEMPLATE REWRITE
-                    // 605:12: -> const_string(value=$STRING.text)
+                    // 615:12: -> const_string(value=$STRING.text)
                     {
                         retval.st = templateLib.getInstanceOf("const_string",
                       new STAttrMap().put("value", (STRING44!=null?STRING44.getText():null)));
@@ -2402,7 +2426,7 @@ public class MyStrLangParser extends Parser {
     };
 
     // $ANTLR start "s_el"
-    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:608:1: s_el : ( ID | INT -> const_int(value=$INT.text));
+    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:618:1: s_el : ( ID | INT -> const_int(value=$INT.text));
     public final MyStrLangParser.s_el_return s_el() throws RecognitionException {
         MyStrLangParser.s_el_return retval = new MyStrLangParser.s_el_return();
         retval.start = input.LT(1);
@@ -2411,7 +2435,7 @@ public class MyStrLangParser extends Parser {
         Token INT46=null;
 
         try {
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:609:2: ( ID | INT -> const_int(value=$INT.text))
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:619:2: ( ID | INT -> const_int(value=$INT.text))
             int alt16=2;
             int LA16_0 = input.LA(1);
 
@@ -2429,9 +2453,9 @@ public class MyStrLangParser extends Parser {
             }
             switch (alt16) {
                 case 1 :
-                    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:609:4: ID
+                    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:619:4: ID
                     {
-                    ID45=(Token)match(input,ID,FOLLOW_ID_in_s_el998); 
+                    ID45=(Token)match(input,ID,FOLLOW_ID_in_s_el1018); 
 
                     		if(names.isDeclaredVariable(((program_scope)program_stack.peek()).curBlock+"."+(ID45!=null?ID45.getText():null)))
                     		{
@@ -2457,13 +2481,13 @@ public class MyStrLangParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:629:4: INT
+                    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:639:4: INT
                     {
-                    INT46=(Token)match(input,INT,FOLLOW_INT_in_s_el1006); 
+                    INT46=(Token)match(input,INT,FOLLOW_INT_in_s_el1026); 
 
 
                     // TEMPLATE REWRITE
-                    // 629:9: -> const_int(value=$INT.text)
+                    // 639:9: -> const_int(value=$INT.text)
                     {
                         retval.st = templateLib.getInstanceOf("const_int",
                       new STAttrMap().put("value", (INT46!=null?INT46.getText():null)));
@@ -2494,7 +2518,7 @@ public class MyStrLangParser extends Parser {
     };
 
     // $ANTLR start "to_string_stmt"
-    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:632:1: to_string_stmt : 'ToString' '(' param_str ')' ;
+    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:642:1: to_string_stmt : 'ToString' '(' param_str ')' ;
     public final MyStrLangParser.to_string_stmt_return to_string_stmt() throws RecognitionException {
         MyStrLangParser.to_string_stmt_return retval = new MyStrLangParser.to_string_stmt_return();
         retval.start = input.LT(1);
@@ -2503,17 +2527,17 @@ public class MyStrLangParser extends Parser {
 
 
         try {
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:633:2: ( 'ToString' '(' param_str ')' )
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:633:4: 'ToString' '(' param_str ')'
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:643:2: ( 'ToString' '(' param_str ')' )
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:643:4: 'ToString' '(' param_str ')'
             {
-            match(input,29,FOLLOW_29_in_to_string_stmt1028); 
-            match(input,14,FOLLOW_14_in_to_string_stmt1030); 
-            pushFollow(FOLLOW_param_str_in_to_string_stmt1032);
+            match(input,29,FOLLOW_29_in_to_string_stmt1048); 
+            match(input,14,FOLLOW_14_in_to_string_stmt1050); 
+            pushFollow(FOLLOW_param_str_in_to_string_stmt1052);
             param_str47=param_str();
 
             state._fsp--;
 
-            match(input,15,FOLLOW_15_in_to_string_stmt1034); 
+            match(input,15,FOLLOW_15_in_to_string_stmt1054); 
 
             		if(TypesChecker.isInteger((param_str47!=null?param_str47.t:null))){
             			retval.st = templateLib.getInstanceOf("int_to_string",
@@ -2548,7 +2572,7 @@ public class MyStrLangParser extends Parser {
     };
 
     // $ANTLR start "param_str"
-    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:644:1: param_str returns [String t] : ( ID | INT -> const_int(value=$INT.text) | char_c -> {$char_c.st});
+    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:654:1: param_str returns [String t] : ( ID | INT -> const_int(value=$INT.text) | char_c -> {$char_c.st});
     public final MyStrLangParser.param_str_return param_str() throws RecognitionException {
         MyStrLangParser.param_str_return retval = new MyStrLangParser.param_str_return();
         retval.start = input.LT(1);
@@ -2559,7 +2583,7 @@ public class MyStrLangParser extends Parser {
 
 
         try {
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:645:2: ( ID | INT -> const_int(value=$INT.text) | char_c -> {$char_c.st})
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:655:2: ( ID | INT -> const_int(value=$INT.text) | char_c -> {$char_c.st})
             int alt17=3;
             switch ( input.LA(1) ) {
             case ID:
@@ -2586,9 +2610,9 @@ public class MyStrLangParser extends Parser {
 
             switch (alt17) {
                 case 1 :
-                    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:645:4: ID
+                    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:655:4: ID
                     {
-                    ID48=(Token)match(input,ID,FOLLOW_ID_in_param_str1052); 
+                    ID48=(Token)match(input,ID,FOLLOW_ID_in_param_str1072); 
 
                     		if(names.isDeclaredVariable(((program_scope)program_stack.peek()).curBlock+"."+(ID48!=null?ID48.getText():null)))
                     		{
@@ -2628,14 +2652,14 @@ public class MyStrLangParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:677:4: INT
+                    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:687:4: INT
                     {
-                    INT49=(Token)match(input,INT,FOLLOW_INT_in_param_str1060); 
+                    INT49=(Token)match(input,INT,FOLLOW_INT_in_param_str1080); 
                     retval.t ="int";
 
 
                     // TEMPLATE REWRITE
-                    // 677:22: -> const_int(value=$INT.text)
+                    // 687:22: -> const_int(value=$INT.text)
                     {
                         retval.st = templateLib.getInstanceOf("const_int",
                       new STAttrMap().put("value", (INT49!=null?INT49.getText():null)));
@@ -2645,9 +2669,9 @@ public class MyStrLangParser extends Parser {
                     }
                     break;
                 case 3 :
-                    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:678:4: char_c
+                    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:688:4: char_c
                     {
-                    pushFollow(FOLLOW_char_c_in_param_str1078);
+                    pushFollow(FOLLOW_char_c_in_param_str1098);
                     char_c50=char_c();
 
                     state._fsp--;
@@ -2656,7 +2680,7 @@ public class MyStrLangParser extends Parser {
 
 
                     // TEMPLATE REWRITE
-                    // 678:25: -> {$char_c.st}
+                    // 688:25: -> {$char_c.st}
                     {
                         retval.st = (char_c50!=null?char_c50.st:null);
                     }
@@ -2686,7 +2710,7 @@ public class MyStrLangParser extends Parser {
     };
 
     // $ANTLR start "call_func_stmt"
-    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:681:1: call_func_stmt : call_func -> {$call_func.st};
+    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:691:1: call_func_stmt : call_func -> {$call_func.st};
     public final MyStrLangParser.call_func_stmt_return call_func_stmt() throws RecognitionException {
         MyStrLangParser.call_func_stmt_return retval = new MyStrLangParser.call_func_stmt_return();
         retval.start = input.LT(1);
@@ -2695,10 +2719,10 @@ public class MyStrLangParser extends Parser {
 
 
         try {
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:682:2: ( call_func -> {$call_func.st})
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:682:4: call_func
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:692:2: ( call_func -> {$call_func.st})
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:692:4: call_func
             {
-            pushFollow(FOLLOW_call_func_in_call_func_stmt1097);
+            pushFollow(FOLLOW_call_func_in_call_func_stmt1117);
             call_func51=call_func();
 
             state._fsp--;
@@ -2706,7 +2730,7 @@ public class MyStrLangParser extends Parser {
 
 
             // TEMPLATE REWRITE
-            // 683:3: -> {$call_func.st}
+            // 693:3: -> {$call_func.st}
             {
                 retval.st = (call_func51!=null?call_func51.st:null);
             }
@@ -2741,7 +2765,7 @@ public class MyStrLangParser extends Parser {
     };
 
     // $ANTLR start "call_func"
-    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:686:1: call_func returns [String type, int line] : ID '(' arg_call ')' ;
+    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:696:1: call_func returns [String type, int line] : ID '(' arg_call ')' ;
     public final MyStrLangParser.call_func_return call_func() throws RecognitionException {
         call_func_stack.push(new call_func_scope());
         MyStrLangParser.call_func_return retval = new MyStrLangParser.call_func_return();
@@ -2756,18 +2780,18 @@ public class MyStrLangParser extends Parser {
         	List<StringTemplate> argTypes = new ArrayList<StringTemplate>();
 
         try {
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:694:2: ( ID '(' arg_call ')' )
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:694:4: ID '(' arg_call ')'
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:704:2: ( ID '(' arg_call ')' )
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:704:4: ID '(' arg_call ')'
             {
-            ID52=(Token)match(input,ID,FOLLOW_ID_in_call_func1125); 
+            ID52=(Token)match(input,ID,FOLLOW_ID_in_call_func1145); 
             ((call_func_scope)call_func_stack.peek()).methodName =(ID52!=null?ID52.getText():null);
-            match(input,14,FOLLOW_14_in_call_func1128); 
-            pushFollow(FOLLOW_arg_call_in_call_func1130);
+            match(input,14,FOLLOW_14_in_call_func1148); 
+            pushFollow(FOLLOW_arg_call_in_call_func1150);
             arg_call53=arg_call();
 
             state._fsp--;
 
-            match(input,15,FOLLOW_15_in_call_func1132); 
+            match(input,15,FOLLOW_15_in_call_func1152); 
 
             		retval.line = (ID52!=null?ID52.getLine():0);
             		ArrayList<String> list = null;
@@ -2854,7 +2878,7 @@ public class MyStrLangParser extends Parser {
     };
 
     // $ANTLR start "arg_call"
-    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:756:1: arg_call returns [ArrayList<String> argumentTypeList, List<StringTemplate> stList] : (a= atom ( ',' b= atom )* )? ;
+    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:766:1: arg_call returns [ArrayList<String> argumentTypeList, List<StringTemplate> stList] : (a= atom ( ',' b= atom )* )? ;
     public final MyStrLangParser.arg_call_return arg_call() throws RecognitionException {
         MyStrLangParser.arg_call_return retval = new MyStrLangParser.arg_call_return();
         retval.start = input.LT(1);
@@ -2865,14 +2889,14 @@ public class MyStrLangParser extends Parser {
 
 
         try {
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:757:2: ( (a= atom ( ',' b= atom )* )? )
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:758:2: (a= atom ( ',' b= atom )* )?
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:767:2: ( (a= atom ( ',' b= atom )* )? )
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:768:2: (a= atom ( ',' b= atom )* )?
             {
 
             		retval.argumentTypeList = new ArrayList<String>();
             		retval.stList = new ArrayList<StringTemplate>();
             	
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:762:2: (a= atom ( ',' b= atom )* )?
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:772:2: (a= atom ( ',' b= atom )* )?
             int alt19=2;
             int LA19_0 = input.LA(1);
 
@@ -2881,15 +2905,15 @@ public class MyStrLangParser extends Parser {
             }
             switch (alt19) {
                 case 1 :
-                    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:762:3: a= atom ( ',' b= atom )*
+                    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:772:3: a= atom ( ',' b= atom )*
                     {
-                    pushFollow(FOLLOW_atom_in_arg_call1158);
+                    pushFollow(FOLLOW_atom_in_arg_call1178);
                     a=atom();
 
                     state._fsp--;
 
                     retval.argumentTypeList.add((a!=null?a.type:null)); retval.stList.add((a!=null?a.st:null));
-                    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:762:64: ( ',' b= atom )*
+                    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:772:64: ( ',' b= atom )*
                     loop18:
                     do {
                         int alt18=2;
@@ -2902,10 +2926,10 @@ public class MyStrLangParser extends Parser {
 
                         switch (alt18) {
                     	case 1 :
-                    	    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:762:65: ',' b= atom
+                    	    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:772:65: ',' b= atom
                     	    {
-                    	    match(input,16,FOLLOW_16_in_arg_call1163); 
-                    	    pushFollow(FOLLOW_atom_in_arg_call1167);
+                    	    match(input,16,FOLLOW_16_in_arg_call1183); 
+                    	    pushFollow(FOLLOW_atom_in_arg_call1187);
                     	    b=atom();
 
                     	    state._fsp--;
@@ -2949,7 +2973,7 @@ public class MyStrLangParser extends Parser {
     };
 
     // $ANTLR start "expression"
-    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:765:1: expression : first= and_expression ( '||' second= expression )? ;
+    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:775:1: expression : first= and_expression ( '||' second= expression )? ;
     public final MyStrLangParser.expression_return expression() throws RecognitionException {
         MyStrLangParser.expression_return retval = new MyStrLangParser.expression_return();
         retval.start = input.LT(1);
@@ -2960,16 +2984,16 @@ public class MyStrLangParser extends Parser {
 
 
         try {
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:766:2: (first= and_expression ( '||' second= expression )? )
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:766:4: first= and_expression ( '||' second= expression )?
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:776:2: (first= and_expression ( '||' second= expression )? )
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:776:4: first= and_expression ( '||' second= expression )?
             {
-            pushFollow(FOLLOW_and_expression_in_expression1187);
+            pushFollow(FOLLOW_and_expression_in_expression1207);
             first=and_expression();
 
             state._fsp--;
 
             retval.st = (first!=null?first.st:null);
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:766:44: ( '||' second= expression )?
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:776:44: ( '||' second= expression )?
             int alt20=2;
             int LA20_0 = input.LA(1);
 
@@ -2978,10 +3002,10 @@ public class MyStrLangParser extends Parser {
             }
             switch (alt20) {
                 case 1 :
-                    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:766:45: '||' second= expression
+                    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:776:45: '||' second= expression
                     {
-                    match(input,30,FOLLOW_30_in_expression1192); 
-                    pushFollow(FOLLOW_expression_in_expression1197);
+                    match(input,30,FOLLOW_30_in_expression1212); 
+                    pushFollow(FOLLOW_expression_in_expression1217);
                     second=expression();
 
                     state._fsp--;
@@ -3020,7 +3044,7 @@ public class MyStrLangParser extends Parser {
     };
 
     // $ANTLR start "and_expression"
-    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:775:1: and_expression : first= not_expression ( '&&' second= and_expression )? ;
+    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:785:1: and_expression : first= not_expression ( '&&' second= and_expression )? ;
     public final MyStrLangParser.and_expression_return and_expression() throws RecognitionException {
         MyStrLangParser.and_expression_return retval = new MyStrLangParser.and_expression_return();
         retval.start = input.LT(1);
@@ -3031,16 +3055,16 @@ public class MyStrLangParser extends Parser {
 
 
         try {
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:776:2: (first= not_expression ( '&&' second= and_expression )? )
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:776:4: first= not_expression ( '&&' second= and_expression )?
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:786:2: (first= not_expression ( '&&' second= and_expression )? )
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:786:4: first= not_expression ( '&&' second= and_expression )?
             {
-            pushFollow(FOLLOW_not_expression_in_and_expression1220);
+            pushFollow(FOLLOW_not_expression_in_and_expression1240);
             first=not_expression();
 
             state._fsp--;
 
             retval.st = (first!=null?first.st:null);
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:776:44: ( '&&' second= and_expression )?
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:786:44: ( '&&' second= and_expression )?
             int alt21=2;
             int LA21_0 = input.LA(1);
 
@@ -3049,10 +3073,10 @@ public class MyStrLangParser extends Parser {
             }
             switch (alt21) {
                 case 1 :
-                    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:776:45: '&&' second= and_expression
+                    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:786:45: '&&' second= and_expression
                     {
-                    match(input,31,FOLLOW_31_in_and_expression1225); 
-                    pushFollow(FOLLOW_and_expression_in_and_expression1229);
+                    match(input,31,FOLLOW_31_in_and_expression1245); 
+                    pushFollow(FOLLOW_and_expression_in_and_expression1249);
                     second=and_expression();
 
                     state._fsp--;
@@ -3091,7 +3115,7 @@ public class MyStrLangParser extends Parser {
     };
 
     // $ANTLR start "not_expression"
-    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:785:1: not_expression : ( '!' first= not_expression | second= comparison );
+    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:795:1: not_expression : ( '!' first= not_expression | second= comparison );
     public final MyStrLangParser.not_expression_return not_expression() throws RecognitionException {
         MyStrLangParser.not_expression_return retval = new MyStrLangParser.not_expression_return();
         retval.start = input.LT(1);
@@ -3102,7 +3126,7 @@ public class MyStrLangParser extends Parser {
 
 
         try {
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:786:2: ( '!' first= not_expression | second= comparison )
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:796:2: ( '!' first= not_expression | second= comparison )
             int alt22=2;
             int LA22_0 = input.LA(1);
 
@@ -3120,10 +3144,10 @@ public class MyStrLangParser extends Parser {
             }
             switch (alt22) {
                 case 1 :
-                    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:786:4: '!' first= not_expression
+                    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:796:4: '!' first= not_expression
                     {
-                    match(input,32,FOLLOW_32_in_not_expression1249); 
-                    pushFollow(FOLLOW_not_expression_in_not_expression1253);
+                    match(input,32,FOLLOW_32_in_not_expression1269); 
+                    pushFollow(FOLLOW_not_expression_in_not_expression1273);
                     first=not_expression();
 
                     state._fsp--;
@@ -3137,9 +3161,9 @@ public class MyStrLangParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:791:4: second= comparison
+                    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:801:4: second= comparison
                     {
-                    pushFollow(FOLLOW_comparison_in_not_expression1265);
+                    pushFollow(FOLLOW_comparison_in_not_expression1285);
                     second=comparison();
 
                     state._fsp--;
@@ -3170,7 +3194,7 @@ public class MyStrLangParser extends Parser {
     };
 
     // $ANTLR start "comparison"
-    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:794:1: comparison : (first= atom op= ( '<' | '>' | '==' | '!=' | '>=' | '<=' ) second= atom | equal_op -> {$equal_op.st});
+    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:804:1: comparison : (first= atom op= ( '<' | '>' | '==' | '!=' | '>=' | '<=' ) second= atom | equal_op -> {$equal_op.st});
     public final MyStrLangParser.comparison_return comparison() throws RecognitionException {
         MyStrLangParser.comparison_return retval = new MyStrLangParser.comparison_return();
         retval.start = input.LT(1);
@@ -3184,7 +3208,7 @@ public class MyStrLangParser extends Parser {
 
 
         try {
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:795:2: (first= atom op= ( '<' | '>' | '==' | '!=' | '>=' | '<=' ) second= atom | equal_op -> {$equal_op.st})
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:805:2: (first= atom op= ( '<' | '>' | '==' | '!=' | '>=' | '<=' ) second= atom | equal_op -> {$equal_op.st})
             int alt23=2;
             int LA23_0 = input.LA(1);
 
@@ -3202,9 +3226,9 @@ public class MyStrLangParser extends Parser {
             }
             switch (alt23) {
                 case 1 :
-                    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:795:4: first= atom op= ( '<' | '>' | '==' | '!=' | '>=' | '<=' ) second= atom
+                    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:805:4: first= atom op= ( '<' | '>' | '==' | '!=' | '>=' | '<=' ) second= atom
                     {
-                    pushFollow(FOLLOW_atom_in_comparison1280);
+                    pushFollow(FOLLOW_atom_in_comparison1300);
                     first=atom();
 
                     state._fsp--;
@@ -3219,7 +3243,7 @@ public class MyStrLangParser extends Parser {
                         throw mse;
                     }
 
-                    pushFollow(FOLLOW_atom_in_comparison1300);
+                    pushFollow(FOLLOW_atom_in_comparison1320);
                     second=atom();
 
                     state._fsp--;
@@ -3269,9 +3293,9 @@ public class MyStrLangParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:831:4: equal_op
+                    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:841:4: equal_op
                     {
-                    pushFollow(FOLLOW_equal_op_in_comparison1308);
+                    pushFollow(FOLLOW_equal_op_in_comparison1328);
                     equal_op54=equal_op();
 
                     state._fsp--;
@@ -3279,7 +3303,7 @@ public class MyStrLangParser extends Parser {
 
 
                     // TEMPLATE REWRITE
-                    // 831:14: -> {$equal_op.st}
+                    // 841:14: -> {$equal_op.st}
                     {
                         retval.st = (equal_op54!=null?equal_op54.st:null);
                     }
@@ -3309,7 +3333,7 @@ public class MyStrLangParser extends Parser {
     };
 
     // $ANTLR start "equal_op"
-    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:834:1: equal_op : 'equals' '(' first= f_el ',' second= f_el ')' ;
+    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:844:1: equal_op : 'equals' '(' first= f_el ',' second= f_el ')' ;
     public final MyStrLangParser.equal_op_return equal_op() throws RecognitionException {
         MyStrLangParser.equal_op_return retval = new MyStrLangParser.equal_op_return();
         retval.start = input.LT(1);
@@ -3320,23 +3344,23 @@ public class MyStrLangParser extends Parser {
 
 
         try {
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:835:2: ( 'equals' '(' first= f_el ',' second= f_el ')' )
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:835:4: 'equals' '(' first= f_el ',' second= f_el ')'
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:845:2: ( 'equals' '(' first= f_el ',' second= f_el ')' )
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:845:4: 'equals' '(' first= f_el ',' second= f_el ')'
             {
-            match(input,39,FOLLOW_39_in_equal_op1325); 
-            match(input,14,FOLLOW_14_in_equal_op1327); 
-            pushFollow(FOLLOW_f_el_in_equal_op1331);
+            match(input,39,FOLLOW_39_in_equal_op1345); 
+            match(input,14,FOLLOW_14_in_equal_op1347); 
+            pushFollow(FOLLOW_f_el_in_equal_op1351);
             first=f_el();
 
             state._fsp--;
 
-            match(input,16,FOLLOW_16_in_equal_op1333); 
-            pushFollow(FOLLOW_f_el_in_equal_op1337);
+            match(input,16,FOLLOW_16_in_equal_op1353); 
+            pushFollow(FOLLOW_f_el_in_equal_op1357);
             second=f_el();
 
             state._fsp--;
 
-            match(input,15,FOLLOW_15_in_equal_op1339); 
+            match(input,15,FOLLOW_15_in_equal_op1359); 
 
             		retval.st = templateLib.getInstanceOf("equal_operation",
               new STAttrMap().put("fValue", (first!=null?first.st:null)).put("sValue", (second!=null?second.st:null)));
@@ -3365,13 +3389,13 @@ public class MyStrLangParser extends Parser {
     };
 
     // $ANTLR start "type"
-    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:841:1: type returns [StringTemplate returnType] : ( 'int' -> type_int() | 'string' -> type_string() | 'char' -> type_char());
+    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:851:1: type returns [StringTemplate returnType] : ( 'int' -> type_int() | 'string' -> type_string() | 'char' -> type_char());
     public final MyStrLangParser.type_return type() throws RecognitionException {
         MyStrLangParser.type_return retval = new MyStrLangParser.type_return();
         retval.start = input.LT(1);
 
         try {
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:842:2: ( 'int' -> type_int() | 'string' -> type_string() | 'char' -> type_char())
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:852:2: ( 'int' -> type_int() | 'string' -> type_string() | 'char' -> type_char())
             int alt24=3;
             switch ( input.LA(1) ) {
             case 40:
@@ -3398,14 +3422,14 @@ public class MyStrLangParser extends Parser {
 
             switch (alt24) {
                 case 1 :
-                    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:842:4: 'int'
+                    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:852:4: 'int'
                     {
-                    match(input,40,FOLLOW_40_in_type1358); 
+                    match(input,40,FOLLOW_40_in_type1378); 
                     retval.returnType = templateLib.getInstanceOf("return_int");
 
 
                     // TEMPLATE REWRITE
-                    // 842:41: -> type_int()
+                    // 852:41: -> type_int()
                     {
                         retval.st = templateLib.getInstanceOf("type_int");
                     }
@@ -3414,14 +3438,14 @@ public class MyStrLangParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:843:5: 'string'
+                    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:853:5: 'string'
                     {
-                    match(input,41,FOLLOW_41_in_type1372); 
+                    match(input,41,FOLLOW_41_in_type1392); 
                     retval.returnType = templateLib.getInstanceOf("return_string");
 
 
                     // TEMPLATE REWRITE
-                    // 843:48: -> type_string()
+                    // 853:48: -> type_string()
                     {
                         retval.st = templateLib.getInstanceOf("type_string");
                     }
@@ -3430,14 +3454,14 @@ public class MyStrLangParser extends Parser {
                     }
                     break;
                 case 3 :
-                    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:844:5: 'char'
+                    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:854:5: 'char'
                     {
-                    match(input,42,FOLLOW_42_in_type1385); 
+                    match(input,42,FOLLOW_42_in_type1405); 
                     retval.returnType = templateLib.getInstanceOf("return_string");
 
 
                     // TEMPLATE REWRITE
-                    // 844:46: -> type_char()
+                    // 854:46: -> type_char()
                     {
                         retval.st = templateLib.getInstanceOf("type_char");
                     }
@@ -3468,13 +3492,13 @@ public class MyStrLangParser extends Parser {
     };
 
     // $ANTLR start "type_func"
-    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:847:1: type_func returns [StringTemplate returnType] : ( | 'int' -> type_int() | 'string' -> type_string() | 'char' -> type_char() | 'void' -> type_void());
+    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:857:1: type_func returns [StringTemplate returnType] : ( | 'int' -> type_int() | 'string' -> type_string() | 'char' -> type_char() | 'void' -> type_void());
     public final MyStrLangParser.type_func_return type_func() throws RecognitionException {
         MyStrLangParser.type_func_return retval = new MyStrLangParser.type_func_return();
         retval.start = input.LT(1);
 
         try {
-            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:848:2: ( | 'int' -> type_int() | 'string' -> type_string() | 'char' -> type_char() | 'void' -> type_void())
+            // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:858:2: ( | 'int' -> type_int() | 'string' -> type_string() | 'char' -> type_char() | 'void' -> type_void())
             int alt25=5;
             switch ( input.LA(1) ) {
             case ID:
@@ -3511,19 +3535,19 @@ public class MyStrLangParser extends Parser {
 
             switch (alt25) {
                 case 1 :
-                    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:849:2: 
+                    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:859:2: 
                     {
                     }
                     break;
                 case 2 :
-                    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:849:4: 'int'
+                    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:859:4: 'int'
                     {
-                    match(input,40,FOLLOW_40_in_type_func1411); 
+                    match(input,40,FOLLOW_40_in_type_func1431); 
                     retval.returnType = templateLib.getInstanceOf("return_int");
 
 
                     // TEMPLATE REWRITE
-                    // 849:41: -> type_int()
+                    // 859:41: -> type_int()
                     {
                         retval.st = templateLib.getInstanceOf("type_int");
                     }
@@ -3532,14 +3556,14 @@ public class MyStrLangParser extends Parser {
                     }
                     break;
                 case 3 :
-                    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:850:5: 'string'
+                    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:860:5: 'string'
                     {
-                    match(input,41,FOLLOW_41_in_type_func1425); 
+                    match(input,41,FOLLOW_41_in_type_func1445); 
                     retval.returnType = templateLib.getInstanceOf("return_string");
 
 
                     // TEMPLATE REWRITE
-                    // 850:48: -> type_string()
+                    // 860:48: -> type_string()
                     {
                         retval.st = templateLib.getInstanceOf("type_string");
                     }
@@ -3548,14 +3572,14 @@ public class MyStrLangParser extends Parser {
                     }
                     break;
                 case 4 :
-                    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:851:5: 'char'
+                    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:861:5: 'char'
                     {
-                    match(input,42,FOLLOW_42_in_type_func1438); 
+                    match(input,42,FOLLOW_42_in_type_func1458); 
                     retval.returnType = templateLib.getInstanceOf("return_string");
 
 
                     // TEMPLATE REWRITE
-                    // 851:46: -> type_char()
+                    // 861:46: -> type_char()
                     {
                         retval.st = templateLib.getInstanceOf("type_char");
                     }
@@ -3564,14 +3588,14 @@ public class MyStrLangParser extends Parser {
                     }
                     break;
                 case 5 :
-                    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:852:4: 'void'
+                    // D:\\Projects\\Yapis\\StrLang\\src\\grammar\\MyStrLang.g:862:4: 'void'
                     {
-                    match(input,43,FOLLOW_43_in_type_func1450); 
+                    match(input,43,FOLLOW_43_in_type_func1470); 
                     retval.returnType = templateLib.getInstanceOf("return_void");
 
 
                     // TEMPLATE REWRITE
-                    // 852:43: -> type_void()
+                    // 862:43: -> type_void()
                     {
                         retval.st = templateLib.getInstanceOf("type_void");
                     }
@@ -3794,83 +3818,83 @@ public class MyStrLangParser extends Parser {
     public static final BitSet FOLLOW_11_in_if_stmt774 = new BitSet(new long[]{0x0000070007700010L});
     public static final BitSet FOLLOW_block_in_if_stmt778 = new BitSet(new long[]{0x0000000000001000L});
     public static final BitSet FOLLOW_12_in_if_stmt780 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_24_in_for_stmt795 = new BitSet(new long[]{0x0000000000004000L});
-    public static final BitSet FOLLOW_14_in_for_stmt797 = new BitSet(new long[]{0x0000000000002010L});
-    public static final BitSet FOLLOW_assign_stmt_in_for_stmt799 = new BitSet(new long[]{0x0000000000002000L});
-    public static final BitSet FOLLOW_13_in_for_stmt802 = new BitSet(new long[]{0x000007813B7000F0L});
-    public static final BitSet FOLLOW_expression_in_for_stmt804 = new BitSet(new long[]{0x0000000000002000L});
-    public static final BitSet FOLLOW_13_in_for_stmt806 = new BitSet(new long[]{0x0000000000000010L});
-    public static final BitSet FOLLOW_assign_stmt_in_for_stmt808 = new BitSet(new long[]{0x0000000000008000L});
-    public static final BitSet FOLLOW_15_in_for_stmt810 = new BitSet(new long[]{0x0000000000000800L});
-    public static final BitSet FOLLOW_11_in_for_stmt812 = new BitSet(new long[]{0x0000070007700010L});
-    public static final BitSet FOLLOW_block_in_for_stmt814 = new BitSet(new long[]{0x0000000000001000L});
-    public static final BitSet FOLLOW_12_in_for_stmt816 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_25_in_while_stmt828 = new BitSet(new long[]{0x0000000000004000L});
-    public static final BitSet FOLLOW_14_in_while_stmt830 = new BitSet(new long[]{0x000007813B7000F0L});
-    public static final BitSet FOLLOW_expression_in_while_stmt832 = new BitSet(new long[]{0x0000000000008000L});
-    public static final BitSet FOLLOW_15_in_while_stmt834 = new BitSet(new long[]{0x0000000000000800L});
-    public static final BitSet FOLLOW_11_in_while_stmt836 = new BitSet(new long[]{0x0000070007700010L});
-    public static final BitSet FOLLOW_block_in_while_stmt838 = new BitSet(new long[]{0x0000000000001000L});
-    public static final BitSet FOLLOW_12_in_while_stmt840 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_26_in_return_stmt859 = new BitSet(new long[]{0x000007003B7000F0L});
-    public static final BitSet FOLLOW_atom_in_return_stmt861 = new BitSet(new long[]{0x0000000000002000L});
-    public static final BitSet FOLLOW_13_in_return_stmt863 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_27_in_length_stmt888 = new BitSet(new long[]{0x0000000000004000L});
-    public static final BitSet FOLLOW_14_in_length_stmt890 = new BitSet(new long[]{0x0000000000000050L});
-    public static final BitSet FOLLOW_param_in_length_stmt892 = new BitSet(new long[]{0x0000000000008000L});
-    public static final BitSet FOLLOW_15_in_length_stmt894 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ID_in_param912 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_STRING_in_param919 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_28_in_elem_stmt944 = new BitSet(new long[]{0x0000000000004000L});
-    public static final BitSet FOLLOW_14_in_elem_stmt946 = new BitSet(new long[]{0x0000000000000050L});
-    public static final BitSet FOLLOW_f_el_in_elem_stmt947 = new BitSet(new long[]{0x0000000000010000L});
-    public static final BitSet FOLLOW_16_in_elem_stmt949 = new BitSet(new long[]{0x0000000000000030L});
-    public static final BitSet FOLLOW_s_el_in_elem_stmt951 = new BitSet(new long[]{0x0000000000008000L});
-    public static final BitSet FOLLOW_15_in_elem_stmt953 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ID_in_f_el968 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_STRING_in_f_el976 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ID_in_s_el998 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_INT_in_s_el1006 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_29_in_to_string_stmt1028 = new BitSet(new long[]{0x0000000000004000L});
-    public static final BitSet FOLLOW_14_in_to_string_stmt1030 = new BitSet(new long[]{0x00000000000000B0L});
-    public static final BitSet FOLLOW_param_str_in_to_string_stmt1032 = new BitSet(new long[]{0x0000000000008000L});
-    public static final BitSet FOLLOW_15_in_to_string_stmt1034 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ID_in_param_str1052 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_INT_in_param_str1060 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_char_c_in_param_str1078 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_call_func_in_call_func_stmt1097 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ID_in_call_func1125 = new BitSet(new long[]{0x0000000000004000L});
-    public static final BitSet FOLLOW_14_in_call_func1128 = new BitSet(new long[]{0x000007003B7080F0L});
-    public static final BitSet FOLLOW_arg_call_in_call_func1130 = new BitSet(new long[]{0x0000000000008000L});
-    public static final BitSet FOLLOW_15_in_call_func1132 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_atom_in_arg_call1158 = new BitSet(new long[]{0x0000000000010002L});
-    public static final BitSet FOLLOW_16_in_arg_call1163 = new BitSet(new long[]{0x000007003B7000F0L});
-    public static final BitSet FOLLOW_atom_in_arg_call1167 = new BitSet(new long[]{0x0000000000010002L});
-    public static final BitSet FOLLOW_and_expression_in_expression1187 = new BitSet(new long[]{0x0000000040000002L});
-    public static final BitSet FOLLOW_30_in_expression1192 = new BitSet(new long[]{0x000007813B7000F0L});
-    public static final BitSet FOLLOW_expression_in_expression1197 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_not_expression_in_and_expression1220 = new BitSet(new long[]{0x0000000080000002L});
-    public static final BitSet FOLLOW_31_in_and_expression1225 = new BitSet(new long[]{0x000007813B7000F0L});
-    public static final BitSet FOLLOW_and_expression_in_and_expression1229 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_32_in_not_expression1249 = new BitSet(new long[]{0x000007813B7000F0L});
-    public static final BitSet FOLLOW_not_expression_in_not_expression1253 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_comparison_in_not_expression1265 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_atom_in_comparison1280 = new BitSet(new long[]{0x0000007E00000000L});
-    public static final BitSet FOLLOW_set_in_comparison1284 = new BitSet(new long[]{0x000007003B7000F0L});
-    public static final BitSet FOLLOW_atom_in_comparison1300 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_equal_op_in_comparison1308 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_39_in_equal_op1325 = new BitSet(new long[]{0x0000000000004000L});
-    public static final BitSet FOLLOW_14_in_equal_op1327 = new BitSet(new long[]{0x0000000000000050L});
-    public static final BitSet FOLLOW_f_el_in_equal_op1331 = new BitSet(new long[]{0x0000000000010000L});
-    public static final BitSet FOLLOW_16_in_equal_op1333 = new BitSet(new long[]{0x0000000000000050L});
-    public static final BitSet FOLLOW_f_el_in_equal_op1337 = new BitSet(new long[]{0x0000000000008000L});
-    public static final BitSet FOLLOW_15_in_equal_op1339 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_40_in_type1358 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_41_in_type1372 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_42_in_type1385 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_40_in_type_func1411 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_41_in_type_func1425 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_42_in_type_func1438 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_43_in_type_func1450 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_24_in_for_stmt797 = new BitSet(new long[]{0x0000000000004000L});
+    public static final BitSet FOLLOW_14_in_for_stmt799 = new BitSet(new long[]{0x0000000000002010L});
+    public static final BitSet FOLLOW_assign_stmt_in_for_stmt803 = new BitSet(new long[]{0x0000000000002000L});
+    public static final BitSet FOLLOW_13_in_for_stmt806 = new BitSet(new long[]{0x000007813B7000F0L});
+    public static final BitSet FOLLOW_expression_in_for_stmt810 = new BitSet(new long[]{0x0000000000002000L});
+    public static final BitSet FOLLOW_13_in_for_stmt812 = new BitSet(new long[]{0x0000000000000010L});
+    public static final BitSet FOLLOW_assign_stmt_in_for_stmt816 = new BitSet(new long[]{0x0000000000008000L});
+    public static final BitSet FOLLOW_15_in_for_stmt818 = new BitSet(new long[]{0x0000000000000800L});
+    public static final BitSet FOLLOW_11_in_for_stmt820 = new BitSet(new long[]{0x0000070007700010L});
+    public static final BitSet FOLLOW_block_in_for_stmt824 = new BitSet(new long[]{0x0000000000001000L});
+    public static final BitSet FOLLOW_12_in_for_stmt826 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_25_in_while_stmt841 = new BitSet(new long[]{0x0000000000004000L});
+    public static final BitSet FOLLOW_14_in_while_stmt843 = new BitSet(new long[]{0x000007813B7000F0L});
+    public static final BitSet FOLLOW_expression_in_while_stmt847 = new BitSet(new long[]{0x0000000000008000L});
+    public static final BitSet FOLLOW_15_in_while_stmt849 = new BitSet(new long[]{0x0000000000000800L});
+    public static final BitSet FOLLOW_11_in_while_stmt851 = new BitSet(new long[]{0x0000070007700010L});
+    public static final BitSet FOLLOW_block_in_while_stmt855 = new BitSet(new long[]{0x0000000000001000L});
+    public static final BitSet FOLLOW_12_in_while_stmt857 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_26_in_return_stmt879 = new BitSet(new long[]{0x000007003B7000F0L});
+    public static final BitSet FOLLOW_atom_in_return_stmt881 = new BitSet(new long[]{0x0000000000002000L});
+    public static final BitSet FOLLOW_13_in_return_stmt883 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_27_in_length_stmt908 = new BitSet(new long[]{0x0000000000004000L});
+    public static final BitSet FOLLOW_14_in_length_stmt910 = new BitSet(new long[]{0x0000000000000050L});
+    public static final BitSet FOLLOW_param_in_length_stmt912 = new BitSet(new long[]{0x0000000000008000L});
+    public static final BitSet FOLLOW_15_in_length_stmt914 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ID_in_param932 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_STRING_in_param939 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_28_in_elem_stmt964 = new BitSet(new long[]{0x0000000000004000L});
+    public static final BitSet FOLLOW_14_in_elem_stmt966 = new BitSet(new long[]{0x0000000000000050L});
+    public static final BitSet FOLLOW_f_el_in_elem_stmt967 = new BitSet(new long[]{0x0000000000010000L});
+    public static final BitSet FOLLOW_16_in_elem_stmt969 = new BitSet(new long[]{0x0000000000000030L});
+    public static final BitSet FOLLOW_s_el_in_elem_stmt971 = new BitSet(new long[]{0x0000000000008000L});
+    public static final BitSet FOLLOW_15_in_elem_stmt973 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ID_in_f_el988 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_STRING_in_f_el996 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ID_in_s_el1018 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_INT_in_s_el1026 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_29_in_to_string_stmt1048 = new BitSet(new long[]{0x0000000000004000L});
+    public static final BitSet FOLLOW_14_in_to_string_stmt1050 = new BitSet(new long[]{0x00000000000000B0L});
+    public static final BitSet FOLLOW_param_str_in_to_string_stmt1052 = new BitSet(new long[]{0x0000000000008000L});
+    public static final BitSet FOLLOW_15_in_to_string_stmt1054 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ID_in_param_str1072 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_INT_in_param_str1080 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_char_c_in_param_str1098 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_call_func_in_call_func_stmt1117 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ID_in_call_func1145 = new BitSet(new long[]{0x0000000000004000L});
+    public static final BitSet FOLLOW_14_in_call_func1148 = new BitSet(new long[]{0x000007003B7080F0L});
+    public static final BitSet FOLLOW_arg_call_in_call_func1150 = new BitSet(new long[]{0x0000000000008000L});
+    public static final BitSet FOLLOW_15_in_call_func1152 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_atom_in_arg_call1178 = new BitSet(new long[]{0x0000000000010002L});
+    public static final BitSet FOLLOW_16_in_arg_call1183 = new BitSet(new long[]{0x000007003B7000F0L});
+    public static final BitSet FOLLOW_atom_in_arg_call1187 = new BitSet(new long[]{0x0000000000010002L});
+    public static final BitSet FOLLOW_and_expression_in_expression1207 = new BitSet(new long[]{0x0000000040000002L});
+    public static final BitSet FOLLOW_30_in_expression1212 = new BitSet(new long[]{0x000007813B7000F0L});
+    public static final BitSet FOLLOW_expression_in_expression1217 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_not_expression_in_and_expression1240 = new BitSet(new long[]{0x0000000080000002L});
+    public static final BitSet FOLLOW_31_in_and_expression1245 = new BitSet(new long[]{0x000007813B7000F0L});
+    public static final BitSet FOLLOW_and_expression_in_and_expression1249 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_32_in_not_expression1269 = new BitSet(new long[]{0x000007813B7000F0L});
+    public static final BitSet FOLLOW_not_expression_in_not_expression1273 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_comparison_in_not_expression1285 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_atom_in_comparison1300 = new BitSet(new long[]{0x0000007E00000000L});
+    public static final BitSet FOLLOW_set_in_comparison1304 = new BitSet(new long[]{0x000007003B7000F0L});
+    public static final BitSet FOLLOW_atom_in_comparison1320 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_equal_op_in_comparison1328 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_39_in_equal_op1345 = new BitSet(new long[]{0x0000000000004000L});
+    public static final BitSet FOLLOW_14_in_equal_op1347 = new BitSet(new long[]{0x0000000000000050L});
+    public static final BitSet FOLLOW_f_el_in_equal_op1351 = new BitSet(new long[]{0x0000000000010000L});
+    public static final BitSet FOLLOW_16_in_equal_op1353 = new BitSet(new long[]{0x0000000000000050L});
+    public static final BitSet FOLLOW_f_el_in_equal_op1357 = new BitSet(new long[]{0x0000000000008000L});
+    public static final BitSet FOLLOW_15_in_equal_op1359 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_40_in_type1378 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_41_in_type1392 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_42_in_type1405 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_40_in_type_func1431 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_41_in_type_func1445 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_42_in_type_func1458 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_43_in_type_func1470 = new BitSet(new long[]{0x0000000000000002L});
 
 }
