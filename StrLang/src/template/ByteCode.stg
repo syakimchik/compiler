@@ -289,6 +289,15 @@ invokenonvirtual java/lang/String/\<init\>(Ljava/lang/String;)V
 invokevirtual java/lang/String.equals(Ljava/lang/Object;)Z
 >>
 
+contain_operation(fValue, sValue) ::=<<
+new java/lang/String
+dup
+<fValue>
+invokenonvirtual java/lang/String/\<init\>(Ljava/lang/String;)V
+<sValue>
+invokevirtual java/lang/String.contains(Ljava/lang/CharSequence;)Z
+>>
+
 //-----------------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------------
 

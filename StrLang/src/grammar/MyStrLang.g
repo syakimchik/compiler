@@ -839,12 +839,20 @@ comparison
 		}
 	}
 	|	equal_op		-> {$equal_op.st}
+	|	contain_op		-> {$contain_op.st}
 	;
 	
 equal_op
 	:	'equals' '(' first=f_el ',' second=f_el ')'
 	{
 		$st = %equal_operation(fValue={$first.st}, sValue={$second.st});
+	}
+	;
+	
+contain_op
+	:	'contains' '(' first=f_el ',' second=f_el ')'
+	{
+		$st = %contain_operation(fValue={$first.st}, sValue={$second.st});
 	}
 	;
 	

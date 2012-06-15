@@ -32,6 +32,7 @@ T__40=40
 T__41=41
 T__42=42
 T__43=43
+T__44=44
 ID=4
 INT=5
 STRING=6
@@ -68,7 +69,8 @@ WS=9
 '>='=37
 '<='=38
 'equals'=39
-'int'=40
-'string'=41
-'char'=42
-'void'=43
+'contains'=40
+'int'=41
+'string'=42
+'char'=43
+'void'=44
