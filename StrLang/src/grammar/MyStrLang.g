@@ -23,6 +23,7 @@ options{
 @members{
 		private static String programName = "";
 		private int counter;
+		private int labelCounter;
 		private String _funcName = "";
 		private String _funcType = "";
 		
@@ -111,6 +112,7 @@ scope{
 mainBlock
 @init{
 	counter = 0;
+	labelCounter = 0;
 }
 	:	'main' '{' block '}'
 		-> mainBlock(block={$block.stList})
@@ -154,6 +156,8 @@ scope{
 	$functions::funcType = "";
 	$functions::funcArgNames = new ArrayList<String>();
 	$functions::funcArgTypes = new ArrayList<String>();
+	labelCounter = 0;
+	counter=0;
 }
 	:	type_func {$functions::funcType = $type_func.text; _funcType = $type_func.text; } 
 		ID {$program::curBlock = $ID.text; $functions::funcName=$ID.text; _funcName = $ID.text;}
@@ -178,7 +182,7 @@ scope{
 arg_list returns[List<StringTemplate> stList]
 @init{
 	$stList = new ArrayList<StringTemplate>();
-	counter = 0;
+	//counter = 0;
 }
 	:	(
 		firstType=type firstId=ID
@@ -483,7 +487,13 @@ read_strm
 	}
 	;
 	
-if_stmt	:	'if' '(' expression ')' '{' block '}' ('else' '{' block '}')?
+if_stmt	
+	:	'if' '(' expression ')' '{' ifBlock=block '}' ('else' '{' elseBlock=block '}')?
+	{
+		$st = %if_operation(expression={$expression.st}, ifBlock={$ifBlock.stList}, elseBlock={$elseBlock.stList}, 
+							trueLabel={labelCounter}, falseLabel={labelCounter+1});
+		labelCounter = labelCounter+2;
+	}
 	;
 	
 for_stmt:	'for' '(' assign_stmt? ';' expression ';' assign_stmt ')' '{' block '}'
@@ -752,24 +762,79 @@ arg_call returns[ArrayList<String> argumentTypeList, List<StringTemplate> stList
 	(a=atom {$argumentTypeList.add($a.type); $stList.add($a.st);} (',' b=atom {$argumentTypeList.add($b.type); $stList.add($b.st);})*)?
 	;
 	
-expression:	and_expression ('|'  expression)? 
+expression
+	:	first=and_expression {$st = $first.st;} ('||'  second=expression
+		{
+			$st = %logical_or(firstExpr={$first.st}, secondExpr={$second.st}, firstLabel={labelCounter},
+								secondLabel={labelCounter+1}, thirdLabel={labelCounter+2});
+			labelCounter = labelCounter+3;
+		}
+	)? 
 	;
 	
 and_expression
-	:	not_expression ('&' and_expression)?
+	:	first=not_expression {$st = $first.st;} ('&&' second=and_expression
+		{
+			$st = %logical_and(firstExpr={$first.st}, secondExpr={$second.st}, firstLabel={labelCounter},
+								secondLabel={labelCounter+1}, thirdLabel={labelCounter+2});
+			labelCounter = labelCounter+3;
+		}
+	)?
 	;
 	
 not_expression
-	:	'!' not_expression|comparison
+	:	'!' first=not_expression
+			{
+				$st = %logical_not(expression={$first.st}, firstLabel={labelCounter}, secondLabel={labelCounter+1});
+				labelCounter = labelCounter+2;
+			}
+	|	second=comparison {$st = $second.st;}
 	;
 
 comparison
-	:	a=atom c=('<'|'>'|'=='|'!=') b=atom
+	:	first=atom op=('<'|'>'|'=='|'!='|'>='|'<=') second=atom
 	{
-		if(!TypesChecker.checkTypes($a.type, $b.type))
+		if(!TypesChecker.checkTypes($first.type, $second.type))
 		{
-			errors.add("line "+$c.line+": Incompatible types "+$a.type+" and "+$b.type);
+			errors.add("line "+$op.line+": Incompatible types "+$first.type+" and "+$second.type);
 		}
+		
+		if(TypesChecker.isInteger($first.type))
+		{
+			if($op.text.equals("<")){
+				$st = %integer_less(firstExpression={$first.st}, secondExpression={$second.st}, trueLabel={labelCounter}, falseLabel={labelCounter+1});
+				labelCounter = labelCounter+2;
+			}
+			if($op.text.equals(">")){
+				$st = %integer_greater(firstExpression={$first.st}, secondExpression={$second.st}, trueLabel={labelCounter}, falseLabel={labelCounter+1});
+				labelCounter = labelCounter+2;
+			}
+			if($op.text.equals("==")){
+				$st = %integer_equal(firstExpression={$first.st}, secondExpression={$second.st}, trueLabel={labelCounter}, falseLabel={labelCounter+1});
+				labelCounter = labelCounter+2;
+			}
+			if($op.text.equals("!=")){
+				$st = %integer_not_equal(firstExpression={$first.st}, secondExpression={$second.st}, trueLabel={labelCounter}, falseLabel={labelCounter+1});
+				labelCounter = labelCounter+2;
+			}
+			if($op.text.equals("<=")){
+				$st = %integer_less_or_equal(firstExpression={$first.st}, secondExpression={$second.st}, trueLabel={labelCounter}, falseLabel={labelCounter+1});
+				labelCounter = labelCounter+2;
+			}
+			if($op.text.equals(">=")){
+				$st = %integer_greater_or_equal(firstExpression={$first.st}, secondExpression={$second.st}, trueLabel={labelCounter}, falseLabel={labelCounter+1});
+				labelCounter = labelCounter+2;
+			}
+			
+		}
+	}
+	|	equal_op		-> {$equal_op.st}
+	;
+	
+equal_op
+	:	'equals' '(' first=f_el ',' second=f_el ')'
+	{
+		$st = %equal_operation(fValue={$first.st}, sValue={$second.st});
 	}
 	;
 	

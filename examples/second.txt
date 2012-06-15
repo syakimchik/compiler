@@ -33,7 +33,7 @@ int func(int j)
 main
 {
 	// присваивание значения глобальным переменным
-	b = "b";
+	b = 'b';
 	s = "Hello world";
 	
 	// чтение строки с консоли
@@ -47,19 +47,20 @@ main
 	text = "Hello"+"Java";
 	
 	//условные операторы
-	if(s==str)
+	if(equals(str,s))
 	{
 		write("Good");
 	}
 	else
 	{
-		if(s=="Hello")
+		if(equals(str,"Hello"))
 		{
 			int i;
 			i =14;
 			write(i);
 		}
-		if(s!="world" & s!="Hello")	// & - обозначает "и". Знак "|" - обазначает или
+		
+		if(!equals(s,"world") && !equals(s,"Hello"))	// && - обозначает "и". Знак "||" - обазначает или
 		{
 			write("no");
 		}
@@ -75,7 +76,7 @@ main
 	int j;
 	for(j=0; j<15; j=j+1)
 	{
-		if(elem(text,j)=="l")			//подсчёт сколько букв в в строке "Hello world"
+		if(elem(text,j)=='l')			//подсчёт сколько букв в в строке "Hello world"
 		{
 			k = k+1;
 		}
@@ -86,7 +87,7 @@ main
 		цикл while
 		~ - элемент, обозначающий конец строки
 	**/
-	while(elem(str,i)!="\n")
+	while(elem(str,i)!='\n')
 	{
 		char v;
 		v = elem(str,i);
