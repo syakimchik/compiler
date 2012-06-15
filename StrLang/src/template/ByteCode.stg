@@ -298,6 +298,15 @@ invokenonvirtual java/lang/String/\<init\>(Ljava/lang/String;)V
 invokevirtual java/lang/String.contains(Ljava/lang/CharSequence;)Z
 >>
 
+indexOf_int(fValue, sValue) ::=<<
+new java/lang/String
+dup
+<fValue>
+invokenonvirtual java/lang/String/\<init\>(Ljava/lang/String;)V
+<sValue>
+invokevirtual java/lang/String.indexOf(Ljava/lang/String;)I
+>>
+
 //-----------------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------------
 

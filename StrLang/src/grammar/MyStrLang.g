@@ -443,6 +443,7 @@ atom returns[String text, String type]
 	|	length_stmt{$type="int";}				-> {$length_stmt.st}
 	|	elem_stmt{$type="char";}				-> {$elem_stmt.st}
 	|	to_string_stmt{$type="string";}			-> {$to_string_stmt.st}
+	|	indexOf_stmt{$type="int";}				-> {$indexOf_stmt.st}
 	;
 	
 char_c returns[int numb]
@@ -853,6 +854,13 @@ contain_op
 	:	'contains' '(' first=f_el ',' second=f_el ')'
 	{
 		$st = %contain_operation(fValue={$first.st}, sValue={$second.st});
+	}
+	;
+	
+indexOf_stmt
+	:	'indexOf' '(' first=f_el ',' second=f_el')'
+	{
+		$st = %indexOf_int(fValue={$first.st}, sValue={$second.st});
 	}
 	;
 	
