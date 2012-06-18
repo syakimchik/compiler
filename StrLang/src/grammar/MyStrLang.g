@@ -445,6 +445,7 @@ atom returns[String text, String type]
 	|	to_string_stmt{$type="string";}			-> {$to_string_stmt.st}
 	|	indexOf_stmt{$type="int";}				-> {$indexOf_stmt.st}
 	|	replace_op{$type="string";}				-> {$replace_op.st}
+	|	replace_firstElem{$type="string";}		-> {$replace_firstElem.st}
 	;
 	
 char_c returns[int numb]
@@ -894,6 +895,13 @@ char_param
 			errors.add("line "+$ID.line+": unknown variable "+$ID.text);
 	}
 	|	char_c		->{$char_c.st}
+	;
+	
+replace_firstElem
+	:	'replaceFirst' '(' first=f_el ',' second=f_el ',' third=f_el ')'
+	{
+		$st = %replaceFirst_op(fValue={$first.st}, sValue={$second.st}, thValue={$third.st});
+	}
 	;
 	
 type returns[StringTemplate returnType]	
