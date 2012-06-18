@@ -487,6 +487,72 @@ ldc 0
 label<falseLabel>:
 >>
 
+char_less(firstExpression, secondExpression, trueLabel, falseLabel) ::= <<
+<firstExpression>
+<secondExpression>
+if_icmple label<trueLabel>
+ldc 0
+goto label<falseLabel>
+label<trueLabel>:
+ldc 1
+label<falseLabel>:
+>>
+
+char_greater(firstExpression, secondExpression, trueLabel, falseLabel) ::=<<
+<firstExpression>
+<secondExpression>
+if_icmpge label<trueLabel>
+ldc 0
+goto label<falseLabel>
+label<trueLabel>:
+ldc 1
+label<falseLabel>:
+>>
+
+char_not_equal(firstExpression, secondExpression, trueLabel, falseLabel) ::= <<
+<firstExpression>
+<secondExpression>
+if_icmpne label<trueLabel>
+ldc 0
+goto label<falseLabel>
+label<trueLabel>:
+ldc 1
+label<falseLabel>:
+>>
+
+char_equal(firstExpression, secondExpression, trueLabel, falseLabel) ::= <<
+<firstExpression>
+<secondExpression>
+if_icmpeq label<trueLabel>
+ldc 0
+goto label<falseLabel>
+label<trueLabel>:
+ldc 1
+label<falseLabel>:
+>>
+
+char_less_or_equal(firstExpression, secondExpression, trueLabel, falseLabel) ::= <<
+<firstExpression>
+<secondExpression>
+if_icmplt label<trueLabel>
+ldc 1
+goto label<falseLabel>
+label<trueLabel>:
+ldc 0
+label<falseLabel>:
+>>
+
+char_greater_or_equal(firstExpression, secondExpression, trueLabel, falseLabel) ::= <<
+<firstExpression>
+<secondExpression>
+if_icmpgt label<trueLabel>
+ldc 1
+goto label<falseLabel>
+label<trueLabel>:
+ldc 0
+label<falseLabel>:
+>>
+
 //-----------------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------------
 

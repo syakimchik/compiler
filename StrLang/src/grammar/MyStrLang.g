@@ -838,7 +838,35 @@ comparison
 				$st = %integer_greater_or_equal(firstExpression={$first.st}, secondExpression={$second.st}, trueLabel={labelCounter}, falseLabel={labelCounter+1});
 				labelCounter = labelCounter+2;
 			}
+		}
+		
+		if(TypesChecker.isChar($first.type))
+		{
+			if($op.text.equals("<")){
+				$st = %char_less(firstExpression={$first.st}, secondExpression={$second.st}, trueLabel={labelCounter}, falseLabel={labelCounter+1});
+				labelCounter = labelCounter+2;
+			}
 			
+			if($op.text.equals(">")){
+				$st = %char_greater(firstExpression={$first.st}, secondExpression={$second.st}, trueLabel={labelCounter}, falseLabel={labelCounter+1});
+				labelCounter = labelCounter+2;
+			}
+			if($op.text.equals("==")){
+				$st = %char_equal(firstExpression={$first.st}, secondExpression={$second.st}, trueLabel={labelCounter}, falseLabel={labelCounter+1});
+				labelCounter = labelCounter+2;
+			}
+			if($op.text.equals("!=")){
+				$st = %char_not_equal(firstExpression={$first.st}, secondExpression={$second.st}, trueLabel={labelCounter}, falseLabel={labelCounter+1});
+				labelCounter = labelCounter+2;
+			}
+			if($op.text.equals("<=")){
+				$st = %char_less_or_equal(firstExpression={$first.st}, secondExpression={$second.st}, trueLabel={labelCounter}, falseLabel={labelCounter+1});
+				labelCounter = labelCounter+2;
+			}
+			if($op.text.equals(">=")){
+				$st = %char_greater_or_equal(firstExpression={$first.st}, secondExpression={$second.st}, trueLabel={labelCounter}, falseLabel={labelCounter+1});
+				labelCounter = labelCounter+2;
+			}
 		}
 	}
 	|	equal_op		-> {$equal_op.st}
