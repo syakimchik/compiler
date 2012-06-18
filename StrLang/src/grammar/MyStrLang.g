@@ -444,6 +444,7 @@ atom returns[String text, String type]
 	|	elem_stmt{$type="char";}				-> {$elem_stmt.st}
 	|	to_string_stmt{$type="string";}			-> {$to_string_stmt.st}
 	|	indexOf_stmt{$type="int";}				-> {$indexOf_stmt.st}
+	|	replace_op{$type="string";}				-> {$replace_op.st}
 	;
 	
 char_c returns[int numb]
@@ -862,6 +863,37 @@ indexOf_stmt
 	{
 		$st = %indexOf_int(fValue={$first.st}, sValue={$second.st});
 	}
+	;
+	
+replace_op
+	:	'replace' '(' f_el ',' first=char_param ',' second=char_param ')'
+	{
+		$st = %replace_operation(fValue={$f_el.st}, sValue={$first.st}, thValue={$second.st});
+	}
+	;
+	
+char_param
+	:	ID
+	{
+		if(names.isDeclaredVariable($program::curBlock+"."+$ID.text))
+		{
+			NamesTable.VariableName v_type = names.getVariable($program::curBlock+"."+$ID.text);
+			String type = v_type.getType();
+			if(TypesChecker.isChar(type))
+			{
+				if(names.isGlobal($ID.text))
+				{
+					$st = %referenceField_char(programName={programName}, fieldName={v_type.getName()});
+				}
+				else{
+					$st = %referenceVariable_char(counter={v_type.getNumber()});
+				}
+			}
+		}
+		else
+			errors.add("line "+$ID.line+": unknown variable "+$ID.text);
+	}
+	|	char_c		->{$char_c.st}
 	;
 	
 type returns[StringTemplate returnType]	
