@@ -446,6 +446,7 @@ atom returns[String text, String type]
 	|	indexOf_stmt{$type="int";}				-> {$indexOf_stmt.st}
 	|	replace_op{$type="string";}				-> {$replace_op.st}
 	|	replace_firstElem{$type="string";}		-> {$replace_firstElem.st}
+	|	substring_op{$type="string";}			-> {$substring_op.st}
 	;
 	
 char_c returns[int numb]
@@ -945,6 +946,17 @@ replace_firstElem
 	:	'replaceFirst' '(' first=f_el ',' second=f_el ',' third=f_el ')'
 	{
 		$st = %replaceFirst_op(fValue={$first.st}, sValue={$second.st}, thValue={$third.st});
+	}
+	;
+	
+substring_op
+	:	'subString' '(' first=f_el ',' second=s_el')'
+	{
+		$st = %substring_op_one(fValue={$first.st}, sValue={$second.st});
+	}
+	|	'subString' '(' first=f_el ',' second=s_el ',' third=s_el ')'
+	{
+		$st = %substring_op_two(fValue={$first.st}, sValue={$second.st}, thValue={$third.st});
 	}
 	;
 	

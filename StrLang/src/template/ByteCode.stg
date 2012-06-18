@@ -327,6 +327,25 @@ invokenonvirtual java/lang/String/\<init\>(Ljava/lang/String;)V
 invokevirtual java/lang/String.replaceFirst(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
 >>
 
+substring_op_one(fValue, sValue) ::=<<
+new java/lang/String
+dup
+<fValue>
+invokenonvirtual java/lang/String/\<init\>(Ljava/lang/String;)V
+<sValue>
+invokevirtual java/lang/String.substring(I)Ljava/lang/String;
+>>
+
+substring_op_two(fValue, sValue, thValue) ::=<<
+new java/lang/String
+dup
+<fValue>
+invokenonvirtual java/lang/String/\<init\>(Ljava/lang/String;)V
+<sValue>
+<thValue>
+invokevirtual java/lang/String.substring(II)Ljava/lang/String;
+>>
+
 //-----------------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------------
 
