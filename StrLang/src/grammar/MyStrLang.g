@@ -868,6 +868,22 @@ comparison
 				labelCounter = labelCounter+2;
 			}
 		}
+		
+		if(TypesChecker.isString($first.type))
+		{
+			if($op.text.equals("<") || $op.text.equals(">") || $op.text.equals("<=") || $op.text.equals(">=")){
+				errors.add("line "+$op.line+": The operator "+$op.text+" for type string not applicable ");
+			}
+			
+			if($op.text.equals("==")){
+				$st = %string_equal(firstExpression={$first.st}, secondExpression={$second.st}, trueLabel={labelCounter}, falseLabel={labelCounter+1});
+				labelCounter = labelCounter+2;
+			}
+			if($op.text.equals("!=")){
+				$st = %string_not_equal(firstExpression={$first.st}, secondExpression={$second.st}, trueLabel={labelCounter}, falseLabel={labelCounter+1});
+				labelCounter = labelCounter+2;
+			}
+		}
 	}
 	|	equal_op		-> {$equal_op.st}
 	|	contain_op		-> {$contain_op.st}

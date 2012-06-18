@@ -553,6 +553,28 @@ ldc 0
 label<falseLabel>:
 >>
 
+string_not_equal(firstExpression, secondExpression, trueLabel, falseLabel) ::= <<
+<firstExpression>
+<secondExpression>
+if_acmpne label<trueLabel>
+ldc 0
+goto label<falseLabel>
+label<trueLabel>:
+ldc 1
+label<falseLabel>:
+>>
+
+string_equal(firstExpression, secondExpression, trueLabel, falseLabel) ::= <<
+<firstExpression>
+<secondExpression>
+if_acmpeq label<trueLabel>
+ldc 0
+goto label<falseLabel>
+label<trueLabel>:
+ldc 1
+label<falseLabel>:
+>>
+
 //-----------------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------------
 
