@@ -570,7 +570,7 @@ param returns[String text, String type]
 			
 			if(TypesChecker.isString($type))
 			{
-				if(names.isGlobal($type))
+				if(names.isGlobal($text))
 				{
 					$st = %referenceField_string(programName={programName}, fieldName={v_type.getName()});
 				}
