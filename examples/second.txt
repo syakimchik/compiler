@@ -40,6 +40,10 @@ main
 	string text;
 	read(text);
 	
+	// чтение числа с консоли
+	int numb;
+	read(numb);
+	
 	text = text + "good";
 	// вывод на экран
 	write(text);
@@ -66,6 +70,28 @@ main
 		}
 	}
 	
+	if('a'<'b')
+	{
+		write("Good");
+	}
+	else{
+		write("bad");
+	}
+	
+	string hg;
+	hg = "strABC";
+	if(hg=="strABC")
+	{
+		write("Good");
+	}
+	
+	string subStr;
+	subStr = subString(hg, 2);			// результат - подстрока ABC. поиск осуществляется от заданного элемента до указанного.
+	subStr = subString(hg, 2, 4);			// результат - подстрока AB. указывается индекс начала и конца.
+	
+	subStr = replace(hg,"A");			//заменяет в строке все A
+	subStr = replaceFirst(hg, "A");		//заменяет в строке первый найденный элемент
+	
 	/**
 		цикл for
 		@ elem(string str, int i) - функция, преобразовывабщая i-ы элемент в char
@@ -74,9 +100,11 @@ main
 	int k;
 	k=0;
 	int j;
+	char ch;
+	ch = elem(text,j)
 	for(j=0; j<15; j=j+1)
 	{
-		if(elem(text,j)=='l')			//подсчёт сколько букв в в строке "Hello world"
+		if(contains(text, "l"))			//подсчёт сколько букв в в строке "Hello world"
 		{
 			k = k+1;
 		}

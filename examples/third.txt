@@ -11,17 +11,11 @@ main
 	int size;
 	size = 0;
 	str = "а роза упала на лапу Азора";
-	/**
-		подсчёт количества символов в строке.
-		Последний симлов '\n'
-	**/
 	
 	int i;
 	i=0;
-	while(elem(str,i)!='\n')				// можно было сразу воспользоваться функцией length
-	{
-		size = size+1;
-	}
+	
+	size = length(str);
 	
 	string buf;
 	int m;
@@ -30,11 +24,12 @@ main
 		переворачивание строки
 	**/
 	int j;
-	j=size-1;
-	for(; j>0; j=j-1)
+	for(j=size-1; j>0; j=j-1)
 	{
 		a = elem(str,j);
 		buf = buf+ToString(a);
 		m = m+1;
 	}
+	
+	write(buf);
 }
