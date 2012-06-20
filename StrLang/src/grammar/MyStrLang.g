@@ -370,6 +370,44 @@ decl_stmt
 		
 		counter++;
 	}
+	('=' expr
+	{
+		NamesTable.VariableName var_type = names.getVariable($program::curBlock+"."+$ID.text);
+		String varType = var_type.getType();
+		if(!TypesChecker.checkTypes(varType, $expr.type))
+		{
+			errors.add("line "+$ID.line+": Type mismatch: cannot convert from "+varType+" to "+$expr.type);
+		}
+		if(TypesChecker.isInteger(varType))
+		{
+			if(names.isGlobal($ID.text)){
+				$st = %assign_field_int(expression={$expr.st}, programName={programName}, fieldName={$ID.text});
+			} 
+			else{
+				$st = %assign_var_int(expression={$expr.st}, counter={var_type.getNumber()});
+			}
+		}
+		if(TypesChecker.isString(varType))
+		{
+			if(names.isGlobal($ID.text)){
+				$st = %assign_field_string(expression={$expr.st}, programName={programName}, fieldName={$ID.text});
+			} 
+			else{
+				$st = %assign_var_string(expression={$expr.st}, counter={var_type.getNumber()});
+			}
+		}
+		if(TypesChecker.isChar(varType))
+		{
+			if(names.isGlobal($ID.text)){
+				$st = %assign_field_char(expression={$expr.st}, programName={programName}, fieldName={$ID.text});
+			} 
+			else{
+				$st = %assign_var_char(expression={$expr.st}, counter={var_type.getNumber()});
+			}
+		}
+			
+	}
+	)?
 	;
 	
 write_stmt
