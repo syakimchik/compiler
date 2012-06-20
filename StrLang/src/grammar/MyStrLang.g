@@ -539,7 +539,7 @@ if_stmt
 	;
 	
 for_stmt
-	:	'for' '(' begin=assign_stmt? ';' check=expression ';' end=assign_stmt ')' '{' forBlock=block '}'
+	:	'for' '(' begin=assign_stmt ';' check=expression ';' end=assign_stmt ')' '{' forBlock=block '}'
 	{
 		$st = %for_operator(beginExpr={$begin.st}, checkExpr={$check.st}, endExpr={$end.st}, 
 			forBlock={$forBlock.stList}, firstLabel={labelCounter}, secondLabel={labelCounter+1}, thirdLabel={labelCounter+2});
