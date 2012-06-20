@@ -41,7 +41,7 @@ main
 	read(text);
 	
 	// чтение числа с консоли
-	int numb;
+	int numb = 0;
 	read(numb);
 	
 	text = text + "good";
@@ -99,7 +99,7 @@ main
 	**/
 	int k;
 	k=0;
-	int j;
+	int j = 0;
 	char ch;
 	ch = elem(text,j)
 	for(j=0; j<15; j=j+1)
