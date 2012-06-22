@@ -24,7 +24,7 @@ main
 		переворачивание строки
 	**/
 	int j;
-	for(j=size-1; j>0; j=j-1)
+	for(j=size- 1; j>0; j=j- 1)
 	{
 		a = elem(str,j);
 		buf = buf+ToString(a);

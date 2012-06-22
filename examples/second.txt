@@ -10,9 +10,9 @@
 /**
 	объявление глобальных переменных
 **/
+
 string str;
 string s;
-char ch;
 char b;
 int kol;
 
@@ -30,92 +30,128 @@ int func(int j)
 	функция main
 **/
 
-main
-{
+main{
+	// присваивание функции переменной
+	int i = func(10);
+	/*
+	*	вывод на экран
+	* 	Варианты, какие типы может принимать ф-я
+	*	write(int numb);
+	*	write(string str);
+	*	write(char ch);
+	*/
+	write(i);
+	
 	// присваивание значения глобальным переменным
 	b = 'b';
 	s = "Hello world";
 	
+	write("Globals:");
+	write(b);
+	write(s);
+	
+	write("Введите строку:");
 	// чтение строки с консоли
 	string text;
 	read(text);
+	write(text); 
 	
-	// чтение числа с консоли
-	int numb = 0;
-	read(numb);
+	text = "Hello "+"Java";
 	
-	text = text + "good";
-	// вывод на экран
-	write(text);
-	
-	text = "Hello"+"Java";
-	
-	//условные операторы
-	if(equals(str,s))
+	if(contains(text, "Hello"))						// операция проверяет содержит ли данная строка указанную строку
 	{
-		write("Good");
-	}
-	else
-	{
-		if(equals(str,"Hello"))
-		{
-			int i;
-			i =14;
-			write(i);
-		}
-		
-		if(!equals(s,"world") && !equals(s,"Hello"))	// && - обозначает "и". Знак "||" - обазначает или
-		{
-			write("no");
-		}
-	}
-	
-	if('a'<'b')
-	{
-		write("Good");
+		write("Yes. Contains");
 	}
 	else{
-		write("bad");
+	
+		if(equals(str,"Hello"))					// операция проверяет равна ли данная строка указанной строке
+		{
+			int i1;
+			i1 =14;
+			write(i1);
+		}
+	}
+	
+	string hello_str = "Hello";
+	/*
+	*	equals(string firstStr, string secondStr)
+	*/
+	if(equals(hello_str,"Hello"))					// операция проверяет равна ли данная строка указанной строке
+	{
+		//int i1;			// нельзя объявить, т.к. переменная была объявлена выше, даже если в блоке if, она используется во всём блоке main
+		i1 =14;
+		i1 = 14+16;
+		write("Yes. Equals!");
+		write(i1);
+	}
+	
+	if(!equals(s,"world") && !equals(s,"Hello"))	// && - обозначает "и". Знак "||" - обазначает или, знак ! - обозначает не
+	{
+		write("No equals");
 	}
 	
 	string hg;
 	hg = "strABC";
-	if(hg=="strABC")
+	
+	/*
+	*	вариант использования оператора if
+	*	можно сравнивать любые одинаковые типы данных(т.е. int, string, char)
+	*	оператора сравнения, которые можно использовать: >,<,>=,<=,==,!=
+	*/
+	if(hg=="strABC")		
 	{
 		write("Good");
 	}
 	
+	/*
+	*	ещё о встроенных функциях
+	*/
+	
+	/*
+	*	subString(string str, int index)
+	*	или
+	*	subString(string str, int indexBegin, int indexEnd)
+	*/
 	string subStr;
-	subStr = subString(hg, 2);			// результат - подстрока ABC. поиск осуществляется от заданного элемента до указанного.
+	subStr = subString(hg, 2);				// результат - подстрока ABC. поиск осуществляется от заданного элемента до конца строки.
 	subStr = subString(hg, 2, 4);			// результат - подстрока AB. указывается индекс начала и конца.
 	
-	subStr = replace(hg,"A");			//заменяет в строке все A
-	subStr = replaceFirst(hg, "A");		//заменяет в строке первый найденный элемент
+	/*
+	*	replace(string str, char a, char b)
+	*	replaceFirst(string str, string A, string B)
+	*/
+	subStr = replace(hg,'A', 'B');			//заменяет в строке все A на B
+	subStr = replaceFirst(hg, "A", "B");		//заменяет в строке первый найденный элемент
 	
 	/**
 		цикл for
 		@ elem(string str, int i) - функция, преобразовывабщая i-ы элемент в char
 		  length(string str) - функция, определяющая длину строки
 	**/
+	
 	int k;
 	k=0;
 	int j = 0;
 	char ch;
-	ch = elem(text,j)
-	for(j=0; j<15; j=j+1)
+	ch = elem(text,j);
+	write(ch);
+	
+	for(j=0; j<length(text); j=j+1)
 	{
 		if(contains(text, "l"))			//подсчёт сколько букв в в строке "Hello world"
 		{
 			k = k+1;
 		}
 	}
+	
 	write(k);
 	
 	/**
-		цикл while
-		~ - элемент, обозначающий конец строки
+	*	цикл while
 	**/
-	while(elem(str,i)!='\n')
+	str = "acdnqqqqn";
+	i=0;
+	while(elem(str,i)!='n')
 	{
 		char v;
 		v = elem(str,i);
@@ -124,10 +160,21 @@ main
 		write(v_str);
 		i=i+1;
 	}
+	write("KOLICHESTVO:");
+	write(i);
 	
-	int sum;
+	write("Arifmetics:");
+	int sum = k+13;
 	int sum1;
-	sum= k+15;
+	write(sum);
+	/*
+	*	от числа 3 отнимаем -3
+	*	ВНИМАНИЕ. если выполнить данный код kol=3-3, тогда работать не будет, не явно опередела операция разности,
+	*	поэтому необходимо данный код записывать так kol=3 - 3, для явного опеделения в правиле, разделяя прабелами числа
+	*/
+	kol = 3 - -3;						
 	sum1 = kol+func(k);
+	write(sum1);
 	sum = sum-sum1;
+	write(sum);
 }
