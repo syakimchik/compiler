@@ -32,8 +32,8 @@ options{
 		protected ArrayList<String> tmpVarNamesList = new ArrayList<String>();
 		
 		public static StringTemplateGroup templateGroup;
-		public static final String templateFileName = "D:/Projects/Yapis/StrLang/src/template/ByteCode.stg";	//testing line
-		//public static final String templateFileName = "template/ByteCode.stg";	//line for jar file
+		//public static final String templateFileName = "D:/Projects/Yapis/StrLang/src/template/ByteCode.stg";	//testing line
+		public static final String templateFileName = "template/ByteCode.stg";	//line for jar file
 		
 		/**
 		* @param args
@@ -1016,7 +1016,7 @@ ID
 	: 	('a'..'z'|'A'..'Z'|'_') ('a'..'z'|'A'..'Z'|'0'..'9'|'_')*
 	;
 	
-INT	:	('0'..'9')+
+INT	:	'-'? ('0'..'9')+
 	;
 	
 CHAR	:	'\'' ('a'..'z' | 'A'..'Z' | '0'..'9'|'\\n' ) '\''
