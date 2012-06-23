@@ -1,0 +1,8 @@
+main{
+	string str;
+	write("Input string:");
+	read(str);
+	write("Количество символов в строке:");
+	int kol = length(str);
+	write(kol);
+}

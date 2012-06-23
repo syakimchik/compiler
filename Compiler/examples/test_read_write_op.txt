@@ -1,0 +1,18 @@
+int numb;
+string str;
+
+main{
+	// ввод числа с клавиатуры
+	write("Input number: ");
+	read(numb);
+	write("Добавим к введённому числу 5 и получим:");
+	numb = numb+5;
+	write(numb);
+	
+	// ввод строки с клавиатуры
+	write("Input string:");
+	read(str);
+	write("Добавим к строке знак восклицательный знак. Получим в рез-те:");
+	str = str+"!";
+	write(str);
+}

@@ -1,0 +1,14 @@
+string func(string s)
+{
+	string str = replace(s, 'A', 'B');
+	return str;
+}
+
+main{
+	string str;
+	write("Input string:");
+	read(str);
+	string new_string = func(str);
+	write("Заменили в введённой строке все А на В. Результат:");
+	write(new_string);
+}
