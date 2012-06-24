@@ -132,9 +132,66 @@ public class NamesTable {
 			return argumentNamesList;
 		}
 	}
+	
+	public class DelegateName{
+		private String nameDelegate;
+		private String nameFunc;
+		private String type;
+		private int lineDeclaration;
+		private ArrayList<Integer> linesUses = new ArrayList<Integer>();
+		private ArrayList<String> argumentTypesList;
+		private ArrayList<String> argumentNamesList;
+		
+		public DelegateName(String _nameD, String _nameF, String _type, ArrayList<String> _types, ArrayList<String> _names, int _lineDeclaration)
+		{
+			nameDelegate = _nameD;
+			nameFunc = _nameF;
+			type = _type;
+			argumentNamesList = _names;
+			argumentTypesList = _types;
+			lineDeclaration = _lineDeclaration;
+		}
+		
+		public void addLineUses(int line)
+		{
+			linesUses.add(new Integer(line));
+		}
+		
+		public String toString()
+		{
+			return nameFunc+", "+type+", "+lineDeclaration+", "
+					+((linesUses.isEmpty())?"not uses":linesUses);
+		}
+		
+		public String getReturnType()
+		{
+			return type;
+		}
+		
+		public ArrayList<String> getArgumentTypes()
+		{
+			return argumentTypesList;
+		}
+		
+		public ArrayList<String> getArgumentNames()
+		{
+			return argumentNamesList;
+		}
+		
+		public String getNameDelegate()
+		{
+			return nameDelegate;
+		}
+		
+		public String getNameFunction()
+		{
+			return nameFunc;
+		}
+	}
 		
 	private HashMap<String, VariableName> variableNames = new HashMap<String, VariableName>();
 	private HashMap<String, FunctionName> functionNames = new HashMap<String, FunctionName>();
+	private HashMap<String, DelegateName> delegateNames = new HashMap<String, DelegateName>();
 	private Stack<String> errors = new Stack<String>();
 	
 	public String getLastError()
@@ -270,6 +327,32 @@ public class NamesTable {
 		while(!errors.isEmpty())
 		{
 			list.add(errors.pop());
+		}
+	}
+	
+	public boolean isExistDelegate(String name)
+	{
+		boolean rv = delegateNames.containsKey(name);
+		return rv;
+	}
+	
+	public void addDelegate(DelegateName name)
+	{
+		delegateNames.put(name.nameDelegate, name);
+	}
+	
+	public DelegateName getDelegate(String name)
+	{
+		DelegateName _name = delegateNames.get(name);
+		return _name;
+	}
+	
+	public void printDelegate(PrintStream out)
+	{
+		for(String idft : delegateNames.keySet())
+		{
+			DelegateName name = delegateNames.get(idft);
+			out.println(name);
 		}
 	}
 }
