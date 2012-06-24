@@ -89,6 +89,7 @@ functions(type, ident, args, returnType, block) ::=<<
   <block; separator="\n">
   <returnType>
 .end method
+
 >>
 
 delegate(type, ident, args, returnType, block) ::=<<
@@ -98,6 +99,7 @@ delegate(type, ident, args, returnType, block) ::=<<
   <block; separator="\n">
   <returnType>
 .end method
+
 >>
 
 

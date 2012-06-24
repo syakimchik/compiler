@@ -245,7 +245,7 @@ scope{
 }
 	:	'delegate' nameDelegate=ID '{'  type_func {$delegates::delType = $type_func.text; _funcType = $type_func.text; } 
 	                   nameFunc=ID {$program::curBlock = $nameDelegate.text; $delegates::delName=$nameFunc.text; }
-	  '(' arg_del ')' ';'
+	  '(' {$program::curBlock=$nameDelegate.text+$nameFunc.text;} arg_del ')' ';'
 	  //if delegate is not exists in nametable then add her
 	  {
 	    if(!names.isExistDelegate($nameDelegate.text))
@@ -310,7 +310,7 @@ delegate_stmt_decl returns[List<StringTemplate> stList]
 @init{
   $stList = new ArrayList<StringTemplate>();
 }
-  : nameDelegate=ID varName=ID '=' b=ID '=>' 
+  : nameDelegate=ID varName=ID '==>' 
   ('{'
       {
         NamesTable.DelegateName del = names.getDelegate($nameDelegate.text);
@@ -676,6 +676,7 @@ write_stmt
 atom returns[String text, String type]
 	:	ID {
 		$text = $ID.text;
+		//System.out.println($program::curBlock);
 		if(names.isDeclaredVariable($program::curBlock+"."+$ID.text))
 		{
 			NamesTable.VariableName v_type = names.getVariable($program::curBlock+"."+$ID.text);
