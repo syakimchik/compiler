@@ -26,6 +26,21 @@ int func(int j)
 	return k;
 }
 
+delegate F1{
+	int func(int x, int y);
+}
+
+F1 f ==> x+y;
+/*
+*		или возможный вариант
+*		F1 f ==> {
+			int i;
+			i = x+y;
+			return i;
+		};
+*/
+
+
 /**
 	функция main
 **/
@@ -177,4 +192,7 @@ main{
 	write(sum1);
 	sum = sum-sum1;
 	write(sum);
+	
+	int yh = f.func(2,3);
+	write(yh);
 }
