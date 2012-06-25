@@ -432,7 +432,7 @@ statements
 * rule describes assignment operation
 */	
 assign_stmt
-	:	ID '=' expr
+	:	ID '=' (expr
 	{
 		if(names.isDeclaredVariable($program::curBlock+"."+$ID.text))
 		{
@@ -477,6 +477,40 @@ assign_stmt
         errors.add("line "+$ID.line+": unknown variable "+$ID.text);
 		}
 	}
+	| call_delegate
+	{
+	  NamesTable.VariableName var_type = names.getVariable($program::curBlock+"."+$ID.text);
+    String varType = var_type.getType();
+    if(!TypesChecker.checkTypes(varType, $call_delegate.type))
+      errors.add("line "+$ID.line+" : Type mismatch: cannot convert from "+varType+" to "+$call_delegate.type);
+    if(TypesChecker.isInteger(varType))
+    {
+      if(names.isGlobal($ID.text)){
+        $st = %assign_field_int(expression={$call_delegate.st}, programName={programName}, fieldName={$ID.text});
+      } 
+      else{
+        $st = %assign_var_int(expression={$call_delegate.st}, counter={var_type.getNumber()});
+      }
+    }
+    if(TypesChecker.isString(varType))
+    {
+      if(names.isGlobal($ID.text)){
+        $st = %assign_field_string(expression={$call_delegate.st}, programName={programName}, fieldName={$ID.text});
+      } 
+      else{
+        $st = %assign_var_string(expression={$call_delegate.st}, counter={var_type.getNumber()});
+      }
+    }
+    if(TypesChecker.isChar(varType))
+    {
+      if(names.isGlobal($ID.text)){
+        $st = %assign_field_char(expression={$call_delegate.st}, programName={programName}, fieldName={$ID.text});
+      } 
+      else{
+        $st = %assign_var_char(expression={$call_delegate.st}, counter={var_type.getNumber()});
+      }
+    }
+	})
 	;
 	
 /*
