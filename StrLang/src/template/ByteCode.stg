@@ -210,7 +210,7 @@ condition_int(firstValue, secondValue) ::= <<
 imul
 >>
 
-division_integer(firstValue, secondValue) ::= <<
+division_int(firstValue, secondValue) ::= <<
 <firstValue>
 <secondValue>
 idiv

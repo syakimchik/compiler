@@ -195,4 +195,10 @@ main{
 	
 	int yh = f.func(2,3);
 	write(yh);
+	
+	/*
+	*	indexOf(string str, string elem)
+	*/
+	
+	int yh = indexOf(str, n);
 }
