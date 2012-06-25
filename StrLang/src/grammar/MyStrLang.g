@@ -1,7 +1,7 @@
 grammar MyStrLang;
 
 options{
-	language = Java;
+	  language = Java;
     output=template;
 }
 
@@ -10,9 +10,9 @@ options{
     package grammar;
     import java.io.*;
     import namestable.*;
-	import org.antlr.stringtemplate.StringTemplateGroup;
-	import org.antlr.stringtemplate.language.AngleBracketTemplateLexer;
-	import java.io.UnsupportedEncodingException;
+    import org.antlr.stringtemplate.StringTemplateGroup;
+    import org.antlr.stringtemplate.language.AngleBracketTemplateLexer;
+    import java.io.UnsupportedEncodingException;
 }
 
 @lexer::header
@@ -21,26 +21,33 @@ options{
 }
 
 @members{
+    /** name of file */
 		private static String programName = "";
+		/** counter of variables */
 		private int counter;
+		/** counter of label for contlor structure */
 		private int labelCounter;
+		/** name of function*/
 		private String _funcName = "";
+		/** type of function */
 		private String _funcType = "";
-		List<StringTemplate> stDelList;
 		
+		/** NamesTable contains declaration variables, functions and delegations */
 		protected NamesTable names = new NamesTable();
+		/** list of errors */
 		protected ArrayList<String> errors = new ArrayList<String>();
-		protected ArrayList<String> tmpVarNamesList = new ArrayList<String>();
 		
 		public static StringTemplateGroup templateGroup;
+		/** path to file, where contain template */
 		public static final String templateFileName = "D:/Projects/Yapis/StrLang/src/template/ByteCode.stg";	//testing line
 		//public static final String templateFileName = "template/ByteCode.stg";	//line for jar file
 		
 		/**
-		* @param args
+		* @param args of command line
 		*/
 		public static void main(String[] args) throws Exception {
 			templateGroup = new StringTemplateGroup(new FileReader(templateFileName), AngleBracketTemplateLexer.class);
+			/** error checking of input file */
 			if(args.length != 1)
 			{
 				System.out.println("Argument error. Please specify input file name");
@@ -93,26 +100,25 @@ options{
 		}
 }
 
-
+/** beginning rule for parsing grammar */
 program
 scope{
-	String curBlock;
-	List global_variables;
-	List functions;
+	String curBlock;               /** variable to store the name of current block*/
+	List global_variables;         /** list of globals variables */
+	List functions;                /** list of function */
 }
 @init{
 	$program::curBlock = "";
 	$program::global_variables = new ArrayList();
 	$program::functions = new ArrayList();
-	stDelList = new ArrayList<StringTemplate>();
-	//counter = 0;
 }
 	:	global_variables* (functions {$program::functions.add($functions.st);})* 
 	  (delegates {$program::functions.add($delegates.st);})*
 	  {$program::curBlock="main";} mainBlock EOF
 		-> program(global_variables={$program::global_variables}, functions={$program::functions}, program={$mainBlock.st}, programName={programName})
 	;
-	
+
+/** rule describes main block */	
 mainBlock
 @init{
 	counter = 0;
@@ -121,11 +127,18 @@ mainBlock
 	:	'main' '{' block '}'
 		-> mainBlock(block={$block.stList})
 	;
-	
+
+/*
+* rule describes global variables
+* global variables are added to the names table 
+*/	
 global_variables
 	:	{ $program::curBlock = "global";} (global_declaration {$program::global_variables.add($global_declaration.st);})* ';'
 	;
-	
+
+/*
+* description global variables
+*/	
 global_declaration
 	:	type ID
 	{
@@ -139,13 +152,17 @@ global_declaration
 		else
 		{
 			if(names.isDeclaredVariable($program::curBlock+"."+$ID.text))
-				errors.add("line "+$ID.line+": Duplicated variable name "+$ID.text);
+				errors.add("line "+$ID.line+": Duplicate variable name "+$ID.text);
 		}
 	}
 	
 	-> global_declaration(ident={$ID.text}, type={$type.st})
 	;
-	
+
+/*
+* rule describes functions
+* functions are added to the names table
+*/	
 functions
 scope{
 	String funcName;
@@ -166,7 +183,7 @@ scope{
 	:	type_func {$functions::funcType = $type_func.text; _funcType = $type_func.text; } 
 		ID {$program::curBlock = $ID.text; $functions::funcName=$ID.text; _funcName = $ID.text;}
 	'(' arg_list ')'
-	//if fuction is not exists in nametable then add her
+	//if fuction is not exists in nametable then add her, else we add her in list errors
 	{
 		if(!names.isExistFunction($ID.text))
 		{
@@ -183,6 +200,10 @@ scope{
 	-> functions(type={$type_func.st}, ident={$ID.text}, args={$arg_list.stList}, returnType={$type_func.returnType}, block={$block.stList})
 	;
 
+/*
+* rule describes argument list of functions
+* all arguments are added to names table and visible within function 
+*/
 arg_list returns[List<StringTemplate> stList]
 @init{
 	$stList = new ArrayList<StringTemplate>();
@@ -226,6 +247,10 @@ arg_list returns[List<StringTemplate> stList]
  		)?
 	;
 
+/*
+* rule describes delegates
+* rule contain declaration and determination delegates
+*/
 delegates
 scope{
   String delName;
@@ -262,7 +287,11 @@ scope{
 	  delegate_stmt_decl
 	  -> functions(type={$type_func.st}, ident={$nameDelegate.text+$nameFunc.text}, args={$arg_del.stList}, returnType={$type_func.returnType}, block={$delegate_stmt_decl.stList})
 	;
-	
+
+/*
+* rule describes argument list of delegate functions
+* all arguments are added to names table and visible within delegate function 
+*/	
 arg_del returns[List<StringTemplate> stList]
 @init{
   $stList = new ArrayList<StringTemplate>();
@@ -306,6 +335,9 @@ arg_del returns[List<StringTemplate> stList]
     )?
   ;
   
+/*
+* rule describes declaration delegates
+*/
 delegate_stmt_decl returns[List<StringTemplate> stList]
 @init{
   $stList = new ArrayList<StringTemplate>();
@@ -356,7 +388,10 @@ delegate_stmt_decl returns[List<StringTemplate> stList]
 	) ';' 
   ;
   
-	
+
+/*
+* rule describes content of functions
+*/	
 block returns[List<StringTemplate> stList]
 @init{
 	$stList = new ArrayList<StringTemplate>();
@@ -377,7 +412,10 @@ block returns[List<StringTemplate> stList]
 		}
 	}
 	;
-	
+
+/*
+* rule describes elements of functions
+*/	
 statements
 	:	 assign_stmt ';' -> {$assign_stmt.st}
 	|	 decl_stmt ';' -> {$decl_stmt.st}
@@ -389,22 +427,21 @@ statements
 	|  call_func_stmt ';' -> {$call_func_stmt.st}    
 	|  call_delegate ';'           -> {$call_delegate.st}
 	;
-	
+
+/*
+* rule describes assignment operation
+*/	
 assign_stmt
 	:	ID '=' expr
 	{
 		if(names.isDeclaredVariable($program::curBlock+"."+$ID.text))
 		{
 			NamesTable.VariableName var_type = names.getVariable($program::curBlock+"."+$ID.text);
+			//get type of variable
 			String varType = var_type.getType();
+			//check for match types
 			if(!TypesChecker.checkTypes(varType, $expr.type))
 			{
-			  /*if(TypesChecker.checkTypes(varType, "delegate"))
-	      {
-	         //System.out.println("Good");
-	      }
-				else
-				*/
 				  errors.add("line "+$ID.line+": Type mismatch: cannot convert from "+varType+" to "+$expr.type);
 			}
 			if(TypesChecker.isInteger(varType))
@@ -442,6 +479,10 @@ assign_stmt
 	}
 	;
 	
+/*
+* rule describes assignment expression
+* assigning either a variable or expression
+*/
 expr returns [String type]
 	:	
 		firstAssign=mult
@@ -484,7 +525,10 @@ expr returns [String type]
 		)?
 	
 	;
-	
+
+/*
+* rule describes composition or division
+*/	
 mult returns[String type]
   :   first=power {$type=$first.type; $st = $first.st;} 
       ((op='*'| op='/') second=mult
@@ -518,6 +562,9 @@ mult returns[String type]
       )?
   ;
   
+/*
+* rule describes involution
+*/
 power returns[String type]
   :   first=cast_stmt {$type=$first.type; $st =$first.st;}
       (op='^' second=power
@@ -548,7 +595,12 @@ power returns[String type]
 cast_stmt returns[String type]
   :   atom  {$type = $atom.type; $st = $atom.st;}
   ;
-	
+  
+/*
+* rule describes declaration local variables
+* local variable are added to names table depending on current function
+* when your declaration variable can perform assignment operation expression or delegate
+*/	
 decl_stmt
 	:	type ID
 	{
@@ -579,7 +631,6 @@ decl_stmt
 			$st = %declaration_char(counter={counter});
 		}
 		
-		//counter++;
 	}
 	('=' (expr
 	{
@@ -654,7 +705,8 @@ decl_stmt
 	}
 	))?
 	;
-	
+
+/** rule describes print variable in screen */	
 write_stmt
 	:	'write' '(' atom ')' 
 	{
@@ -672,7 +724,10 @@ write_stmt
 		}
 	}
 	;
-	
+
+/*
+* rule describes elements, which you can use in different rules
+*/	
 atom returns[String text, String type]
 	:	ID {
 		$text = $ID.text;
@@ -745,7 +800,11 @@ atom returns[String text, String type]
 	|	replace_firstElem{$type="string";}		-> {$replace_firstElem.st}
 	|	substring_op{$type="string";}			-> {$substring_op.st}
 	;
-	
+
+/*
+* rule describes const char
+* converts a character in the cod of computer
+*/	
 char_c returns[int numb]
 	:	CHAR
 	{	
@@ -762,6 +821,10 @@ char_c returns[int numb]
 		-> const_char(cod={$numb})
 	;
 	
+/** 
+* rule describes read variable from screen
+* reads types: string and int
+*/	
 read_strm
 	:	'read' '(' ID ')'
 	{
@@ -787,7 +850,10 @@ read_strm
 		}
 	}
 	;
-	
+
+/*
+* rule describes operator if..else
+*/	
 if_stmt	
 	:	'if' '(' expression ')' '{' ifBlock=block '}' ('else' '{' elseBlock=block '}')?
 	{
@@ -796,7 +862,10 @@ if_stmt
 		labelCounter = labelCounter+2;
 	}
 	;
-	
+
+/*
+* rule describes operator for
+*/	
 for_stmt
 	:	'for' '(' begin=assign_stmt ';' check=expression ';' end=assign_stmt ')' '{' forBlock=block '}'
 	{
@@ -805,7 +874,10 @@ for_stmt
 		labelCounter = labelCounter+3;
 	}
 	;
-	
+
+/*
+* rule describes operator while
+*/	
 while_stmt
 	:	'while' '(' check=expression ')' '{' whileBlock=block '}'
 	{
@@ -813,7 +885,10 @@ while_stmt
 		labelCounter = labelCounter+3;
 	}
 	;
-	
+
+/*
+* rule describes return variable
+*/	
 return_stmt returns[String value, int line]
 	:
 	(a='return' atom ';' 
@@ -844,14 +919,19 @@ return_stmt returns[String value, int line]
 	)?
 	-> {$atom.st}
 	;
-	
+
+/*
+* rule describes built-in function length
+* function return length of string
+*/	
 length_stmt
 	:	'length' '(' param ')'
 	{
 		$st = %length_string(string={$param.st});
 	}
 	;
-	
+
+/** rule describes parametrs of function length */	
 param returns[String text, String type]
 	:	ID {
 		$text = $ID.text;
@@ -889,14 +969,19 @@ param returns[String text, String type]
 		}
 	|	STRING {$text = $STRING.text; $type = "string";}	-> const_string(value = {$STRING.text})
 	;
-	
+
+/*
+* rule describes built-in function elem
+* function return character of string
+*/	
 elem_stmt
 	:	'elem' '('f_el ',' s_el ')'
 	{
 		$st = %elem_in_string(fValue={$f_el.st}, sValue={$s_el.st});
 	}
 	;
-	
+
+/** rule describes parametrs of different functions */
 f_el
 	:	ID
 	{
@@ -920,7 +1005,8 @@ f_el
 	}
 	|	STRING		-> const_string(value={$STRING.text})
 	;
-	
+
+/** rule describes parametrs of different functions */  	
 s_el
 	:	ID
 	{
@@ -944,7 +1030,11 @@ s_el
 	}
 	|	INT		-> const_int(value={$INT.text})
 	;
-	
+
+/*
+* rule describes built-in function ToString
+* function return string
+*/	
 to_string_stmt
 	:	'ToString' '(' param_str ')'
 	{
@@ -956,7 +1046,8 @@ to_string_stmt
 		}
 	}
 	;
-	
+
+/** rule describes parametrs of function ToString */	
 param_str returns[String t]
 	:	ID
 	{
@@ -998,7 +1089,10 @@ call_func_stmt
 	:	call_func
 		-> {$call_func.st}
 	;
-	
+
+/** 
+* rule describes call functions 
+*/	
 call_func returns[String type, int line]
 scope{
 	String methodName;
@@ -1068,7 +1162,8 @@ scope{
 		$st = %function_call(programName={programName}, funcName={$ID.text}, argTemplates={$arg_call.stList}, argTypes={argTypes}, returnType={returnType});
 	}
 	;
-	
+
+/** rule describes arguments of call functions */	
 arg_call returns[ArrayList<String> argumentTypeList, List<StringTemplate> stList]
 	:
 	{
@@ -1077,7 +1172,11 @@ arg_call returns[ArrayList<String> argumentTypeList, List<StringTemplate> stList
 	}	
 	(a=atom {$argumentTypeList.add($a.type); $stList.add($a.st);} (',' b=atom {$argumentTypeList.add($b.type); $stList.add($b.st);})*)?
 	;
-	
+
+/*
+* rule describes terms of control structures
+* || - logic operation OR
+*/ 	
 expression
 	:	first=and_expression {$st = $first.st;} ('||'  second=expression
 		{
@@ -1087,7 +1186,11 @@ expression
 		}
 	)? 
 	;
-	
+
+/*
+* rule describes terms of control structures
+* && - logic operation AND
+*/	
 and_expression
 	:	first=not_expression {$st = $first.st;} ('&&' second=and_expression
 		{
@@ -1097,7 +1200,11 @@ and_expression
 		}
 	)?
 	;
-	
+
+/*
+* rule describes terms of control structures
+* ! - logic operation NO
+*/	
 not_expression
 	:	'!' first=not_expression
 			{
@@ -1107,6 +1214,10 @@ not_expression
 	|	second=comparison {$st = $second.st;}
 	;
 
+/*
+* rule describes terms of control structures
+* comparison operators
+*/
 comparison
 	:	first=atom op=('<'|'>'|'=='|'!='|'>='|'<=') second=atom
 	{
@@ -1191,28 +1302,44 @@ comparison
 	|	equal_op		-> {$equal_op.st}
 	|	contain_op		-> {$contain_op.st}
 	;
-	
+
+/*
+* rule describes built-in function equals
+* function return bool
+*/	
 equal_op
 	:	'equals' '(' first=f_el ',' second=f_el ')'
 	{
 		$st = %equal_operation(fValue={$first.st}, sValue={$second.st});
 	}
 	;
-	
+
+/*
+* rule describes built-in function contains
+* function return bool
+*/  	
 contain_op
 	:	'contains' '(' first=f_el ',' second=f_el ')'
 	{
 		$st = %contain_operation(fValue={$first.st}, sValue={$second.st});
 	}
 	;
-	
+
+/*
+* rule describes built-in function indexOf
+* function return int
+*/  	
 indexOf_stmt
 	:	'indexOf' '(' first=f_el ',' second=f_el')'
 	{
 		$st = %indexOf_int(fValue={$first.st}, sValue={$second.st});
 	}
 	;
-	
+
+/*
+* rule describes built-in function replace
+* function return string
+*/  	
 replace_op
 	:	'replace' '(' f_el ',' first=char_param ',' second=char_param ')'
 	{
@@ -1244,6 +1371,10 @@ char_param
 	|	char_c		->{$char_c.st}
 	;
 	
+/*
+* rule describes built-in function replaceFirst
+* function return string
+*/  
 replace_firstElem
 	:	'replaceFirst' '(' first=f_el ',' second=f_el ',' third=f_el ')'
 	{
@@ -1251,6 +1382,10 @@ replace_firstElem
 	}
 	;
 	
+/*
+* rule describes built-in function subString
+* function return string
+*/  	
 substring_op
 	:	'subString' '(' first=f_el ',' second=s_el')'
 	{
@@ -1262,12 +1397,14 @@ substring_op
 	}
 	;
 	
+/** rule describes type of variables */	
 type returns[StringTemplate returnType]	
 	:	'int' {$returnType = %return_int();} -> type_int()
 	| 	'string' {$returnType = %return_string();} ->type_string()
 	| 	'char' {$returnType = %return_string();} ->type_char()
 	;
-	
+
+/** rule describes type of functions */	
 type_func returns[StringTemplate returnType]
 	:	
 	|	'int' {$returnType = %return_int();} -> type_int()
@@ -1275,7 +1412,10 @@ type_func returns[StringTemplate returnType]
 	| 	'char' {$returnType = %return_string();} ->type_char()
 	|	'void' {$returnType = %return_void();} -> type_void()
 	;
-	  
+
+/** 
+* rule describes call delegates 
+*/	  
 call_delegate returns[String type, int line]
 scope{
   String methodName;
@@ -1349,17 +1489,29 @@ scope{
     
   }
   ;
-	  
+
+/** 
+* rule describes name of variables 
+*/	  
 ID  	
 	: 	('a'..'z'|'A'..'Z'|'_') ('a'..'z'|'A'..'Z'|'0'..'9'|'_')*
 	;
-	
+
+/** 
+* rule describes type int 
+*/
 INT	:	'-'? ('0'..'9')+
 	;
-	
+
+/** 
+* rule describes type char 
+*/	
 CHAR	:	'\'' ('a'..'z' | 'A'..'Z' | '0'..'9'|'\\n' ) '\''
 	;
 	
+/** 
+* rule describes type string 
+*/
 STRING	:	'"' ~'"'* '"'
 	;
 
