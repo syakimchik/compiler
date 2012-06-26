@@ -1,0 +1,23 @@
+
+main{
+	string str;
+	write("Input string:");
+	read(str);
+	
+	//оператор if
+	if(contains(str, "Hello"))
+	{
+		write("Строка содержит слово Hello");
+	}
+	else{
+		write("Строка не содержит слово Hello");
+	}
+	
+	if(equals(str, "Hello"))
+	{
+		write("Строки совпадают");
+	}
+	else{
+		write("Строки не совпадают");
+	}
+}

@@ -1,0 +1,207 @@
+/**
+	@второй пример
+	типы данных, имеющиес€ в €зыке:
+		char
+		string
+		int
+		void
+**/
+
+/**
+	объ€вление глобальных переменных
+**/
+
+string str;
+string str;
+char b;
+int kol;
+
+/**
+	глобальна€ функци€
+**/
+int func(int j, int j)
+{
+	int k;
+	k = j+15;
+	return k;
+}
+
+delegate F1{
+	int func(int x, int y);
+}
+
+F1 f ==> x+y;
+/*
+*		или возможный вариант
+*		F1 f ==> {
+			int i;
+			i = x+y;
+			return i;
+		};
+*/
+
+
+/**
+	функци€ main
+**/
+
+main{
+	// присваивание функции переменной
+	int i = func(10);
+	/*
+	*	вывод на экран
+	* 	¬арианты, какие типы может принимать ф-€
+	*	write(int numb);
+	*	write(string str);
+	*	write(char ch);
+	*/
+	write(i);
+	
+	// присваивание значени€ глобальным переменным
+	b = 'b';
+	s = "Hello world";
+	
+	write("Globals:");
+	write(b);
+	write(s);
+	
+	write("¬ведите строку:");
+	// чтение строки с консоли
+	string text;
+	read(text);
+	write(text); 
+	
+	text = "Hello "+"Java";
+	
+	if(contains(text, "Hello"))						// операци€ провер€ет содержит ли данна€ строка указанную строку
+	{
+		write("Yes. Contains");
+	}
+	else{
+	
+		if(equals(str,"Hello"))					// операци€ провер€ет равна ли данна€ строка указанной строке
+		{
+			int i1;
+			i1 =14;
+			write(i1);
+		}
+	}
+	
+	string hello_str = "Hello";
+	/*
+	*	equals(string firstStr, string secondStr)
+	*/
+	if(equals(hello_str,"Hello"))					// операци€ провер€ет равна ли данна€ строка указанной строке
+	{
+		//int i1;			// нельз€ объ€вить, т.к. переменна€ была объ€влена выше, даже если в блоке if, она используетс€ во всЄм блоке main
+		i1 =14;
+		i1 = 14+16;
+		write("Yes. Equals!");
+		write(i1);
+	}
+	
+	if(!equals(s,"world") && !equals(s,"Hello"))	// && - обозначает "и". «нак "||" - обазначает или, знак ! - обозначает не
+	{
+		write("No equals");
+	}
+	
+	string hg;
+	hg = "strABC";
+	
+	/*
+	*	вариант использовани€ оператора if
+	*	можно сравнивать любые одинаковые типы данных(т.е. int, string, char)
+	*	оператора сравнени€, которые можно использовать: >,<,>=,<=,==,!=
+	*/
+	if(hg=="strABC")		
+	{
+		write("Good");
+	}
+	
+	/*
+	*	ещЄ о встроенных функци€х
+	*/
+	
+	/*
+	*	subString(string str, int index)
+	*	или
+	*	subString(string str, int indexBegin, int indexEnd)
+	*/
+	string subStr;
+	subStr = subString(hg, 2);				// результат - подстрока ABC. поиск осуществл€етс€ от заданного элемента до конца строки.
+	subStr = subString(hg, 2, 4);			// результат - подстрока AB. указываетс€ индекс начала и конца.
+	
+	/*
+	*	replace(string str, char a, char b)
+	*	replaceFirst(string str, string A, string B)
+	*/
+	subStr = replace(hg,'A', 'B');			//замен€ет в строке все A на B
+	subStr = replaceFirst(hg, "A", "B");		//замен€ет в строке первый найденный элемент
+	
+	/**
+		цикл for
+		@ elem(string str, int i) - функци€, преобразовывабща€ i-ы элемент в char
+		  length(string str) - функци€, определ€юща€ длину строки
+	**/
+	
+	int k;
+	k=0;
+	int j = 0;
+	char ch;
+	ch = elem(text,j);
+	write(ch);
+	
+	for(j=0; j<length(text); j=j+1)
+	{
+		if(contains(text, "l"))			//подсчЄт сколько букв в в строке "Hello world"
+		{
+			k = k+1;
+		}
+	}
+	
+	write(k);
+	
+	/**
+	*	цикл while
+	**/
+	str = "acdnqqqqn";
+	i=0;
+	while(elem(str,i)!='n')
+	{
+		char v;
+		v = elem(str,i);
+		string v_str;
+		v_str = ToString(v);
+		write(v_str);
+		i=i+1;
+	}
+	write("KOLICHESTVO:");
+	write(i);
+	
+	write("Arifmetics:");
+	int sum = k+13;
+	int sum1;
+	write(sum);
+	/*
+	*	от числа 3 отнимаем -3
+	*	¬Ќ»ћјЌ»≈. если выполнить данный код kol=3-3, тогда работать не будет, не €вно опередела операци€ разности,
+	*	поэтому необходимо данный код записывать так kol=3 - 3, дл€ €вного опеделени€ в правиле, раздел€€ прабелами числа
+	*/
+	kol = 3 - -3;						
+	sum1 = kol+func(k);
+	write(sum1);
+	sum = sum-sum1;
+	write(sum);
+	
+	int yh = f.func(2,3);
+	write(yh);
+	
+	/*
+	*	indexOf(string str, string elem)
+	*/
+	
+	yh = indexOf(str, "n");
+	
+	yh = f.func(10,10);
+	write(yh);
+}

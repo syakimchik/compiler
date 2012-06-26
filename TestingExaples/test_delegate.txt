@@ -1,0 +1,17 @@
+delegate A{
+	string kol(int h);
+}
+
+A del ==> {
+	string str;
+	str = "число"+ToString(h);
+	return str;
+};
+
+main{
+	int k;
+	write("¬ведите число:");
+	read(k);
+	string str = del.kol(k);
+	write(str);
+}
