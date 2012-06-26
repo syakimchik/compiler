@@ -111,6 +111,7 @@ scope{
 	$program::curBlock = "";
 	$program::global_variables = new ArrayList();
 	$program::functions = new ArrayList();
+	counter = 0;
 }
 	:	global_variables* (functions {$program::functions.add($functions.st);})* 
 	  (delegates {$program::functions.add($delegates.st);})*
@@ -121,7 +122,7 @@ scope{
 /** rule describes main block */	
 mainBlock
 @init{
-	counter = 0;
+	//counter = 0;
 	labelCounter = 0;
 }
 	:	'main' '{' block '}'
@@ -178,7 +179,7 @@ scope{
 	$functions::funcArgNames = new ArrayList<String>();
 	$functions::funcArgTypes = new ArrayList<String>();
 	labelCounter = 0;
-	counter=0;
+	//counter=0;
 }
 	:	type_func {$functions::funcType = $type_func.text; _funcType = $type_func.text; } 
 		ID {$program::curBlock = $ID.text; $functions::funcName=$ID.text; _funcName = $ID.text;}
@@ -266,11 +267,10 @@ scope{
   $delegates::delArgNames = new ArrayList<String>();
   $delegates::delArgTypes = new ArrayList<String>();
   labelCounter = 0;
-  counter=0;
 }
 	:	'delegate' nameDelegate=ID '{'  type_func {$delegates::delType = $type_func.text; _funcType = $type_func.text; } 
 	                   nameFunc=ID {$program::curBlock = $nameDelegate.text; $delegates::delName=$nameFunc.text; }
-	  '(' {$program::curBlock=$nameDelegate.text+$nameFunc.text;} arg_del ')' ';'
+	  '(' {$program::curBlock=$nameDelegate.text;} arg_del ')' ';'
 	  //if delegate is not exists in nametable then add her
 	  {
 	    if(!names.isExistDelegate($nameDelegate.text))
@@ -284,8 +284,6 @@ scope{
 	    }
 	  }
 	  '}'
-	  delegate_stmt_decl
-	  -> functions(type={$type_func.st}, ident={$nameDelegate.text+$nameFunc.text}, args={$arg_del.stList}, returnType={$type_func.returnType}, block={$delegate_stmt_decl.stList})
 	;
 
 /*
@@ -335,77 +333,25 @@ arg_del returns[List<StringTemplate> stList]
     )?
   ;
   
-/*
-* rule describes declaration delegates
-*/
-delegate_stmt_decl returns[List<StringTemplate> stList]
-@init{
-  $stList = new ArrayList<StringTemplate>();
-}
-  : nameDelegate=ID varName=ID '==>' 
-  ('{'
-      {
-        NamesTable.DelegateName del = names.getDelegate($nameDelegate.text);
-        String t = del.getNameFunction();
-        $program::curBlock = t;}
-    block {$stList = $block.stList;} '}'
-	  {    
-	    if(!names.isExistDelegate($nameDelegate.text))
-	        errors.add("line "+$nameDelegate.line+": unknown delegate "+$nameDelegate.text);
-	    if(!names.isDeclaredVariable("global."+$varName.text))
-	    {
-	      NamesTable.VariableName var = names.new VariableName("global."+$varName.text, $nameDelegate.text, $varName.line);
-	      var.setNumber(counter);
-        names.addVariable(var);
-        counter++;
-	    }
-	    else
-	    {
-	      if(names.isDeclaredVariable("global."+$varName.text))
-	        errors.add("line "+$varName.line+": Duplicated variable name "+$varName.text);
-	    } 
-	    
-	  }
-	|  expr 
-	    {
-	      $stList.add($expr.st);
-	      if(!names.isExistDelegate($nameDelegate.text))
-          errors.add("line "+$nameDelegate.line+": unknown delegate "+$nameDelegate.text);
-	      if(!names.isDeclaredVariable("global."+$varName.text))
-	      {   
-	        NamesTable.VariableName var = names.new VariableName("global."+$varName.text, $nameDelegate.text, $varName.line);
-	        var.setNumber(counter);
-	        names.addVariable(var);
-	        counter++;
-	      }
-	      else
-	      {
-	        if(names.isDeclaredVariable("global."+$varName.text))
-	          errors.add("line "+$varName.line+": Duplicated variable name "+$varName.text);
-	      }
-	      $st = $expr.st;
-	    }
-	) ';' 
-  ;
-  
 
 /*
 * rule describes content of functions
 */	
-block returns[List<StringTemplate> stList]
+block returns[List<StringTemplate> stList, String type]
 @init{
 	$stList = new ArrayList<StringTemplate>();
+	$type = "void";
 }
-	:	(statements {$stList.add($statements.st);})* (return_stmt {$stList.add($return_stmt.st);})
+	:	(statements {$stList.add($statements.st);})* (return_stmt {$stList.add($return_stmt.st); $type=$return_stmt.type;})
 	{		
 			if($program::curBlock!="main"){
 			  String name = $program::curBlock;
 			  if(names.isExistFunction(name)){
 					NamesTable.FunctionName func = names.getFunction(name);
-					String type = func.getReturnType();
+					String _type = func.getReturnType();
 					if($return_stmt.value==null)
 					{
-						if(!type.equals("void"))
+						if(!_type.equals("void"))
 							errors.add("line "+$return_stmt.line+": Not found the keyword return in function with name "+name);
 					}
 				}
@@ -482,32 +428,32 @@ assign_stmt
 	  NamesTable.VariableName var_type = names.getVariable($program::curBlock+"."+$ID.text);
     String varType = var_type.getType();
     if(!TypesChecker.checkTypes(varType, $call_delegate.type))
-      errors.add("line "+$ID.line+" : Type mismatch: cannot convert from "+varType+" to "+$call_delegate.type);
+      errors.add("line "+$ID.line+": Type mismatch: cannot convert from "+varType+" to "+$call_delegate.type);
     if(TypesChecker.isInteger(varType))
     {
       if(names.isGlobal($ID.text)){
-        $st = %assign_field_int(expression={$call_delegate.st}, programName={programName}, fieldName={$ID.text});
+        $st = %assign_field_int(expression={$call_delegate.stList}, programName={programName}, fieldName={$ID.text});
       } 
       else{
-        $st = %assign_var_int(expression={$call_delegate.st}, counter={var_type.getNumber()});
+        $st = %assign_var_int(expression={$call_delegate.stList}, counter={var_type.getNumber()});
       }
     }
     if(TypesChecker.isString(varType))
     {
       if(names.isGlobal($ID.text)){
-        $st = %assign_field_string(expression={$call_delegate.st}, programName={programName}, fieldName={$ID.text});
+        $st = %assign_field_string(expression={$call_delegate.stList}, programName={programName}, fieldName={$ID.text});
       } 
       else{
-        $st = %assign_var_string(expression={$call_delegate.st}, counter={var_type.getNumber()});
+        $st = %assign_var_string(expression={$call_delegate.stList}, counter={var_type.getNumber()});
       }
     }
     if(TypesChecker.isChar(varType))
     {
       if(names.isGlobal($ID.text)){
-        $st = %assign_field_char(expression={$call_delegate.st}, programName={programName}, fieldName={$ID.text});
+        $st = %assign_field_char(expression={$call_delegate.stList}, programName={programName}, fieldName={$ID.text});
       } 
       else{
-        $st = %assign_var_char(expression={$call_delegate.st}, counter={var_type.getNumber()});
+        $st = %assign_var_char(expression={$call_delegate.stList}, counter={var_type.getNumber()});
       }
     }
 	})
@@ -712,28 +658,28 @@ decl_stmt
 	  if(TypesChecker.isInteger(varType))
     {
       if(names.isGlobal($ID.text)){
-        $st = %assign_field_int(expression={$call_delegate.st}, programName={programName}, fieldName={$ID.text});
+        $st = %assign_field_int(expression={$call_delegate.stList}, programName={programName}, fieldName={$ID.text});
       } 
       else{
-        $st = %assign_var_int(expression={$call_delegate.st}, counter={var_type.getNumber()});
+        $st = %assign_var_int(expression={$call_delegate.stList}, counter={var_type.getNumber()});
       }
     }
     if(TypesChecker.isString(varType))
     {
       if(names.isGlobal($ID.text)){
-        $st = %assign_field_string(expression={$call_delegate.st}, programName={programName}, fieldName={$ID.text});
+        $st = %assign_field_string(expression={$call_delegate.stList}, programName={programName}, fieldName={$ID.text});
       } 
       else{
-        $st = %assign_var_string(expression={$call_delegate.st}, counter={var_type.getNumber()});
+        $st = %assign_var_string(expression={$call_delegate.stList}, counter={var_type.getNumber()});
       }
     }
     if(TypesChecker.isChar(varType))
     {
       if(names.isGlobal($ID.text)){
-        $st = %assign_field_char(expression={$call_delegate.st}, programName={programName}, fieldName={$ID.text});
+        $st = %assign_field_char(expression={$call_delegate.stList}, programName={programName}, fieldName={$ID.text});
       } 
       else{
-        $st = %assign_var_char(expression={$call_delegate.st}, counter={var_type.getNumber()});
+        $st = %assign_var_char(expression={$call_delegate.stList}, counter={var_type.getNumber()});
       }
     }
 	}
@@ -923,10 +869,11 @@ while_stmt
 /*
 * rule describes return variable
 */	
-return_stmt returns[String value, int line]
+return_stmt returns[String value, int line, String type]
 	:
 	(a='return' atom ';' 
 	{	
+	  $type = $atom.type;
 		if($program::curBlock=="main")
 			errors.add("line "+$a.line+": function main may not contain keyword return");
 		$value = $atom.text;
@@ -1450,77 +1397,131 @@ type_func returns[StringTemplate returnType]
 /** 
 * rule describes call delegates 
 */	  
-call_delegate returns[String type, int line]
+call_delegate returns[String type, int line, List<StringTemplate> stList]
 scope{
   String methodName;
 }
 @init{
   List<StringTemplate> argTypes = new ArrayList<StringTemplate>();
+  $stList = new ArrayList<StringTemplate>();
 }
-  : nameVar=ID'.'funcName=ID '(' arg_call ')'
-  {
-    if(!names.isDeclaredVariable("global."+$nameVar.text))
-      errors.add("line "+$nameVar.line+" unknown variable "+$nameVar.text);
-    String nameDelegate = "";
-    try{
-	    NamesTable.VariableName del = names.getVariable($nameVar.text);
-	    nameDelegate = del.getType(); 
-	  }
-	  catch(NullPointerException e){}
-    if(!names.isExistFunction(nameDelegate+$funcName.text))
-      errors.add("line "+$funcName.line+" unknown variable "+nameDelegate+$funcName.text);
-    else
+  : 
+    '[' delegatename=ID {$program::curBlock=$delegatename.text;} ':' expr ']' '(' {$program::curBlock="main";} arg_call ')'
     {
-      ArrayList<String> list = null;
-	    if($arg_call.argumentTypeList==null)
-	      list = new ArrayList<String>();
-	    else
-	      list = $arg_call.argumentTypeList;
-	    if(!names.checkCallFunction(nameDelegate+$funcName.text, list, $nameVar.line))
-	    {
-	      names.getAllErrors(errors);
-	    }
-	    NamesTable.FunctionName func = names.getFunction(nameDelegate+$funcName.text);
-      $type = func.getReturnType();
-      
-      for(String arg_type: $arg_call.argumentTypeList)
-	    {
-	      if(TypesChecker.isInteger(arg_type))
+      if(names.isExistDelegate($delegatename.text))
+      {
+        NamesTable.DelegateName delName = names.getDelegate($delegatename.text);
+        String functionName = delName.getNameFunction();
+        NamesTable.FunctionName funcName = names.getFunction(functionName);
+        $line = $delegatename.line;
+        $type = $expr.type;
+        if(!names.checkCallFunction(functionName, $arg_call.argumentTypeList, $line))
 	      {
-	        argTypes.add(%type_int());
+	        names.getAllErrors(errors);
 	      }
-	      if(TypesChecker.isString(arg_type))
-	      {
-	        argTypes.add(%type_string());
-	      }
-	      if(TypesChecker.isChar(arg_type))
-	      {
-	        argTypes.add(%type_char());
-	      }
-	        
-	    }
-	    
-	    StringTemplate returnType = new StringTemplate();
-	    
-	    if(TypesChecker.isInteger($type))
-	    {
-	      returnType = %type_int();
-	    }
-	    if(TypesChecker.isString($type))
-	    {
-	      returnType = %type_string();
-	    }
-	    if(TypesChecker.isChar($type))
-	    {
-	      returnType = %type_char();
-	    }
-	    if(TypesChecker.isVoid($type))
-	    {
-	      returnType = %type_void();
-	    }
-	    $st = %function_call(programName={programName}, funcName={nameDelegate+$funcName.text}, argTemplates={$arg_call.stList}, argTypes={argTypes}, returnType={returnType});
-    }  
-    
+	      ArrayList<String> argNames = new ArrayList<String>();
+        argNames = funcName.getArgumentNames();
+        List<StringTemplate> assign_list = $arg_call.stList;
+        for(String arg_name: argNames)
+        {
+            NamesTable.VariableName varName = names.getVariable($delegatename.text+"."+arg_name);
+            int _counter = varName.getNumber();
+            if(TypesChecker.isString(varName.getType())){
+              StringTemplate t = %declaration_string(counter={_counter});
+              $stList.add(t);
+              for(StringTemplate _t: assign_list)
+              {
+                StringTemplate t_assign= %assign_var_string(expression={_t}, counter={_counter});
+                $stList.add(t_assign);
+                assign_list.remove(_t);
+                break;
+              }
+            }
+            if(TypesChecker.isInteger(varName.getType())){
+	            StringTemplate t = %declaration_int(counter={_counter});
+	            $stList.add(t);
+	            for(StringTemplate _t: assign_list)
+			        {
+			          StringTemplate t_assign= %assign_var_int(expression={_t}, counter={_counter});
+			          $stList.add(t_assign);
+			          assign_list.remove(_t);
+			          break;
+			        }
+			      }
+			      
+        }
+        $stList.add($expr.st);        
+      }
+      else
+        errors.add("line "+$delegatename.line+" unknown variable "+$delegatename.text);
+      $program::curBlock="main";
+    }
+  | '[' delegatename=ID {$program::curBlock=$delegatename.text;} ':' '{' block '}' ']' '(' {$program::curBlock="main";} arg_call ')'
+  {
+    if(names.isExistDelegate($delegatename.text))
+    {
+        NamesTable.DelegateName delName = names.getDelegate($delegatename.text);
+        String functionName = delName.getNameFunction();
+        NamesTable.FunctionName funcName = names.getFunction(functionName);
+        $line = $delegatename.line;
+        $type = funcName.getReturnType();
+        if(!TypesChecker.checkTypes($type, $block.type))
+        {
+          errors.add("line "+$line+": delegate return "+$block.type+", but search type "+$type);
+        }
+        if(!names.checkCallFunction(functionName, $arg_call.argumentTypeList, $line))
+        {
+          names.getAllErrors(errors);
+        }
+        ArrayList<String> argNames = new ArrayList<String>();
+        argNames = funcName.getArgumentNames();
+        List<StringTemplate> assign_list = $arg_call.stList;
+        for(String arg_name: argNames)
+        {
+            NamesTable.VariableName varName = names.getVariable($delegatename.text+"."+arg_name);
+            int _counter = varName.getNumber();
+            if(TypesChecker.isString(varName.getType())){
+              StringTemplate t = %declaration_string(counter={_counter});
+              $stList.add(t);
+              for(StringTemplate _t: assign_list)
+              {
+                StringTemplate t_assign= %assign_var_string(expression={_t}, counter={_counter});
+                $stList.add(t_assign);
+                assign_list.remove(_t);
+                break;
+              }
+            }
+            if(TypesChecker.isInteger(varName.getType())){
+              StringTemplate t = %declaration_int(counter={_counter});
+              $stList.add(t);
+              for(StringTemplate _t: assign_list)
+              {
+                StringTemplate t_assign= %assign_var_int(expression={_t}, counter={_counter});
+                $stList.add(t_assign);
+                assign_list.remove(_t);
+                break;
+              }
+            }
+            
+            if(TypesChecker.isChar(varName.getType())){
+              StringTemplate t = %declaration_char(counter={_counter});
+              $stList.add(t);
+              for(StringTemplate _t: assign_list)
+              {
+                StringTemplate t_assign= %assign_var_char(expression={_t}, counter={_counter});
+                $stList.add(t_assign);
+                assign_list.remove(_t);
+                break;
+              }
+            }
+            
+        }
+        for(StringTemplate t: $block.stList)
+          $stList.add(t);
+    }
+    else
+        errors.add("line "+$delegatename.line+" unknown variable "+$delegatename.text);
+    $program::curBlock="main";
   }
   ;
 

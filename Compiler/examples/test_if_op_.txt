@@ -1,0 +1,35 @@
+
+main{
+	string str;
+	write("Input string:");
+	read(str);
+	
+	//оператор if
+	if(contains(str, "Hello"))
+	{
+		write("Строка содержит слово Hello");
+	}
+	else{
+		write("Строка не содержит слово Hello");
+	}
+	
+	if(equals(str, "Hello"))
+	{
+		write("Строки совпадают");
+	}
+	else{
+		write("Строки не совпадают");
+	}
+	
+	int a;
+	write("Введите число:");
+	read(a);
+	
+	if(a>10 && a<15)
+	{
+		write("Число от 10 до 15");
+	}
+	else{
+		write("число меньше 10 и больше 15");
+	}
+}

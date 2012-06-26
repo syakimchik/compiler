@@ -1,0 +1,9 @@
+delegate F1{
+	string func(string x, string y);
+}
+
+main
+{
+	string a = [F1: x+y] ("19","92");
+	write(a);
+}

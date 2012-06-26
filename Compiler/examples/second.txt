@@ -12,19 +12,34 @@
 **/
 
 string str;
-string s;
+string str;
 char b;
 int kol;
 
 /**
 	глобальная функция
 **/
-int func(int j)
+int func(int j, int j)
 {
 	int k;
 	k = j+15;
 	return k;
 }
+
+delegate F1{
+	int func(int x, int y);
+}
+
+F1 f ==> x+y;
+/*
+*		или возможный вариант
+*		F1 f ==> {
+			int i;
+			i = x+y;
+			return i;
+		};
+*/
+
 
 /**
 	функция main
@@ -177,4 +192,16 @@ main{
 	write(sum1);
 	sum = sum-sum1;
 	write(sum);
+	
+	int yh = f.func(2,3);
+	write(yh);
+	
+	/*
+	*	indexOf(string str, string elem)
+	*/
+	
+	yh = indexOf(str, "n");
+	
+	yh = f.func(10,10);
+	write(yh);
 }

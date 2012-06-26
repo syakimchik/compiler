@@ -1,0 +1,13 @@
+delegate F1{
+	int func(int x, string y);
+}
+
+main{
+	string a;
+	a = [F1: {
+			string str;
+			str = ToString(x)+y;
+			return str;
+			}] (19,"92");
+	write(a);
+}
