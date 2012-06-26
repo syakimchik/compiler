@@ -1,0 +1,21 @@
+delegate F1{
+	string func(string x, string y);
+}
+
+void func()
+{
+	string a = [F1: x+y] (ToString(12),ToString(15));
+	write(a);
+}
+
+main
+{
+	string a = [F1: x+y] ("19","92");
+	write(a);
+	string b = [F1: { string s;
+						s="I born in "+x+y;
+						 return s; }] ("19","91");
+	write(b);
+	
+	func();
+}
