@@ -92,28 +92,6 @@ functions(type, ident, args, returnType, block) ::=<<
 
 >>
 
-delegate(type, ident, args, returnType, block) ::=<<
-.method public static <ident>(<args:{<it.type>}>)<type>
-.limit locals 100
-.limit stack 20
-  <block; separator="\n">
-  <returnType>
-.end method
-
->>
-
-
-delegate_decl(counter) ::=<<
-aconst_null
-astore <counter>
->>
-
-delegate_assign(labelNumb, block) ::=<<
-goto label98:
-label99:
-<block; separator="\n">
->>
-
 parameter(type, ident) ::= "<type> <ident>"
 
 function_call(programName, funcName, argTemplates, argTypes, returnType) ::=<<
@@ -145,32 +123,32 @@ ireturn
 //--------------------------------------------------------------------------------------------------
 
 assign_var_int(expression, counter) ::= <<
-<expression>
+<expression; separator="\n">
 istore <counter>
 >>
 
 assign_field_int(expression, programName, fieldName) ::= <<
-<expression>
+<expression; separator="\n">
 putstatic <programName>/<fieldName>field I
 >>
 
 assign_var_char(expression, counter) ::= <<
-<expression>
+<expression; separator="\n">
 istore <counter>
 >>
 
 assign_field_char(expression, programName, fieldName) ::= <<
-<expression>
+<expression; separator="\n">
 putstatic <programName>/<fieldName>field C
 >>
 
 assign_var_string(expression, counter) ::= <<
-<expression>
+<expression; separator="\n">
 astore <counter>
 >>
 
 assign_field_string(expression, programName, fieldName) ::= <<
-<expression>
+<expression; separator="\n">
 putstatic <programName>/<fieldName>field Ljava/lang/String; 
 >>
 

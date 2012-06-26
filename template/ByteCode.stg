@@ -89,6 +89,7 @@ functions(type, ident, args, returnType, block) ::=<<
   <block; separator="\n">
   <returnType>
 .end method
+
 >>
 
 parameter(type, ident) ::= "<type> <ident>"
@@ -122,32 +123,32 @@ ireturn
 //--------------------------------------------------------------------------------------------------
 
 assign_var_int(expression, counter) ::= <<
-<expression>
+<expression; separator="\n">
 istore <counter>
 >>
 
 assign_field_int(expression, programName, fieldName) ::= <<
-<expression>
+<expression; separator="\n">
 putstatic <programName>/<fieldName>field I
 >>
 
 assign_var_char(expression, counter) ::= <<
-<expression>
+<expression; separator="\n">
 istore <counter>
 >>
 
 assign_field_char(expression, programName, fieldName) ::= <<
-<expression>
+<expression; separator="\n">
 putstatic <programName>/<fieldName>field C
 >>
 
 assign_var_string(expression, counter) ::= <<
-<expression>
+<expression; separator="\n">
 astore <counter>
 >>
 
 assign_field_string(expression, programName, fieldName) ::= <<
-<expression>
+<expression; separator="\n">
 putstatic <programName>/<fieldName>field Ljava/lang/String; 
 >>
 
@@ -179,6 +180,27 @@ sub_int(firstValue, secondValue) ::= <<
 <firstValue>
 <secondValue>
 isub 
+>>
+
+condition_int(firstValue, secondValue) ::= <<
+<firstValue>
+<secondValue>
+imul
+>>
+
+division_int(firstValue, secondValue) ::= <<
+<firstValue>
+<secondValue>
+idiv
+>>
+
+power_int(firstValue, secondValue) ::= <<
+<firstValue>
+i2d
+<secondValue>
+i2d
+invokestatic java/lang/Math/pow(II)D
+d2i
 >>
 
 //--------------------------------------------------------------------------------------------------
