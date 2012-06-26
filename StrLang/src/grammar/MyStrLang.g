@@ -113,8 +113,7 @@ scope{
 	$program::functions = new ArrayList();
 	counter = 0;
 }
-	:	global_variables* (functions {$program::functions.add($functions.st);})* 
-	  (delegates {$program::functions.add($delegates.st);})*
+	:	global_variables* (delegates {$program::functions.add($delegates.st);})* (functions {$program::functions.add($functions.st);})* 
 	  {$program::curBlock="main";} mainBlock EOF
 		-> program(global_variables={$program::global_variables}, functions={$program::functions}, program={$mainBlock.st}, programName={programName})
 	;
@@ -1017,8 +1016,12 @@ s_el
 * function return string
 */	
 to_string_stmt
-	:	'ToString' '(' param_str ')'
+	:	line='ToString' '(' param_str ')'
 	{
+	  if(TypesChecker.isString($param_str.t))
+	  {
+	      errors.add("line "+$line.line+": Can't convert string to string");
+	  }
 		if(TypesChecker.isInteger($param_str.t)){
 			$st = %int_to_string(value={$param_str.st});
 		}
@@ -1402,11 +1405,11 @@ scope{
   String methodName;
 }
 @init{
-  List<StringTemplate> argTypes = new ArrayList<StringTemplate>();
   $stList = new ArrayList<StringTemplate>();
+  $call_delegate::methodName="";
 }
   : 
-    '[' delegatename=ID {$program::curBlock=$delegatename.text;} ':' expr ']' '(' {$program::curBlock="main";} arg_call ')'
+    '[' {$call_delegate::methodName = $program::curBlock;} delegatename=ID {$program::curBlock=$delegatename.text;} ':' expr ']' '(' {$program::curBlock=$call_delegate::methodName;} arg_call ')'
     {
       if(names.isExistDelegate($delegatename.text))
       {
@@ -1454,9 +1457,9 @@ scope{
       }
       else
         errors.add("line "+$delegatename.line+" unknown variable "+$delegatename.text);
-      $program::curBlock="main";
+      $program::curBlock=$call_delegate::methodName;
     }
-  | '[' delegatename=ID {$program::curBlock=$delegatename.text;} ':' '{' block '}' ']' '(' {$program::curBlock="main";} arg_call ')'
+  | '[' {$call_delegate::methodName = $program::curBlock;} delegatename=ID {$program::curBlock=$delegatename.text;} ':' '{' block '}' ']' '(' {$program::curBlock=$call_delegate::methodName;} arg_call ')'
   {
     if(names.isExistDelegate($delegatename.text))
     {
@@ -1521,7 +1524,7 @@ scope{
     }
     else
         errors.add("line "+$delegatename.line+" unknown variable "+$delegatename.text);
-    $program::curBlock="main";
+    $program::curBlock=$call_delegate::methodName;
   }
   ;
 
