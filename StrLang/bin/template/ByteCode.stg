@@ -1,0 +1,633 @@
+group ByteCode;
+
+program(global_variables, functions, program, programName) ::= <<
+.class public <programName>
+.super java/lang/Object
+  <global_variables>
+  <functions>
+	<program>
+>>
+
+mainBlock(block) ::= <<
+.method public static main([Ljava/lang/String;)V
+.limit locals 100
+.limit stack 20
+  <block; separator="\n">
+  return
+.end method
+>>
+
+//------------------------------FOR VARIABLES----------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------
+
+global_declaration(ident, type) ::=<<
+.field private static <ident>field <type> <\n>
+>>
+
+declaration_int(counter) ::= <<
+ldc 0
+istore <counter>
+>>
+
+declaration_string(counter) ::= <<
+ldc ""
+astore <counter>
+>>
+
+declaration_char(counter) ::= <<
+bipush 0
+istore <counter>
+>>
+
+referenceVariable_int(counter) ::= <<
+iload <counter>
+>>
+
+referenceField_int(programName, fieldName) ::= <<
+getstatic <programName>/<fieldName>field I
+>>
+
+referenceVariable_string(counter) ::= <<
+aload <counter>
+>>
+
+referenceField_string(programName, fieldName) ::= <<
+getstatic <programName>/<fieldName>field Ljava/lang/String;
+>>
+
+referenceVariable_char(counter) ::= <<
+iload <counter>
+>>
+
+referenceField_char(programName, fieldName) ::= <<
+getstatic <programName>/<fieldName>field C
+>>
+
+const_int(value) ::=<<
+ldc <value>
+>>
+
+const_string(value) ::=<<
+ldc <value>
+>>
+
+const_char(cod) ::=<<
+bipush <cod>
+>>
+
+//-----------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------
+
+
+//------------------------------------FOR FUNCTIONS----------------------------------------------------
+//-----------------------------------------------------------------------------------------------------
+
+functions(type, ident, args, returnType, block) ::=<<
+.method public static <ident>(<args:{<it.type>}>)<type>
+.limit locals 100
+.limit stack 20
+  <block; separator="\n">
+  <returnType>
+.end method
+
+>>
+
+parameter(type, ident) ::= "<type> <ident>"
+
+function_call(programName, funcName, argTemplates, argTypes, returnType) ::=<<
+<argTemplates; separator="\n">
+invokestatic <programName>/<funcName>(<argTypes>)<returnType>
+>>
+
+return_int() ::= <<
+ireturn
+>>
+
+return_void() ::= <<
+return
+>>
+
+return_string() ::= <<
+areturn
+>>
+
+return_char() ::=<<
+ireturn
+>>
+
+//--------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
+
+
+//---------------------------------FOR ASSIGN STATEMENT---------------------------------------------
+//--------------------------------------------------------------------------------------------------
+
+assign_var_int(expression, counter) ::= <<
+<expression; separator="\n">
+istore <counter>
+>>
+
+assign_field_int(expression, programName, fieldName) ::= <<
+<expression; separator="\n">
+putstatic <programName>/<fieldName>field I
+>>
+
+assign_var_char(expression, counter) ::= <<
+<expression; separator="\n">
+istore <counter>
+>>
+
+assign_field_char(expression, programName, fieldName) ::= <<
+<expression; separator="\n">
+putstatic <programName>/<fieldName>field C
+>>
+
+assign_var_string(expression, counter) ::= <<
+<expression; separator="\n">
+astore <counter>
+>>
+
+assign_field_string(expression, programName, fieldName) ::= <<
+<expression; separator="\n">
+putstatic <programName>/<fieldName>field Ljava/lang/String; 
+>>
+
+//--------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
+
+
+//----------------------------------FOR MATH EXPRESSIONS--------------------------------------------
+//--------------------------------------------------------------------------------------------------
+
+add_string(firstValue, secondValue) ::= <<
+new java/lang/StringBuilder
+dup
+<firstValue>
+invokestatic java/lang/String.valueOf(Ljava/lang/Object;)Ljava/lang/String;
+invokespecial java/lang/StringBuilder.\<init\>(Ljava/lang/String;)V
+<secondValue>
+invokevirtual java/lang/StringBuilder.append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+invokevirtual java/lang/StringBuilder.toString()Ljava/lang/String;
+>>
+
+add_int(firstValue, secondValue) ::= <<
+<firstValue>
+<secondValue>
+iadd 
+>>
+
+sub_int(firstValue, secondValue) ::= <<
+<firstValue>
+<secondValue>
+isub 
+>>
+
+condition_int(firstValue, secondValue) ::= <<
+<firstValue>
+<secondValue>
+imul
+>>
+
+division_int(firstValue, secondValue) ::= <<
+<firstValue>
+<secondValue>
+idiv
+>>
+
+power_int(firstValue, secondValue) ::= <<
+<firstValue>
+i2d
+<secondValue>
+i2d
+invokestatic java/lang/Math/pow(II)D
+d2i
+>>
+
+//--------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
+
+
+//----------------------------------READ AND WRITE--------------------------------------------------
+//--------------------------------------------------------------------------------------------------
+
+read_var_int(counter) ::= <<
+new java/util/Scanner
+dup
+getstatic java/lang/System/in Ljava/io/InputStream;
+invokespecial java/util/Scanner/\<init\>(Ljava/io/InputStream;)V
+invokevirtual java/util/Scanner/nextInt()I
+istore <counter>
+>>
+
+read_field_int(programName, fieldName) ::= <<
+new java/util/Scanner
+dup
+getstatic java/lang/System/in Ljava/io/InputStream;
+invokespecial java/util/Scanner/\<init\>(Ljava/io/InputStream;)V
+invokevirtual java/util/Scanner/nextInt()I
+putstatic <programName>/<fieldName>field I
+>>
+
+read_field_string(programName, fieldName) ::= <<
+new java/util/Scanner
+dup
+getstatic java/lang/System/in Ljava/io/InputStream;
+invokespecial java/util/Scanner/\<init\>(Ljava/io/InputStream;)V
+invokevirtual java/util/Scanner/nextLine()Ljava/lang/String;
+putstatic <programName>/<fieldName>field Ljava/lang/String;
+>>
+
+read_var_string(counter) ::= <<
+new java/util/Scanner
+dup
+getstatic java/lang/System/in Ljava/io/InputStream;
+invokespecial java/util/Scanner/\<init\>(Ljava/io/InputStream;)V
+invokevirtual java/util/Scanner/nextLine()Ljava/lang/String;
+astore <counter>
+>>
+
+write_string(string) ::=<<
+getstatic java/lang/System/out Ljava/io/PrintStream;
+<string>
+invokevirtual java/io/PrintStream/println(Ljava/lang/String;)V
+>>
+
+write_int(expression) ::=<<
+getstatic java/lang/System/out Ljava/io/PrintStream;
+<expression>
+invokevirtual java/io/PrintStream/println(I)V
+>>
+
+write_char(string) ::=<<
+getstatic java/lang/System/out Ljava/io/PrintStream;
+<string>
+invokevirtual java/io/PrintStream/println(C)V
+>>
+
+//-----------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------
+
+
+//------------------------------INSIDE FUNCTIONS-------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------
+
+length_string(string) ::= <<
+<string>
+invokevirtual java/lang/String.length()I
+>>
+
+int_to_string(value) ::= <<
+new java/lang/Integer
+dup
+<value>
+invokenonvirtual java/lang/Integer/\<init\>(I)V
+invokevirtual java/lang/Integer.toString()Ljava/lang/String;
+>>
+
+char_to_string(value) ::= <<
+new java/lang/Character
+dup
+<value>
+invokenonvirtual java/lang/Character/\<init\>(C)V
+invokevirtual java/lang/Character.toString()Ljava/lang/String;
+>>
+
+
+elem_in_string(fValue, sValue) ::=<<
+new java/lang/String
+dup
+<fValue>
+invokenonvirtual java/lang/String/\<init\>(Ljava/lang/String;)V
+<sValue>
+invokevirtual java/lang/String.charAt(I)C
+>>
+
+equal_operation(fValue, sValue) ::=<<
+new java/lang/String
+dup
+<fValue>
+invokenonvirtual java/lang/String/\<init\>(Ljava/lang/String;)V
+<sValue>
+invokevirtual java/lang/String.equals(Ljava/lang/Object;)Z
+>>
+
+contain_operation(fValue, sValue) ::=<<
+new java/lang/String
+dup
+<fValue>
+invokenonvirtual java/lang/String/\<init\>(Ljava/lang/String;)V
+<sValue>
+invokevirtual java/lang/String.contains(Ljava/lang/CharSequence;)Z
+>>
+
+indexOf_int(fValue, sValue) ::=<<
+new java/lang/String
+dup
+<fValue>
+invokenonvirtual java/lang/String/\<init\>(Ljava/lang/String;)V
+<sValue>
+invokevirtual java/lang/String.indexOf(Ljava/lang/String;)I
+>>
+
+replace_operation(fValue, sValue, thValue) ::=<<
+new java/lang/String
+dup
+<fValue>
+invokenonvirtual java/lang/String/\<init\>(Ljava/lang/String;)V
+<sValue>
+<thValue>
+invokevirtual java/lang/String.replace(CC)Ljava/lang/String;
+>>
+
+replaceFirst_op(fValue, sValue, thValue) ::=<<
+new java/lang/String
+dup
+<fValue>
+invokenonvirtual java/lang/String/\<init\>(Ljava/lang/String;)V
+<sValue>
+<thValue>
+invokevirtual java/lang/String.replaceFirst(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+>>
+
+substring_op_one(fValue, sValue) ::=<<
+new java/lang/String
+dup
+<fValue>
+invokenonvirtual java/lang/String/\<init\>(Ljava/lang/String;)V
+<sValue>
+invokevirtual java/lang/String.substring(I)Ljava/lang/String;
+>>
+
+substring_op_two(fValue, sValue, thValue) ::=<<
+new java/lang/String
+dup
+<fValue>
+invokenonvirtual java/lang/String/\<init\>(Ljava/lang/String;)V
+<sValue>
+<thValue>
+invokevirtual java/lang/String.substring(II)Ljava/lang/String;
+>>
+
+//-----------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------
+
+
+//----------------------------------FOR BRANCHING STATEMENTS-------------------------------------------
+//-----------------------------------------------------------------------------------------------------
+
+if_operation(expression, ifBlock, elseBlock, trueLabel, falseLabel) ::=<<
+<expression>
+ifne label<trueLabel>
+<elseBlock; separator="\n">
+goto label<falseLabel>
+label<trueLabel>:
+<ifBlock; separator="\n">
+label<falseLabel>:
+>>
+
+for_operator(beginExpr, checkExpr, endExpr, forBlock, firstLabel, secondLabel, thirdLabel) ::= <<
+<beginExpr>
+label<firstLabel>:
+<checkExpr>
+ifne label<secondLabel>
+goto label<thirdLabel>
+label<secondLabel>:
+<forBlock; separator="\n">
+<endExpr>
+goto label<firstLabel>
+label<thirdLabel>:
+>>
+
+while_operator(checkExpr, whileBlock, firstLabel, secondLabel, thirdLabel) ::= <<
+label<firstLabel>:
+<checkExpr>
+ifne label<secondLabel>
+goto label<thirdLabel>
+label<secondLabel>:
+<whileBlock; separator="\n">
+goto label<firstLabel>
+label<thirdLabel>:
+>>
+
+//-----------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------
+
+
+//-----------------------------------LOGICAL EXPRESSION------------------------------------------------
+//-----------------------------------------------------------------------------------------------------
+
+logical_and(firstExpr, secondExpr, firstLabel, secondLabel, thirdLabel) ::=<<
+<firstExpr>
+ifne label<firstLabel>
+ldc 0
+goto label<thirdLabel>
+label<firstLabel>:
+<secondExpr>
+ifne label<secondLabel>
+ldc 0
+goto label<thirdLabel>
+label<secondLabel>:
+ldc 1
+label<thirdLabel>:
+>>
+
+logical_or(firstExpr, secondExpr, firstLabel, secondLabel, thirdLabel) ::= <<
+<firstExpr>
+ifne label<secondLabel>
+goto label<firstLabel>
+label<firstLabel>:
+<secondExpr>
+ifne label<secondLabel>
+ldc 0
+goto label<thirdLabel>
+label<secondLabel>:
+ldc 1
+label<thirdLabel>:
+>>
+
+logical_not(expression, firstLabel, secondLabel) ::= <<
+<expression>
+ifne label<firstLabel>
+ldc 1
+goto label<secondLabel>
+label<firstLabel>:
+ldc 0
+label<secondLabel>:
+>>
+
+//-----------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------
+
+
+//----------------------------------------COMPARE-------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------
+
+integer_less(firstExpression, secondExpression, trueLabel, falseLabel) ::=<<
+<firstExpression>
+<secondExpression>
+if_icmplt label<trueLabel>
+ldc 0
+goto label<falseLabel>
+label<trueLabel>:
+ldc 1
+label<falseLabel>:
+>>
+
+integer_greater(firstExpression, secondExpression, trueLabel, falseLabel) ::= <<
+<firstExpression>
+<secondExpression>
+if_icmpgt label<trueLabel>
+ldc 0
+goto label<falseLabel>
+label<trueLabel>:
+ldc 1
+label<falseLabel>:
+>>
+
+integer_equal(firstExpression, secondExpression, trueLabel, falseLabel) ::= <<
+<firstExpression>
+<secondExpression>
+if_icmpeq label<trueLabel>
+ldc 0
+goto label<falseLabel>
+label<trueLabel>:
+ldc 1
+label<falseLabel>:
+>>
+
+integer_not_equal(firstExpression, secondExpression, trueLabel, falseLabel) ::= <<
+<firstExpression>
+<secondExpression>
+if_icmpne label<trueLabel>
+ldc 0
+goto label<falseLabel>
+label<trueLabel>:
+ldc 1
+label<falseLabel>:
+>>
+
+integer_less_or_equal(firstExpression, secondExpression, trueLabel, falseLabel) ::= <<
+<firstExpression>
+<secondExpression>
+if_icmpgt label<trueLabel>
+ldc 1
+goto label<falseLabel>
+label<trueLabel>:
+ldc 0
+label<falseLabel>:
+>>
+
+integer_greater_or_equal(firstExpression, secondExpression, trueLabel, falseLabel) ::= <<
+<firstExpression>
+<secondExpression>
+if_icmplt label<trueLabel>
+ldc 1
+goto label<falseLabel>
+label<trueLabel>:
+ldc 0
+label<falseLabel>:
+>>
+
+char_less(firstExpression, secondExpression, trueLabel, falseLabel) ::= <<
+<firstExpression>
+<secondExpression>
+if_icmple label<trueLabel>
+ldc 0
+goto label<falseLabel>
+label<trueLabel>:
+ldc 1
+label<falseLabel>:
+>>
+
+char_greater(firstExpression, secondExpression, trueLabel, falseLabel) ::=<<
+<firstExpression>
+<secondExpression>
+if_icmpge label<trueLabel>
+ldc 0
+goto label<falseLabel>
+label<trueLabel>:
+ldc 1
+label<falseLabel>:
+>>
+
+char_not_equal(firstExpression, secondExpression, trueLabel, falseLabel) ::= <<
+<firstExpression>
+<secondExpression>
+if_icmpne label<trueLabel>
+ldc 0
+goto label<falseLabel>
+label<trueLabel>:
+ldc 1
+label<falseLabel>:
+>>
+
+char_equal(firstExpression, secondExpression, trueLabel, falseLabel) ::= <<
+<firstExpression>
+<secondExpression>
+if_icmpeq label<trueLabel>
+ldc 0
+goto label<falseLabel>
+label<trueLabel>:
+ldc 1
+label<falseLabel>:
+>>
+
+char_less_or_equal(firstExpression, secondExpression, trueLabel, falseLabel) ::= <<
+<firstExpression>
+<secondExpression>
+if_icmplt label<trueLabel>
+ldc 1
+goto label<falseLabel>
+label<trueLabel>:
+ldc 0
+label<falseLabel>:
+>>
+
+char_greater_or_equal(firstExpression, secondExpression, trueLabel, falseLabel) ::= <<
+<firstExpression>
+<secondExpression>
+if_icmpgt label<trueLabel>
+ldc 1
+goto label<falseLabel>
+label<trueLabel>:
+ldc 0
+label<falseLabel>:
+>>
+
+string_not_equal(firstExpression, secondExpression, trueLabel, falseLabel) ::= <<
+<firstExpression>
+<secondExpression>
+if_acmpne label<trueLabel>
+ldc 0
+goto label<falseLabel>
+label<trueLabel>:
+ldc 1
+label<falseLabel>:
+>>
+
+string_equal(firstExpression, secondExpression, trueLabel, falseLabel) ::= <<
+<firstExpression>
+<secondExpression>
+if_acmpeq label<trueLabel>
+ldc 0
+goto label<falseLabel>
+label<trueLabel>:
+ldc 1
+label<falseLabel>:
+>>
+
+//-----------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------
+
+
+
+//---------------------------------TYPES---------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------
+
+type_int() ::= "I"
+type_string() ::= "Ljava/lang/String;"
+type_void() ::="V"
+type_char() ::="C"
+
+//----------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------

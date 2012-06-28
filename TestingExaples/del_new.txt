@@ -2,10 +2,6 @@ delegate F1{
 	string func(string x, string y);
 }
 
-delegate F2{
-	int func(int x);
-}
-
 void func()
 {
 	string a = [F1: x+y] (ToString(12),ToString(15));
@@ -22,8 +18,4 @@ main
 	write(b);
 	
 	func();
-	
-	int n;
-	n = [F2: 15] (12);
-	write(n);
 }
